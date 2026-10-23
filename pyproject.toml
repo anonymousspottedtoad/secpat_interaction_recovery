@@ -1,0 +1,38 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "secpat-interaction-order"
+version = "0.1.0"
+description = "Interaction-order detection for security-pattern role mappings, on a Joern query service."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "Proprietary" }
+authors = [{ name = "Anonymous" }]
+
+# None: the walk runs on the Joern query service, reached over stdlib `urllib`.
+dependencies = []
+
+[project.optional-dependencies]
+dev = ["pytest", "ruff>=0.4"]
+
+[project.urls]
+Repository = "https://github.com/anonymousspottedtoad/secpat_interaction_recovery"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/secpat_interaction_order"]
+
+[tool.hatch.build.targets.sdist]
+include = ["src/secpat_interaction_order", "tests", "README.md"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+# Same width as secpat-scoring, which this code came from.
+line-length = 120
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP"]
