@@ -68,3 +68,7 @@ pytest
 ```
 
 The service is never started: `joern_service.query` is the seam the tests replace.
+
+## License
+
+MIT — see [LICENSE](LICENSE).
