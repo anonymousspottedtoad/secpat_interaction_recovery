@@ -1,0 +1,20 @@
+{
+ "repo": "extrawest_extrawest_ocpi",
+ "launch": 0,
+ "jobs": [
+  "python/obscure_token_based_access_control/extrawest_extrawest_ocpi"
+ ],
+ "marks": {
+  "main": 11.52215963229537,
+  "loaded": 12.524053607136011,
+  "start:python/obscure_token_based_access_control/extrawest_extrawest_ocpi": 12.524059806019068,
+  "done:python/obscure_token_based_access_control/extrawest_extrawest_ocpi": 13.025100093334913,
+  "end": 13.025105949491262,
+  "exit": 13.025131285190582
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 300.0
+}

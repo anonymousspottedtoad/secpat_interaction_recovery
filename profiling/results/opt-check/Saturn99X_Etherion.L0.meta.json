@@ -1,0 +1,20 @@
+{
+ "repo": "Saturn99X_Etherion",
+ "launch": 0,
+ "jobs": [
+  "python/limit_request_rate/Saturn99X_Etherion"
+ ],
+ "marks": {
+  "main": 11.53535858541727,
+  "loaded": 12.537366148084402,
+  "start:python/limit_request_rate/Saturn99X_Etherion": 12.537372790277004,
+  "done:python/limit_request_rate/Saturn99X_Etherion": 14.541495259851217,
+  "end": 14.541502304375172,
+  "exit": 14.541534919291735
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 300.0
+}

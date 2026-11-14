@@ -1,0 +1,20 @@
+{
+ "repo": "farhan0167_otto-m8",
+ "launch": 0,
+ "jobs": [
+  "python/authentication_pwd/farhan0167_otto-m8"
+ ],
+ "marks": {
+  "main": 12.023265793919563,
+  "loaded": 13.025094356387854,
+  "start:python/authentication_pwd/farhan0167_otto-m8": 13.025099892169237,
+  "done:python/authentication_pwd/farhan0167_otto-m8": 13.025106556713581,
+  "end": 13.025109928101301,
+  "exit": 13.526108380407095
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 300.0
+}

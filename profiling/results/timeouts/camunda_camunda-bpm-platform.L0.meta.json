@@ -1,0 +1,19 @@
+{
+ "repo": "camunda_camunda-bpm-platform",
+ "launch": 0,
+ "jobs": [
+  "java/limit_request_rate/camunda_camunda-bpm-platform"
+ ],
+ "marks": {
+  "main": 11.521284155547619,
+  "loaded": 12.523081209510565,
+  "start:java/limit_request_rate/camunda_camunda-bpm-platform": 12.52308602258563,
+  "done:java/limit_request_rate/camunda_camunda-bpm-platform": 132.74026190117002,
+  "exit": 133.74225494638085
+ },
+ "returncode": 1,
+ "killed": "",
+ "jfr": true,
+ "xmx": "48g",
+ "budget": 120.0
+}

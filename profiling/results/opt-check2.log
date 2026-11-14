@@ -1,0 +1,42 @@
+02:50:34 20 job(s) over 20 repo(s) -> /workspace/replicate/secpat_interaction_recovery/profiling/results/opt-check2
+02:50:34 [1/20] wjs1995_sb-jwt-auth-starter: 1 job(s), CPG 0.2 MB
+02:50:47     L0: main@11.0s loaded@12.0s exit@12.5s  verifiable_token_based_authentication=done
+02:50:47 [2/20] sargsyanhayko_rsha_auth: 1 job(s), CPG 0.2 MB
+02:51:00     L0: main@12.0s loaded@12.5s exit@13.0s  verifiable_token_based_authentication=done
+02:51:00 [3/20] icexmoon_spring-easy: 1 job(s), CPG 0.3 MB
+02:51:12     L0: main@10.5s loaded@11.5s exit@12.0s  authentication_pwd=done
+02:51:12 [4/20] m4rc310RCP_core-api: 1 job(s), CPG 0.6 MB
+02:51:24     L0: main@11.0s loaded@11.5s exit@12.0s  verifiable_token_based_authentication=done
+02:51:24 [5/20] namastexlabs_murmurai: 1 job(s), CPG 0.9 MB
+02:51:36     L0: main@11.5s loaded@12.0s exit@12.5s  obscure_token_based_access_control=done
+02:51:36 [6/20] hprxkbrddd_grind: 1 job(s), CPG 1.1 MB
+02:51:48     L0: main@11.0s loaded@12.0s exit@12.0s  authentication_pwd=done
+02:51:48 [7/20] farhan0167_otto-m8: 1 job(s), CPG 1.5 MB
+02:52:02     L0: main@12.0s loaded@13.0s exit@13.5s  authentication_pwd=done
+02:52:02 [8/20] catch-money_java-impetus: 1 job(s), CPG 1.6 MB
+02:52:14     L0: main@11.0s loaded@11.5s exit@12.0s  session_based_access_control=done
+02:52:14 [9/20] mosip_esignet: 1 job(s), CPG 2.7 MB
+02:52:26     L0: main@11.0s loaded@11.5s exit@12.0s  verifiable_token_based_authentication=done
+02:52:26 [10/20] extrawest_extrawest_ocpi: 1 job(s), CPG 2.8 MB
+02:52:39     L0: main@11.5s loaded@12.5s exit@13.0s  obscure_token_based_access_control=done
+02:52:39 [11/20] factcast_factcast: 1 job(s), CPG 4.1 MB
+02:52:51     L0: main@10.5s loaded@11.5s exit@12.0s  limit_request_rate=done
+02:52:51 [12/20] dialob_dialob-parent: 1 job(s), CPG 5.1 MB
+02:53:04     L0: main@11.0s loaded@12.0s exit@12.5s  obscure_token_based_access_control=done
+02:53:04 [13/20] mvdbeek_pulsar-relay: 1 job(s), CPG 5.1 MB
+02:53:18     L0: main@12.0s loaded@13.0s exit@14.0s  authentication_pwd=done
+02:53:18 [14/20] lbk-ones_easy4j: 1 job(s), CPG 10.9 MB
+02:53:30     L0: main@10.5s loaded@11.5s exit@12.5s  verifiable_token_based_authentication=done
+02:53:30 [15/20] descoped_authly: 1 job(s), CPG 11.4 MB
+02:53:45     L0: main@12.0s loaded@13.5s exit@14.5s  verifiable_token_based_authentication=done
+02:53:45 [16/20] xinetzone_tao: 1 job(s), CPG 17.5 MB
+02:53:59     L0: main@12.0s loaded@13.0s exit@14.5s  authentication_pwd=done
+02:53:59 [17/20] TrueSelph_jvspatial: 1 job(s), CPG 26.7 MB
+02:54:15     L0: main@12.0s loaded@13.0s exit@15.5s  session_based_access_control=done
+02:54:15 [18/20] EximeeBPMS_eximeebpms: 1 job(s), CPG 34.5 MB
+02:59:27     L0: main@10.5s loaded@11.5s exit@312.5s  limit_request_rate=timeout
+02:59:27 [19/20] Saturn99X_Etherion: 1 job(s), CPG 35.5 MB
+02:59:43     L0: main@11.5s loaded@13.1s exit@15.6s  limit_request_rate=done
+02:59:43 [20/20] DSpace_DSpace: 1 job(s), CPG 35.7 MB
+02:59:57     L0: main@11.0s loaded@12.0s exit@14.0s  obscure_token_based_access_control=done
+02:59:57 done

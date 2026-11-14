@@ -1,0 +1,20 @@
+{
+ "repo": "icexmoon_spring-easy",
+ "launch": 0,
+ "jobs": [
+  "java/authentication_pwd/icexmoon_spring-easy"
+ ],
+ "marks": {
+  "main": 10.520479798316956,
+  "loaded": 11.522184506058693,
+  "start:java/authentication_pwd/icexmoon_spring-easy": 11.522188670933247,
+  "done:java/authentication_pwd/icexmoon_spring-easy": 11.522193312644958,
+  "end": 11.522195506840944,
+  "exit": 12.023081958293915
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 300.0
+}

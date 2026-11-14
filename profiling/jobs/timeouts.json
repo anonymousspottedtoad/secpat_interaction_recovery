@@ -1,0 +1,21 @@
+[
+ "java/limit_request_rate/camunda_camunda-bpm-platform",
+ "java/obscure_token_based_access_control/DSpace_DSpace",
+ "java/limit_request_rate/operaton_operaton",
+ "java/limit_request_rate/factcast_factcast",
+ "python/verifiable_token_based_authentication/BerriAI_litellm",
+ "python/obscure_token_based_access_control/terrene-foundation_kailash-py",
+ "python/limit_request_rate/terrene-foundation_kailash-py",
+ "java/limit_request_rate/cadenzaflow_cadenzaflow-bpm-platform",
+ "java/limit_request_rate/EximeeBPMS_eximeebpms",
+ "java/limit_request_rate/OrqueIO_OrqueIO",
+ "java/limit_request_rate/cibseven_cibseven",
+ "java/limit_request_rate/camunda_camunda",
+ "python/authentication_pwd/BilgisayarKavramlari_cadelphi",
+ "python/verifiable_token_based_authentication/ThalesGroup_fred",
+ "python/obscure_token_based_access_control/topoteretes_cognee",
+ "python/obscure_token_based_access_control/langflow-ai_langflow",
+ "python/session_based_access_control/TrueSelph_jvspatial",
+ "python/limit_request_rate/agno-agi_agno",
+ "python/session_based_access_control/CIRISAI_CIRISAgent"
+]

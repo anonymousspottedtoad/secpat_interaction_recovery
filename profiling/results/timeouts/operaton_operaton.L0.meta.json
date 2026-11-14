@@ -1,0 +1,19 @@
+{
+ "repo": "operaton_operaton",
+ "launch": 0,
+ "jobs": [
+  "java/limit_request_rate/operaton_operaton"
+ ],
+ "marks": {
+  "main": 12.52245469018817,
+  "loaded": 13.523619577288628,
+  "start:java/limit_request_rate/operaton_operaton": 13.523623656481504,
+  "done:java/limit_request_rate/operaton_operaton": 133.74085713550448,
+  "exit": 134.74287383258343
+ },
+ "returncode": 1,
+ "killed": "",
+ "jfr": true,
+ "xmx": "48g",
+ "budget": 120.0
+}

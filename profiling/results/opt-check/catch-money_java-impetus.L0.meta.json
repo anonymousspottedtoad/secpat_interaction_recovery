@@ -1,0 +1,20 @@
+{
+ "repo": "catch-money_java-impetus",
+ "launch": 0,
+ "jobs": [
+  "java/session_based_access_control/catch-money_java-impetus"
+ ],
+ "marks": {
+  "main": 11.021957378834486,
+  "loaded": 11.522913068532944,
+  "start:java/session_based_access_control/catch-money_java-impetus": 11.522918675094843,
+  "done:java/session_based_access_control/catch-money_java-impetus": 12.023944776505232,
+  "end": 12.023950643837452,
+  "exit": 12.023974530398846
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 300.0
+}

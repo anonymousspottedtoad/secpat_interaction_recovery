@@ -1,0 +1,20 @@
+{
+ "repo": "mvdbeek_pulsar-relay",
+ "launch": 0,
+ "jobs": [
+  "python/authentication_pwd/mvdbeek_pulsar-relay"
+ ],
+ "marks": {
+  "main": 12.020404547452927,
+  "loaded": 13.022000692784786,
+  "start:python/authentication_pwd/mvdbeek_pulsar-relay": 13.022006392478943,
+  "done:python/authentication_pwd/mvdbeek_pulsar-relay": 14.02380671352148,
+  "end": 14.023812659084797,
+  "exit": 14.023835603147745
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 300.0
+}

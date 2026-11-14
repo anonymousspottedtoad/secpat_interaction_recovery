@@ -1,0 +1,26 @@
+{
+ "repo": "raphw_jenesis-repository",
+ "launch": 0,
+ "jobs": [
+  "java/limit_request_rate/raphw_jenesis-repository",
+  "java/obscure_token_based_access_control/raphw_jenesis-repository",
+  "java/verifiable_token_based_authentication/raphw_jenesis-repository"
+ ],
+ "marks": {
+  "main": 12.020956572145224,
+  "loaded": 12.521895594894886,
+  "start:java/limit_request_rate/raphw_jenesis-repository": 12.521902829408646,
+  "done:java/limit_request_rate/raphw_jenesis-repository": 12.521910481154919,
+  "start:java/obscure_token_based_access_control/raphw_jenesis-repository": 12.521914545446634,
+  "done:java/obscure_token_based_access_control/raphw_jenesis-repository": 12.521920718252659,
+  "start:java/verifiable_token_based_authentication/raphw_jenesis-repository": 12.521924078464508,
+  "done:java/verifiable_token_based_authentication/raphw_jenesis-repository": 12.521927401423454,
+  "end": 12.5219293422997,
+  "exit": 13.022946543991566
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": true,
+ "xmx": "48g",
+ "budget": 120.0
+}

@@ -1,0 +1,20 @@
+{
+ "repo": "mosip_esignet",
+ "launch": 0,
+ "jobs": [
+  "java/verifiable_token_based_authentication/mosip_esignet"
+ ],
+ "marks": {
+  "main": 11.02137179300189,
+  "loaded": 11.52228931337595,
+  "start:java/verifiable_token_based_authentication/mosip_esignet": 11.522295139729977,
+  "done:java/verifiable_token_based_authentication/mosip_esignet": 12.023312974721193,
+  "end": 12.023318905383348,
+  "exit": 12.023341555148363
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 300.0
+}

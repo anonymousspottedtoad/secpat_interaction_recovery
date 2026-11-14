@@ -1,0 +1,19 @@
+{
+ "repo": "camunda_camunda",
+ "launch": 0,
+ "jobs": [
+  "java/limit_request_rate/camunda_camunda"
+ ],
+ "marks": {
+  "main": 11.522803161293268,
+  "loaded": 13.02535080909729,
+  "start:java/limit_request_rate/camunda_camunda": 13.0253567956388,
+  "done:java/limit_request_rate/camunda_camunda": 133.25980681180954,
+  "exit": 133.76088688150048
+ },
+ "returncode": 1,
+ "killed": "",
+ "jfr": true,
+ "xmx": "48g",
+ "budget": 120.0
+}

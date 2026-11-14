@@ -1,0 +1,4 @@
+03:03:53 379 job(s) over 306 repo(s) -> /workspace/replicate/secpat_interaction_recovery/profiling/results/opt-full
+03:03:53 [1/306] raphw_jenesis-repository: 3 job(s), CPG 0.0 MB
+03:04:05     L0: main@11.0s loaded@11.5s exit@11.5s  limit_request_rate=done, obscure_token_based_access_control=done, verifiable_token_based_authentication=done
+03:04:05 [2/306] movewp3_microservice-security-autoconfiguration: 1 job(s), CPG 0.1 MB

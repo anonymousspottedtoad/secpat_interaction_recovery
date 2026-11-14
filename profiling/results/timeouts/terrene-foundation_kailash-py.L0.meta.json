@@ -1,0 +1,19 @@
+{
+ "repo": "terrene-foundation_kailash-py",
+ "launch": 0,
+ "jobs": [
+  "python/obscure_token_based_access_control/terrene-foundation_kailash-py"
+ ],
+ "marks": {
+  "main": 12.522625543177128,
+  "loaded": 18.533623840659857,
+  "start:python/obscure_token_based_access_control/terrene-foundation_kailash-py": 19.03454316407442,
+  "done:python/obscure_token_based_access_control/terrene-foundation_kailash-py": 139.22888887301087,
+  "exit": 141.23151856288314
+ },
+ "returncode": 1,
+ "killed": "",
+ "jfr": true,
+ "xmx": "48g",
+ "budget": 120.0
+}

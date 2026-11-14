@@ -1,0 +1,20 @@
+{
+ "repo": "sargsyanhayko_rsha_auth",
+ "launch": 0,
+ "jobs": [
+  "python/verifiable_token_based_authentication/sargsyanhayko_rsha_auth"
+ ],
+ "marks": {
+  "main": 12.023459438234568,
+  "loaded": 12.524373844265938,
+  "start:python/verifiable_token_based_authentication/sargsyanhayko_rsha_auth": 12.524382550269365,
+  "done:python/verifiable_token_based_authentication/sargsyanhayko_rsha_auth": 13.025410238653421,
+  "end": 13.025417190045118,
+  "exit": 13.025444522500038
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 300.0
+}
