@@ -127,7 +127,10 @@ case class Step(caller: String, file: String, line: Int, code: String, callee: S
   * interaction that brought the walk into the source role's body, None at the entry. */
 case class Edge(source: String, target: String, file: String, line: Int,
                 via: List[String], mechanism: String, path: List[Step] = Nil,
-                parent: Option[(String, String)] = None)
+                parent: Option[(String, String)] = None,
+                // Bookkeeping for the walk's memo, never rendered: the helper chain the edge was
+                // emitted in, and whether `parent` was read from that chain's `enteredBy`.
+                chain: Long = -1L, ctxParent: Boolean = false)
 
 /** A call the framework passes on: `method` on `owner` -- or on a receiver one of `getters`
   * returned, when the frontend left the owner unresolved -- runs the first of `steps` that
@@ -254,7 +257,32 @@ class CallGraph(val repo: Repo) {
     * `bridged`); then the repository's injection providers of the receiver's type
     * (`dependency-injection`). A route or a provider only fills a gap the code leaves,
     * and is added after what the call resolved to without it, which it never replaces. */
-  def targetsOf(c: Call): Resolution = {
+  /** Memo tables: every answer below is a pure function of the graph, and the walk asks the
+    * same question again each time it passes a call site (profiling: 1,226 times per site on
+    * factcast). */
+  private val targetsMemo = scala.collection.mutable.HashMap[Long, Resolution]()
+  private val passedMemo = scala.collection.mutable.HashMap[Long, List[Method]]()
+  private val fieldsMemo = scala.collection.mutable.HashMap[Long, List[Member]]()
+  private val providersMemo = scala.collection.mutable.HashMap[String, List[Method]]()
+  private val refMemo = scala.collection.mutable.HashMap[Long, Option[Method]]()
+  private val callArgMemo = scala.collection.mutable.HashMap[Long, Boolean]()
+  private val cfgNextMemo = scala.collection.mutable.HashMap[Long, List[CfgNode]]()
+  private val fileMemo = scala.collection.mutable.HashMap[Long, String]()
+
+  /** The CFG successors of `n`, in the order the walk pushes them (reversed, so the first runs first). */
+  def cfgNextReversed(n: CfgNode): List[CfgNode] =
+    cfgNextMemo.getOrElseUpdate(n.id, n._cfgOut.collect { case c: CfgNode => c }.toList.reverse)
+
+  /** `repo.file` of a method's filename. */
+  def fileOf(m: Method): String = fileMemo.getOrElseUpdate(m.id, repo.file(m.filename))
+
+  private val briefMemo = scala.collection.mutable.HashMap[Long, String]()
+  /** `brief(c.code)`, once per call site (it compiles a regex per use). */
+  def briefOf(c: Call): String = briefMemo.getOrElseUpdate(c.id, brief(c.code))
+
+  def targetsOf(c: Call): Resolution = targetsMemo.getOrElseUpdate(c.id, resolveTargets(c))
+
+  private def resolveTargets(c: Call): Resolution = {
     val direct = calleesOf(c)
     val plain = Resolution(List(Hop(direct, "call")))
     if (direct.exists(m => !m.isExternal && hasBody(m))) plain
@@ -331,12 +359,16 @@ class CallGraph(val repo: Repo) {
   lazy val providerIds: Set[Long] = providers.map(_.id).toSet
 
   /** Providers whose declared return type is `t`, by fullName or, unresolved, simple name. */
+  /** Each provider with its return type and that type's simple name, read once. */
+  private lazy val providerReturns: List[(Method, String, String)] =
+    providers.map { m => val r = m.methodReturn.typeFullName; (m, r, simpleName(r)) }
+
   def providersOf(t: String): List[Method] =
     if (t.isEmpty || t == "ANY") Nil
-    else providers.filter { m =>
-      val r = m.methodReturn.typeFullName
-      r == t || simpleName(r) == simpleName(t)
-    }.sortBy(_.fullName)
+    else providersMemo.getOrElseUpdate(t, {
+      val st = simpleName(t)
+      providerReturns.collect { case (m, r, sr) if r == t || sr == st => m }.sortBy(_.fullName)
+    })
 
   /** The type a call is addressed to: its fullName's owner, else the receiver's type. */
   def declaredOwner(c: Call): String = {
@@ -413,7 +445,9 @@ class CallGraph(val repo: Repo) {
   }
 
   /** The field a field access reads or writes: the object's class, else its nearest parent. */
-  def fieldsOf(access: Call): List[Member] = {
+  def fieldsOf(access: Call): List[Member] = fieldsMemo.getOrElseUpdate(access.id, resolveFields(access))
+
+  private def resolveFields(access: Call): List[Member] = {
     val field = access.argument.collectFirst { case f: FieldIdentifier => f.canonicalName }
     val objectType = access.argument.l.find(_.argumentIndex == 1).map(typeOf)
       .filter(typeDeclsByName.contains)
@@ -449,28 +483,43 @@ class CallGraph(val repo: Repo) {
   }
 
   /** Repository methods passed to a call as arguments (METHOD_REF only). */
-  def methodsPassedTo(c: Call): List[Method] =
+  def methodsPassedTo(c: Call): List[Method] = passedMemo.getOrElseUpdate(c.id,
     c.argument.ast.l.collect { case mr: MethodRef => mr }
       .flatMap(mr => scala.util.Try(Option(mr.referencedMethod)).getOrElse(None))
-      .filterNot(_.isExternal).distinct
+      .filterNot(_.isExternal).distinct)
 
   /** The method a METHOD_REF refers to, if it is in this repository. */
-  def referencedMethodInRepo(mr: MethodRef): Option[Method] =
-    scala.util.Try(Option(mr.referencedMethod)).getOrElse(None).filterNot(_.isExternal)
+  def referencedMethodInRepo(mr: MethodRef): Option[Method] = refMemo.getOrElseUpdate(mr.id,
+    scala.util.Try(Option(mr.referencedMethod)).getOrElse(None).filterNot(_.isExternal))
 
   /** Inside a real call's arguments -- `methodsPassedTo` enters it at that call. */
-  def isCallArgument(mr: MethodRef): Boolean =
+  def isCallArgument(mr: MethodRef): Boolean = callArgMemo.getOrElseUpdate(mr.id,
     Iterator.iterate[AstNode](mr)(_.astParent).drop(1)
       .takeWhile(p => p != null && !p.isInstanceOf[Method])
-      .exists { case c: Call => isRealCall(c); case _ => false }
+      .exists { case c: Call => isRealCall(c); case _ => false })
 
-  /** TYPE_DECL id -> the non-synthetic methods it declares. */
-  lazy val methodsOfType: Map[Long, List[Long]] =
-    cpg.typeDecl.filterNot(_.isExternal).l.map { td =>
-      td.id -> allMethods
-        .filter(m => Lang.declares(td.fullName, m.fullName) && !isSynthetic(m.name))
-        .map(_.id)
-    }.toMap
+  /** TYPE_DECL id -> the non-synthetic methods it declares, in `allMethods` order.
+    * Both profiles define `declares(owner, member)` as `member.startsWith(owner + ".")`, i.e.
+    * `owner` is the text before one of the member's dots; so each method is filed under the
+    * types named by its dotted prefixes -- O(methods x dots) rather than O(types x methods). */
+  lazy val methodsOfType: Map[Long, List[Long]] = {
+    val tds = cpg.typeDecl.filterNot(_.isExternal).l
+    val idsByName: Map[String, List[Long]] = tds.groupBy(_.fullName).map { case (k, v) => k -> v.map(_.id) }
+    val acc = scala.collection.mutable.HashMap[Long, scala.collection.mutable.ListBuffer[Long]]()
+    allMethods.foreach { m =>
+      if (!isSynthetic(m.name)) {
+        val fn = m.fullName
+        var i = fn.indexOf('.')
+        while (i >= 0) {
+          idsByName.get(fn.substring(0, i)).foreach(_.foreach { td =>
+            if (Lang.declares(fn.substring(0, i), fn)) acc.getOrElseUpdate(td, scala.collection.mutable.ListBuffer()) += m.id
+          })
+          i = fn.indexOf('.', i + 1)
+        }
+      }
+    }
+    tds.map(td => td.id -> acc.get(td.id).map(_.toList).getOrElse(Nil)).toMap
+  }
 
   /** The bodies a node stands for: a method itself, or a class's methods. */
   def bodiesOf(e: Decl): List[Method] = e.kind match {
@@ -826,28 +875,383 @@ class Walker(graph: CallGraph, ownership: Ownership) {
   /** JVM-stack guard, not a search limit. */
   val MAX_DEPTH = 512
 
-  val edges = scala.collection.mutable.ListBuffer[Edge]()
-  /** (method, start node, roles) already walked. */
-  val enteredBodies = scala.collection.mutable.Set[(Long, Long, String)]()
+  val edges = scala.collection.mutable.ArrayBuffer[Edge]()
+
+  /** A walked body: (method, start node, roles). */
+  type Key = (Long, Long, String)
+
+  /** (method, start node, roles) already walked -> the clock tick it was added at. `log` lists the
+    * adds in order, so `keepMostRoles` rolls an alternative back by truncating it instead of
+    * cloning the whole set for every alternative. */
+  private val entered = scala.collection.mutable.HashMap[Key, Long]()
+  private val log = scala.collection.mutable.ArrayBuffer[Key]()
+  private var clock = 0L
+  private def addKey(k: Key): Unit = { clock += 1; entered(k) = clock; log += k }
+  private def rollback(mark: Int): Unit = {
+    var i = log.size - 1
+    while (i >= mark) { entered.remove(log(i)); i -= 1 }
+    log.dropRightInPlace(log.size - mark)
+  }
+  def enteredCount: Int = entered.size
 
   /** Walk each alternative in isolation and keep the one reaching the most distinct
     * roles, then the one through the fewest helpers, then the earlier; the rest
     * leave no trace. */
   def keepMostRoles(alternatives: List[() => Unit]): Unit = {
-    val (mark, entered) = (edges.size, enteredBodies.clone())
-    var best: Option[((Int, Int), List[Edge], scala.collection.mutable.Set[(Long, Long, String)])] = None
+    val (mark, logMark) = (edges.size, log.size)
+    var best: Option[((Int, Int), Vector[Edge], Vector[Key])] = None
     alternatives.foreach { walk =>
       walk()
-      val added = edges.drop(mark).toList
+      val added = edges.view.slice(mark, edges.size).toVector
       val rank = (added.map(_.target).distinct.size, -added.map(_.via.size).sum)
       if (rank._1 > 0 && best.forall(b => Ordering[(Int, Int)].lt(b._1, rank)))
-        best = Some((rank, added, enteredBodies.clone()))
-      edges.remove(mark, edges.size - mark)
-      enteredBodies.clear(); enteredBodies ++= entered
+        best = Some((rank, added, log.view.slice(logMark, log.size).toVector))
+      edges.dropRightInPlace(edges.size - mark)
+      rollback(logMark)
     }
-    best.foreach { case (_, added, after) =>
+    best.foreach { case (_, added, keys) =>
       edges ++= added
-      enteredBodies.clear(); enteredBodies ++= after
+      keys.foreach(addKey)
+    }
+  }
+
+  // ── the memo ───────────────────────────────────────────────────────────────
+  //
+  // `keepMostRoles` undoes every alternative it does not keep, so nested alternatives walk the
+  // same bodies again and again (profiling: 171 distinct bodies entered 930,000 times on factcast,
+  // alternatives nested 19 deep). What walking a body adds -- its edges and the bodies it enters --
+  // is a function of (method, start node, roles, |via|, dispatched, framework) and of the answers
+  // the `entered` set gives it, nothing else: `via`, `path` and `enteredBy` only flow into the
+  // edges it emits, and `keepMostRoles` reads only `via`'s length. So each walked body is kept as a
+  // summary, together with the keys it found present or absent, and is replayed wherever the same
+  // body is walked again with the same answers. Edges of the body's own helper chain are stored
+  // relative to its context and rebuilt with the caller's. The output is unchanged; only repeated
+  // work is skipped.
+
+  private final class Frame(val start: Long, val depth: Int, val edgeMark: Int, val logMark: Int,
+                            val chain: Long, val viaSize: Int, val pathSize: Int) {
+    val qin = scala.collection.mutable.HashMap[Key, Long]()   // found present, with its add tick
+    val qout = scala.collection.mutable.HashSet[Key]()        // found absent
+    var maxRel = 0                                            // deepest walkBody attempted, relative
+  }
+  private val frames = scala.collection.mutable.ArrayBuffer[Frame]()
+
+  private final case class SEdge(e: Edge, relative: Boolean)
+  private final case class Summary(qin: Array[Key], qout: Array[Key], edges: Array[SEdge],
+                                   adds: Array[Key], maxRel: Int, depth0: Int)
+  private type MemoKey = (Long, Long, List[String], Int, Boolean, Boolean)
+  private val memo = scala.collection.mutable.HashMap[MemoKey, List[Summary]]()
+  /** Summaries kept per memo key, newest first. */
+  val MEMO_PER_KEY = 8
+  private var chains = 0L
+  var memoHits = 0L
+  var memoMisses = 0L
+  /** Why a body was computed rather than replayed: no summary for its memo key; summaries, but none
+    * valid here; and of those, how often the key already held MEMO_PER_KEY summaries. */
+  var missNoKey = 0L
+  var missInvalid = 0L
+  var missFull = 0L
+  def memoKeys: Int = memo.size
+
+  /** Whether `k` was already walked; the innermost frame records the answer it depended on. */
+  private def test(k: Key): Boolean = entered.get(k) match {
+    case Some(a) =>
+      if (frames.nonEmpty) { val f = frames.last; if (a <= f.start) f.qin(k) = a }
+      true
+    case None =>
+      if (frames.nonEmpty) frames.last.qout += k
+      false
+  }
+
+  private def noteDepth(depth: Int): Unit =
+    if (frames.nonEmpty) { val f = frames.last; if (depth - f.depth > f.maxRel) f.maxRel = depth - f.depth }
+
+  private def valid(s: Summary, depth: Int): Boolean =
+    ((s.depth0 + s.maxRel <= MAX_DEPTH && depth + s.maxRel <= MAX_DEPTH) || depth == s.depth0) &&
+      s.qin.forall(entered.contains) && !s.qout.exists(entered.contains)
+
+  private def summarize(f: Frame): Summary = {
+    val es = edges.view.slice(f.edgeMark, edges.size).map { e =>
+      if (e.chain == f.chain) SEdge(e.copy(via = e.via.drop(f.viaSize), path = e.path.drop(f.pathSize)), relative = true)
+      else SEdge(e, relative = false)
+    }.toArray
+    Summary(f.qin.keys.toArray, f.qout.toArray, es, log.view.slice(f.logMark, log.size).toArray, f.maxRel, f.depth)
+  }
+
+  /** Pass a finished frame's dependencies to the frame around it. */
+  private def pop(f: Frame): Unit = {
+    frames.remove(frames.size - 1)
+    if (frames.nonEmpty) {
+      val p = frames.last
+      f.qin.foreach { case (k, a) => if (a <= p.start) p.qin(k) = a }
+      p.qout ++= f.qout
+      if (f.depth - p.depth + f.maxRel > p.maxRel) p.maxRel = f.depth - p.depth + f.maxRel
+    }
+  }
+
+  private def replay(s: Summary, via: List[String], path: List[Step],
+                     enteredBy: List[(String, String)], chain: Long, depth: Int): Unit = {
+    s.edges.foreach { se =>
+      if (!se.relative) edges += se.e
+      else {
+        val e = se.e
+        edges += e.copy(via = via ++ e.via, path = path ++ e.path,
+                        parent = if (e.ctxParent) enteredBy.find(_._2 == e.source) else e.parent,
+                        chain = chain)
+      }
+    }
+    s.adds.foreach(addKey)
+    if (frames.nonEmpty) {
+      val f = frames.last
+      s.qin.foreach { k => val a = entered(k); if (a <= f.start) f.qin(k) = a }
+      f.qout ++= s.qout
+      if (depth - f.depth + s.maxRel > f.maxRel) f.maxRel = depth - f.depth + s.maxRel
+    }
+  }
+
+  private val entryMemo = scala.collection.mutable.HashMap[Long, List[(Method, Int, String)]]()
+  private def entryEdgesOf(m: Method): List[(Method, Int, String)] =
+    entryMemo.getOrElseUpdate(m.id, Lang.entryEdges(m, graph.root))
+
+  // ── liveness ───────────────────────────────────────────────────────────────
+  //
+  // A body is live when walking it could emit an edge: some node it reaches carries a role, or a
+  // method it may run is live. Walking a dead body emits nothing, whatever it is entered as, and the
+  // keys it would add to `entered` belong to dead methods, which only dead walks ever test; so dead
+  // bodies are not walked at all, with an identical result. The edges below over-approximate what
+  // the walk follows (every hop of `targetsOf`, the gate on a second override hop ignored; every
+  // method passed, referenced or bound on entry), so a body judged dead really is.
+
+  private val liveMemo = scala.collection.mutable.HashMap[Long, Boolean]()
+  var deadSkips = 0L
+
+  /** (whether `m`'s own nodes reach a role, the repository methods it may run). */
+  private def bodyFacts(m: Method): (Boolean, List[Method]) = {
+    def role(id: Long) = roleOfNode.contains(id)
+    val succ = scala.collection.mutable.LinkedHashMap[Long, Method]()
+    var hit = false
+    def to(t: Method): Unit = { if (role(t.id)) hit = true; if (!t.isExternal) succ(t.id) = t }
+    entryEdgesOf(m).foreach { case (t, _, _) => to(t) }
+    val seen = scala.collection.mutable.Set[Long]()
+    val pending = scala.collection.mutable.Stack[CfgNode]()
+    m.cfgFirst.headOption.foreach(pending.push)
+    while (pending.nonEmpty && !hit) {
+      val n = pending.pop()
+      if (seen.add(n.id)) {
+        n match {
+          case c: Call if isRealCall(c) =>
+            if (role(c.id)) hit = true
+            graph.methodsPassedTo(c).foreach(to)
+            graph.targetsOf(c).hops.foreach { h =>
+              h.methods.foreach(to)
+              if (h.provided.exists(p => role(p.id))) hit = true
+            }
+          case mr: MethodRef => graph.referencedMethodInRepo(mr).foreach(to)
+          case c: Call if c.name == "<operator>.fieldAccess" =>
+            if (graph.fieldsOf(c).exists(f => role(f.id))) hit = true
+          case i: Identifier =>
+            if (i._refOut.exists(d => role(d.id))) hit = true
+          case _ => ()
+        }
+        graph.cfgNextReversed(n).foreach(pending.push)
+      }
+    }
+    (hit, if (hit) Nil else succ.values.toList)
+  }
+
+  /** Whether walking `m` can emit anything; Tarjan's SCCs over `bodyFacts`, iteratively. */
+  def live(m: Method): Boolean = liveMemo.get(m.id) match {
+    case Some(v) => v
+    case None =>
+      val index = scala.collection.mutable.HashMap[Long, Int]()
+      val low = scala.collection.mutable.HashMap[Long, Int]()
+      val onStack = scala.collection.mutable.Set[Long]()
+      val stack = scala.collection.mutable.ArrayBuffer[Long]()
+      val hitOf = scala.collection.mutable.HashMap[Long, Boolean]()
+      val succOf = scala.collection.mutable.HashMap[Long, List[Method]]()
+      var next = 0
+      // frames: (method id, remaining successors)
+      val work = scala.collection.mutable.Stack[(Long, List[Method])]()
+      def open(x: Method): Unit = {
+        index(x.id) = next; low(x.id) = next; next += 1
+        stack += x.id; onStack += x.id
+        val (h, ss) = bodyFacts(x)
+        hitOf(x.id) = h; succOf(x.id) = ss
+        work.push((x.id, ss))
+      }
+      open(m)
+      while (work.nonEmpty) {
+        val (v, rest) = work.pop()
+        rest match {
+          case w :: more =>
+            work.push((v, more))
+            if (liveMemo.contains(w.id)) ()                       // finished earlier
+            else if (!index.contains(w.id)) open(w)
+            else if (onStack(w.id)) low(v) = math.min(low(v), index(w.id))
+          case Nil =>
+            // all successors done: fold their lowlinks into the parent frame
+            if (work.nonEmpty) { val (u, _) = work.top; low(u) = math.min(low(u), low(v)) }
+            if (low(v) == index(v)) {
+              val comp = scala.collection.mutable.ArrayBuffer[Long]()
+              var x = -1L
+              while (x != v) { x = stack.remove(stack.size - 1); onStack -= x; comp += x }
+              val members = comp.toSet
+              val isLive = comp.exists(hitOf) || comp.exists(c => succOf(c).exists(s =>
+                !members.contains(s.id) && liveMemo.getOrElse(s.id, false)))
+              comp.foreach(c => liveMemo(c) = isLive)
+            }
+        }
+      }
+      liveMemo(m.id)
+  }
+
+  // ── alternatives that cannot emit ─────────────────────────────────────────
+  //
+  // `keepMostRoles` keeps an alternative only if it reaches a role (rank > 0), and rolls back every
+  // other one without a trace (edges and entered keys). So an alternative that provably emits
+  // nothing can be left unwalked, with an identical result. Liveness is decided here in the
+  // alternative's own context, which the method-level `live` above cannot use (entered keys ignore
+  // `dispatched`, so skipping a whole walkBody on it would drop keys later walks test):
+  //  - the trail's `dispatched` flag: a dispatched trail resolves a guessed call to nothing;
+  //  - the entered set at the alternative's start: it only grows while the alternative runs (inner
+  //    rollbacks stop at their own marks), and a helper descent into a body whose key
+  //    (method, -1, sources) is already entered returns at once.
+  // (Found by the Rust port; profiling: on the Camunda forks every hot alternative had rank 0.)
+
+  /** Per (method, dispatched): the roles reached at each place a helper walk may reach, and the
+    * helper targets it may enter with the flag they would carry. */
+  private val ctxFactsMemo = scala.collection.mutable.HashMap[(Long, Boolean), (List[String], List[(Method, Boolean)])]()
+  private val ctxLiveMemo = scala.collection.mutable.HashMap[(String, Long, Boolean), Boolean]()
+  var alternativesSkipped = 0L
+
+  private def givesPair(sources: List[String], roles: Iterable[String]): Boolean =
+    sources.exists(s => roles.exists(_ != s))
+
+  private def ctxFacts(m: Method, d: Boolean): (List[String], List[(Method, Boolean)]) =
+    ctxFactsMemo.getOrElseUpdate((m.id, d), {
+      def rolesOf(id: Long) = roleOfNode.getOrElse(id, Nil)
+      val roles = scala.collection.mutable.LinkedHashSet[String]()
+      val succ = scala.collection.mutable.LinkedHashMap[(Long, Boolean), (Method, Boolean)]()
+      def place(targetId: Option[Long], target: Option[Method], site: Option[Call], provided: List[Method], nd: Boolean): Unit = {
+        val reached = (targetId.toList ++ site.map(_.id)).flatMap(rolesOf)
+        roles ++= reached
+        provided.foreach(p => roles ++= rolesOf(p.id))
+        if (reached.isEmpty) target.filterNot(_.isExternal).foreach(t => succ((t.id, nd)) = (t, nd))
+      }
+      entryEdgesOf(m).foreach { case (t, _, mech) => place(Some(t.id), Some(t), None, Nil, d || mech == "dispatch") }
+      val seen = scala.collection.mutable.Set[Long]()
+      val pending = scala.collection.mutable.Stack[CfgNode]()
+      m.cfgFirst.headOption.foreach(pending.push)
+      while (pending.nonEmpty) {
+        val n = pending.pop()
+        if (seen.add(n.id)) {
+          n match {
+            case c: Call if isRealCall(c) =>
+              graph.methodsPassedTo(c).foreach(t => place(Some(t.id), Some(t), None, Nil, d))
+              val r = graph.targetsOf(c)
+              if ((r.guessed && d) || r.all.isEmpty) place(None, None, Some(c), Nil, d)
+              else r.hops.filter(h => h.methods.nonEmpty || h.provided.nonEmpty).foreach { h =>
+                val nd = d || (h.mechanism == "dispatch" && !h.bridged)
+                if (h.methods.isEmpty) place(None, None, Some(c), h.provided, nd)
+                h.methods.foreach(t => place(Some(t.id), Some(t), Some(c), h.provided, nd))
+              }
+            case mr: MethodRef if !graph.isCallArgument(mr) && !Lang.isModuleOrClassBody(m) =>
+              graph.referencedMethodInRepo(mr).foreach(t => place(Some(t.id), Some(t), None, Nil, d))
+            case c: Call if c.name == "<operator>.fieldAccess" =>
+              graph.fieldsOf(c).foreach(f => place(Some(f.id), None, None, Nil, d))
+            case i: Identifier =>
+              i._refOut.collect { case x: AstNode => x }.foreach(x => place(Some(x.id), None, None, Nil, d))
+            case _ => ()
+          }
+          graph.cfgNextReversed(n).foreach(pending.push)
+        }
+      }
+      (roles.toList, succ.values.toList)
+    })
+
+  /** Whether a helper walk of `m` as `sources` with `dispatched = d` can emit anything; Tarjan's
+    * SCCs over (method, dispatched) states, iteratively. */
+  private def liveCtx(m: Method, d: Boolean, sources: List[String]): Boolean = {
+    val sk = sources.distinct.sorted.mkString("\u0000")
+    ctxLiveMemo.get((sk, m.id, d)) match {
+      case Some(v) => v
+      case None =>
+        type St = (Long, Boolean)
+        val index = scala.collection.mutable.HashMap[St, Int]()
+        val low = scala.collection.mutable.HashMap[St, Int]()
+        val onStack = scala.collection.mutable.Set[St]()
+        val stack = scala.collection.mutable.ArrayBuffer[St]()
+        val hitOf = scala.collection.mutable.HashMap[St, Boolean]()
+        val succOf = scala.collection.mutable.HashMap[St, List[(Method, Boolean)]]()
+        var next = 0
+        val work = scala.collection.mutable.Stack[(St, List[(Method, Boolean)])]()
+        def open(x: Method, xd: Boolean): Unit = {
+          val st = (x.id, xd)
+          index(st) = next; low(st) = next; next += 1
+          stack += st; onStack += st
+          val (roles, ss) = ctxFacts(x, xd)
+          val h = givesPair(sources, roles)
+          hitOf(st) = h; succOf(st) = if (h) Nil else ss
+          work.push((st, succOf(st)))
+        }
+        open(m, d)
+        while (work.nonEmpty) {
+          val (v, rest) = work.pop()
+          rest match {
+            case (w, wd) :: more =>
+              work.push((v, more))
+              val ws = (w.id, wd)
+              if (ctxLiveMemo.contains((sk, w.id, wd))) ()
+              else if (!index.contains(ws)) open(w, wd)
+              else if (onStack(ws)) low(v) = math.min(low(v), index(ws))
+            case Nil =>
+              if (work.nonEmpty) { val (u, _) = work.top; low(u) = math.min(low(u), low(v)) }
+              if (low(v) == index(v)) {
+                val comp = scala.collection.mutable.ArrayBuffer[St]()
+                var x: St = null
+                while (x != v) { x = stack.remove(stack.size - 1); onStack -= x; comp += x }
+                val members = comp.toSet
+                val isLive = comp.exists(hitOf) || comp.exists(c => succOf(c).exists { case (sx, sd) =>
+                  !members.contains((sx.id, sd)) && ctxLiveMemo.getOrElse((sk, sx.id, sd), false) })
+                comp.foreach { case (cm, cd) => ctxLiveMemo((sk, cm, cd)) = isLive }
+              }
+          }
+        }
+        ctxLiveMemo((sk, m.id, d))
+    }
+  }
+
+  /** Whether a helper walk of `t` as `sources` with `dispatched = d` can reach a place giving a pair
+    * without entering a body whose key (method, -1, sources) is already entered. */
+  private def liveGivenEntered(t: Method, d: Boolean, sources: List[String]): Boolean = {
+    val joined = sources.sorted.mkString(" ")
+    val seen = scala.collection.mutable.Set[(Long, Boolean)]()
+    val stack = scala.collection.mutable.Stack[(Method, Boolean)]((t, d))
+    var found = false
+    while (stack.nonEmpty && !found) {
+      val (m, md) = stack.pop()
+      if (seen.add((m.id, md)) && !entered.contains((m.id, -1L, joined))) {
+        val (roles, succ) = ctxFacts(m, md)
+        if (givesPair(sources, roles)) found = true
+        else succ.foreach { case (x, xd) =>
+          if (!seen.contains((x.id, xd)) && liveCtx(x, xd, sources)) stack.push((x, xd))
+        }
+      }
+    }
+    found
+  }
+
+  /** Whether the keepMostRoles alternative `t` (a target of hop `h` at call `c`, walked as
+    * `sources` on a trail whose flag is `dispatched`) can emit anything. */
+  private def alternativeMayEmit(t: Method, c: Call, h: Hop, sources: List[String], dispatched: Boolean): Boolean = {
+    def rolesOf(id: Long) = roleOfNode.getOrElse(id, Nil)
+    val reached = rolesOf(t.id) ++ rolesOf(c.id)
+    val roles = reached ++ h.provided.flatMap(p => rolesOf(p.id))
+    if (givesPair(sources, roles)) true
+    else if (reached.nonEmpty || t.isExternal) false
+    else {
+      val d = dispatched || (h.mechanism == "dispatch" && !h.bridged)
+      liveCtx(t, d, sources) && liveGivenEntered(t, d, sources)
     }
   }
 
@@ -863,14 +1267,45 @@ class Walker(graph: CallGraph, ownership: Ownership) {
   /** Execute `m` as `sources`, from `from` or its first node; `via` is the helper
     * trail, `dispatched` says that trail entered a `dispatch` override, and `framework`
     * that it crossed a framework route. `path` is the calls since the last role, and
-    * `enteredBy` the interactions whose target body this is. */
+    * `enteredBy` the interactions whose target body this is. `chain` names the helper chain
+    * a helper descent continues (-1: this body starts one). */
   def walkBody(m: Method, from: Option[CfgNode], sources: List[String],
                via: List[String], depth: Int, dispatched: Boolean = false,
                framework: Boolean = false, path: List[Step] = Nil,
-               enteredBy: List[(String, String)] = Nil): Unit = {
-    val key = (m.id, from.map(_.id).getOrElse(-1L), sources.sorted.mkString(" "))
-    if (depth > MAX_DEPTH || !enteredBodies.add(key)) return
-    val file = graph.repo.file(m.filename)
+               enteredBy: List[(String, String)] = Nil, chain: Long = -1L): Unit = {
+    noteDepth(depth)
+    if (depth > MAX_DEPTH) return
+    if (!live(m)) { deadSkips += 1; return }
+    val fromId = from.map(_.id).getOrElse(-1L)
+    val key = (m.id, fromId, sources.sorted.mkString(" "))
+    if (test(key)) return
+    addKey(key)
+    val myChain = if (chain >= 0) chain else { chains += 1; chains }
+    val mk: MemoKey = (m.id, fromId, sources, via.size, dispatched, framework)
+    val cands = memo.getOrElse(mk, Nil)
+    if (cands.isEmpty) missNoKey += 1
+    val hit = cands.find(valid(_, depth))
+    if (hit.isEmpty && cands.nonEmpty) { missInvalid += 1; if (cands.sizeIs >= MEMO_PER_KEY) missFull += 1 }
+    hit match {
+      case Some(s) =>
+        memoHits += 1
+        replay(s, via, path, enteredBy, myChain, depth)
+      case None =>
+        memoMisses += 1
+        val f = new Frame(clock, depth, edges.size, log.size, myChain, via.size, path.size)
+        frames += f
+        walkOnce(m, from, sources, via, depth, dispatched, framework, path, enteredBy, myChain)
+        val s = summarize(f)
+        pop(f)
+        memo(mk) = (s :: memo.getOrElse(mk, Nil)).take(MEMO_PER_KEY)
+    }
+  }
+
+  private def walkOnce(m: Method, from: Option[CfgNode], sources: List[String],
+                       via: List[String], depth: Int, dispatched: Boolean,
+                       framework: Boolean, path: List[Step],
+                       enteredBy: List[(String, String)], myChain: Long): Unit = {
+    val file = graph.fileOf(m)
 
     /** Control arrived at a target (through call `site`, if any): emit an edge if
       * it is another role's and continue inside it; step into a non-role helper as the same role.
@@ -895,7 +1330,7 @@ class Walker(graph: CallGraph, ownership: Ownership) {
       val among = if (pairs.isEmpty) Nil else prescribedAmong(reached ++ injectedRoles).filterNot(pairs.contains)
 
       // This hop, as the step a path records: the call made here and what it ran.
-      val code = site.map(c => brief(c.code)).getOrElse("")
+      val code = site.map(graph.briefOf).getOrElse("")
       val callee = target.map(_.fullName).orElse(site.map(_.methodFullName)).getOrElse(name)
       def step(to: String, how: String) = Step(m.fullName, file, line, code, to, how, hopVia.mkString(" "))
       def stepInto(role: String) =
@@ -904,11 +1339,13 @@ class Walker(graph: CallGraph, ownership: Ownership) {
                     .getOrElse(callee), "dependency-injection")
 
       inPatternOrder(pairs ++ among).foreach { case (s, t) =>
-        val how = if (among.contains((s, t))) "co-located"
+        val coLocated = among.contains((s, t))
+        val how = if (coLocated) "co-located"
                   else if (injectedRoles.contains(t)) "dependency-injection" else tag
         // A co-located pair's source was reached at this same call, by the pair targeting it.
-        val parent = if (among.contains((s, t))) pairs.find(_._2 == s) else enteredBy.find(_._2 == s)
-        edges += Edge(s, t, file, line, trail, how, path :+ stepInto(t), parent)
+        val parent = if (coLocated) pairs.find(_._2 == s) else enteredBy.find(_._2 == s)
+        edges += Edge(s, t, file, line, trail, how, path :+ stepInto(t), parent,
+                      chain = myChain, ctxParent = !coLocated)
       }
       val entered = pairs.map(_._2).filterNot(injectedRoles.contains).distinct
       if (entered.nonEmpty)
@@ -917,11 +1354,11 @@ class Walker(graph: CallGraph, ownership: Ownership) {
       else if (reached.isEmpty && intoHelper)
         target.filterNot(_.isExternal)
           .foreach(t => walkBody(t, None, sources, trail :+ t.fullName, depth + 1, inferred, routed,
-                                 path :+ step(t.fullName, mechanism), enteredBy))
+                                 path :+ step(t.fullName, mechanism), enteredBy, chain = myChain))
     }
 
-    if (from.isEmpty) Lang.entryEdges(m, graph.root).foreach { case (target, line, mechanism) =>
-      emitAndDescend(Some(target.id), Some(target), None, line, mechanism)
+    if (from.isEmpty) entryEdgesOf(m).foreach {
+      case (target, line, mechanism) => emitAndDescend(Some(target.id), Some(target), None, line, mechanism)
     }
 
     val visitedNodes = scala.collection.mutable.Set[Long]()
@@ -952,7 +1389,12 @@ class Walker(graph: CallGraph, ownership: Ownership) {
               h.methods match {
                 case Nil      => go(None)
                 case t :: Nil => go(Some(t))
-                case ts       => keepMostRoles(ts.map(t => () => go(Some(t))))
+                case ts       =>
+                  // The entered set is rolled back to this point before each alternative, so every
+                  // alternative is judged against the same state.
+                  val (kept, skipped) = ts.partition(t => alternativeMayEmit(t, c, h, sources, dispatched))
+                  alternativesSkipped += skipped.size
+                  keepMostRoles(kept.map(t => () => go(Some(t))))
               }
             }
 
@@ -976,7 +1418,7 @@ class Walker(graph: CallGraph, ownership: Ownership) {
           case _ => ()
         }
 
-        n._cfgOut.collect { case c: CfgNode => c }.toList.reverse.foreach(pending.push)
+        graph.cfgNextReversed(n).foreach(pending.push)
       }
     }
   }

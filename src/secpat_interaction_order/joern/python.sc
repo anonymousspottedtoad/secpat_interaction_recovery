@@ -702,14 +702,17 @@ object Lang extends LangSpec {
     lazy val graphFiles: Set[String] = cpg.file.name.l.map(rl).filter(_.nonEmpty).toSet
 
     /** A repo-root path as a graph file: exact, or the unique match below a source root (`src/`). */
-    def toGraphFile(p: String): Option[String] =
+    def toGraphFile(p: String): Option[String] = graphFileMemo.getOrElseUpdate(p,
       if (graphFiles.contains(p)) Some(p)
       else graphFiles.filter { f =>
         f.endsWith("/" + p) && !graphFiles.contains(f.dropRight(p.length) + "__init__.py")
       }.toList match {
         case List(one) => Some(one)
         case _         => None
-      }
+      })
+    /** `toGraphFile` scans every graph file for a suffix match; profiling found it under 58-78 % of
+      * the walk's samples on the Python drafts that timed out. It is a pure function of `p`. */
+    private val graphFileMemo = scala.collection.mutable.HashMap[String, Option[String]]()
 
     /** (file, name) -> module-level `def`, `class` and non-import assignment nodes. */
     lazy val moduleDefs: Map[(String, String), List[Long]] = {
@@ -725,7 +728,14 @@ object Lang extends LangSpec {
     }
 
     /** Follow `name` as `file` imports it, file by file, until one defines it. */
+    /** `chain` from an empty `seen` is a pure function of (file, name); the inner calls are not
+      * cached, since their answer depends on the cycle cut `seen` makes. */
+    private val chainMemo = scala.collection.mutable.HashMap[(String, String), List[Long]]()
     def chain(file: String, name: String, seen: Set[(String, String)]): List[Long] =
+      if (seen.isEmpty) chainMemo.getOrElseUpdate((file, name), chainFrom(file, name, seen))
+      else chainFrom(file, name, seen)
+
+    private def chainFrom(file: String, name: String, seen: Set[(String, String)]): List[Long] =
       if (seen.contains((file, name))) Nil
       else importedIn.get((file, name)).toList.flatMap { entity =>
         val symbol = entity.split('.').filter(_.nonEmpty).lastOption.getOrElse(name)

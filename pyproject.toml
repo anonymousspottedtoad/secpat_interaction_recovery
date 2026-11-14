@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "secpat-interaction-order"
-version = "0.1.0"
+version = "0.2.0"
 description = "Interaction-order detection for security-pattern role mappings, on a Joern query service."
 readme = "README.md"
 requires-python = ">=3.11"
