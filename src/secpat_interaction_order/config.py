@@ -66,3 +66,19 @@ SECPAT_WALK_BIN = os.getenv("SECPAT_WALK_BIN", "secpat-walk")
 # With the native engine: keep one `secpat-walk serve` process per Python process, so
 # consecutive queries on one repository read its CPG once.
 SECPAT_WALK_SERVE = os.getenv("SECPAT_WALK_SERVE", "").strip().lower() in ("1", "true", "yes")
+
+# ── CPG builds (local joern-parse) ────────────────────────────────────────────
+
+# Delombok mode for JAVASRC builds. "types-only" is what the query service used; "no-delombok"
+# skips it. Profiling (2026-11-14, a 713-file Lombok repo): types-only took 106 s, 10.8 GB and 38
+# concurrent JVMs against 20 s, 1.8 GB and 2 JVMs without -- the cause of the 2026-11-09 freezes.
+JOERN_DELOMBOK_MODE = os.getenv("JOERN_DELOMBOK_MODE", "types-only").strip() or "types-only"
+
+# joern-parse computes reaching definitions (the data-flow overlay) by default. The walk never
+# reads them, and they cost 6-42 % of a build; unset, builds pass `--max-num-def 0`, which skips
+# them. Set JOERN_PARSE_DATAFLOW=1 to build the full graph.
+JOERN_PARSE_DATAFLOW = os.getenv("JOERN_PARSE_DATAFLOW", "").strip().lower() in ("1", "true", "yes")
+
+# Heap cap for every JVM a build starts, e.g. "32g". Passed through JAVA_TOOL_OPTIONS, so delombok's
+# child JVMs inherit it too; without it each JVM sizes itself at 75 % of the machine's memory.
+JOERN_PARSE_XMX = os.getenv("JOERN_PARSE_XMX", "").strip()

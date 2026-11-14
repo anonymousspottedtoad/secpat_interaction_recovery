@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""A warm Joern worker: compile the walk once, keep the JVM, stream queries over stdin.
+"""A warm Joern worker: compile the walk once, keep the JVM, stream queries over a named pipe.
 
 `joern --script` per query pays ~10 s before the walk starts (two JVMs + compiling the
 ~1,300-2,000-line script) and copies + re-saves the CPG; the walk itself takes 0.0-0.3 s on
@@ -19,7 +19,8 @@ from __future__ import annotations
 import argparse
 import json
 import os
-import select
+import queue
+import threading
 import signal
 import subprocess
 import sys
@@ -37,9 +38,11 @@ WORKER_MAIN = r'''
 var cpg: io.shiftleft.codepropertygraph.generated.Cpg = null
 var loadedPath = ""
 
-@main def serve() = {
+// `joern --script` runs the script in a second JVM and does not hand it stdin, so jobs arrive
+// through a named pipe instead.
+@main def serve(fifo: String) = {
   println(s"WORKER-READY uptime_ms=${java.lang.management.ManagementFactory.getRuntimeMXBean.getUptime}")
-  val in = new java.io.BufferedReader(new java.io.InputStreamReader(System.in, "UTF-8"))
+  val in = new java.io.BufferedReader(new java.io.InputStreamReader(new java.io.FileInputStream(fifo), "UTF-8"))
   var line = in.readLine()
   while (line != null) {
     if (line.trim.nonEmpty) {
@@ -83,35 +86,63 @@ class Worker:
         self.workdir = workdir
         script = workdir / f"worker_{language}.sc"
         script.write_text(worker_script(language, walk), encoding="utf-8")
+        self.fifo = workdir / f"jobs_{language}.fifo"
+        if not self.fifo.exists():
+            os.mkfifo(self.fifo)
         self.t_spawn = time.monotonic()
         self.proc = subprocess.Popen(
-            [pw.JOERN, "--script", str(script)], stdin=subprocess.PIPE, stdout=subprocess.PIPE,
+            [pw.JOERN, "--script", str(script), "--param", f"fifo={self.fifo}"],
+            stdin=subprocess.DEVNULL, stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT, text=True, bufsize=1, cwd=str(workdir), start_new_session=True,
             env=dict(os.environ, JAVA_TOOL_OPTIONS=f"-Xmx{xmx}"))
         self.log = log
         self.ready_s = None
+        self.lines: queue.Queue = queue.Queue()
+        threading.Thread(target=self._pump, daemon=True).start()
         line = self._read_until(("WORKER-READY",), 600)
         if line is None:
             raise RuntimeError("worker did not start")
         self.ready_s = time.monotonic() - self.t_spawn
+        # The reader has the pipe open once `serve` runs; open the write end without blocking.
+        fd = None
+        for _ in range(600):
+            try:
+                fd = os.open(self.fifo, os.O_WRONLY | os.O_NONBLOCK)
+                break
+            except OSError:
+                time.sleep(0.1)
+        if fd is None:
+            raise RuntimeError("worker never opened its job pipe")
+        os.set_blocking(fd, True)
+        self.jobs = os.fdopen(fd, "w", buffering=1)
+
+    def _pump(self):
+        # One thread owns the pipe: select() on a buffered text stream misses lines that
+        # readline() already pulled into the buffer.
+        for line in self.proc.stdout:
+            self.lines.put(line)
+        self.lines.put(None)
 
     def _read_until(self, prefixes, timeout):
         deadline = time.monotonic() + timeout
-        while time.monotonic() < deadline:
-            r, _, _ = select.select([self.proc.stdout], [], [], max(0.0, deadline - time.monotonic()))
-            if not r:
-                break
-            line = self.proc.stdout.readline()
-            if not line:
+        while True:
+            left = deadline - time.monotonic()
+            if left <= 0:
+                return None
+            try:
+                line = self.lines.get(timeout=left)
+            except queue.Empty:
+                return None
+            if line is None:
                 return None
             self.log.write(line)
+            self.log.flush()
             if line.startswith(prefixes):
                 return line.rstrip("\n")
-        return None
 
     def run(self, job: dict, timeout: float):
-        self.proc.stdin.write(json.dumps(job) + "\n")
-        self.proc.stdin.flush()
+        self.jobs.write(json.dumps(job) + "\n")
+        self.jobs.flush()
         load_s = 0.0
         t0 = time.monotonic()
         while True:
@@ -183,7 +214,7 @@ def main() -> int:
                 w = None
             (out / "timings.json").write_text(json.dumps(timings, indent=1))
         if w is not None:
-            w.proc.stdin.close()
+            w.jobs.close()
             try:
                 w.proc.wait(timeout=60)
             except subprocess.TimeoutExpired:

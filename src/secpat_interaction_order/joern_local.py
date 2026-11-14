@@ -49,7 +49,7 @@ logger = logging.getLogger(__name__)
 #: pretty-printer drops blank lines and comments, so every line in the graph would
 #: drift from the checkout; ``types-only`` resolves Lombok's types but analyses the
 #: original files.
-_FRONTEND_ARGS = {"JAVASRC": ["--delombok-mode", "types-only"]}
+_FRONTEND_ARGS = {"JAVASRC": ["--delombok-mode", config.JOERN_DELOMBOK_MODE]}
 
 #: How much of Joern's stdout/stderr is logged on a failure.
 _DETAIL_TAIL = 2000
@@ -143,14 +143,20 @@ def _ensure_cpg(repo: str, frontend: str, repo_path: Path) -> Path | None:
         command = [config.JOERN_PARSE_BIN, str(repo_path), "-o", str(partial)]
         if frontend:
             command += ["--language", frontend]
+        if not config.JOERN_PARSE_DATAFLOW:
+            command += ["--max-num-def", "0"]
         if frontend in _FRONTEND_ARGS:
             command += ["--frontend-args", *_FRONTEND_ARGS[frontend]]
 
         logger.info("joern: building the CPG for %s — %s", repo, " ".join(command))
         started = time.monotonic()
         workdir = Path(tempfile.mkdtemp(prefix="secpat-joern-parse-"))
+        env = None
+        if config.JOERN_PARSE_XMX:
+            opts = os.environ.get("JAVA_TOOL_OPTIONS", "")
+            env = dict(os.environ, JAVA_TOOL_OPTIONS=f"{opts} -Xmx{config.JOERN_PARSE_XMX}".strip())
         try:
-            completed = _run(command, workdir, config.JOERN_BUILD_TIMEOUT_SECONDS, repo, "build")
+            completed = _run(command, workdir, config.JOERN_BUILD_TIMEOUT_SECONDS, repo, "build", env=env)
         finally:
             shutil.rmtree(workdir, ignore_errors=True)
         if completed is None or completed.returncode != 0 or not partial.is_file():
@@ -171,12 +177,12 @@ def _ensure_cpg(repo: str, frontend: str, repo_path: Path) -> Path | None:
 
 
 def _run(
-    command: list[str], cwd: Path, timeout: int, repo: str, what: str
+    command: list[str], cwd: Path, timeout: int, repo: str, what: str, env: dict | None = None
 ) -> subprocess.CompletedProcess | None:
     """Run one Joern binary; ``None`` (logged) when it is missing or times out."""
     try:
         return subprocess.run(
-            command, cwd=str(cwd), env=dict(os.environ),
+            command, cwd=str(cwd), env=env or dict(os.environ),
             capture_output=True, text=True, timeout=timeout, check=False,
         )
     except FileNotFoundError:

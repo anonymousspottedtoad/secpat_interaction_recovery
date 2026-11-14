@@ -84,6 +84,20 @@ and kept. Two things to get right:
   installs both. A JRE-only install resolves fewer Java types, so its orders are not
   comparable.
 
+## Faster engines and builds
+
+Profiling (`profiling/PROFILING.md`, branch `profiling`) found that a local `joern --script` query
+spends ~11 s starting Joern for a walk that mostly takes well under a second. Two options, both
+returning the same orders:
+
+| Setting | Default | |
+| ------- | ------- | - |
+| `JOERN_ENGINE` | `joern` | `rust` runs the walk on `secpat-walk` (repository joern-rust), which reads the same CPGs |
+| `SECPAT_WALK_BIN` / `SECPAT_WALK_SERVE` | `secpat-walk` / off | the native binary; keep one `serve` process per Python process |
+| `JOERN_DELOMBOK_MODE` | `types-only` | `no-delombok` builds a Lombok repo in a fifth of the time and memory |
+| `JOERN_PARSE_DATAFLOW` | off | builds skip reaching definitions (`--max-num-def 0`), which the walk never reads |
+| `JOERN_PARSE_XMX` | unset | heap cap for every JVM a build starts, delombok's children included |
+
 ## Install
 
 ```bash

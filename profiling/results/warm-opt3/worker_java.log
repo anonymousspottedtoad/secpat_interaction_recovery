@@ -1,0 +1,48 @@
+Picked up JAVA_TOOL_OPTIONS: -Xmx48g
+Picked up JAVA_TOOL_OPTIONS: -Xmx48g
+executing /tmp/claude-0/-workspace-replicate-secpat-interaction-recovery/2b3e719e-e09c-4879-891f-382be0d995cf/scratchpad/prof/warm-bvyelumx/worker_java.sc with params=Map(fifo -> /tmp/claude-0/-workspace-replicate-secpat-interaction-recovery/2b3e719e-e09c-4879-891f-382be0d995cf/scratchpad/prof/warm-bvyelumx/jobs_java.fifo)
+WORKER-READY uptime_ms=9581
+[INFO ] initialising from existing storage (/workspace/mining-sec-arcs-tactics/build/volumes/joern_cpg/wjs1995_sb-jwt-auth-starter__JAVASRC.cpg)
+WORKER-LOADED java/verifiable_token_based_authentication/wjs1995_sb-jwt-auth-starter 0.149
+derived 5 interaction(s) from 4 role(s), entry=Enforcer
+WORKER-DONE java/verifiable_token_based_authentication/wjs1995_sb-jwt-auth-starter 0.1877
+[INFO ] initialising from existing storage (/workspace/mining-sec-arcs-tactics/build/volumes/joern_cpg/icexmoon_spring-easy__JAVASRC.cpg)
+WORKER-LOADED java/authentication_pwd/icexmoon_spring-easy 0.182
+derived 2 interaction(s) from 7 role(s), entry=Enforcer
+WORKER-DONE java/authentication_pwd/icexmoon_spring-easy 0.0768
+[INFO ] initialising from existing storage (/workspace/mining-sec-arcs-tactics/build/volumes/joern_cpg/m4rc310RCP_core-api__JAVASRC.cpg)
+WORKER-LOADED java/verifiable_token_based_authentication/m4rc310RCP_core-api 0.057
+derived 2 interaction(s) from 4 role(s), entry=Enforcer
+WORKER-DONE java/verifiable_token_based_authentication/m4rc310RCP_core-api 0.0754
+[INFO ] initialising from existing storage (/workspace/mining-sec-arcs-tactics/build/volumes/joern_cpg/hprxkbrddd_grind__JAVASRC.cpg)
+WORKER-LOADED java/authentication_pwd/hprxkbrddd_grind 0.065
+derived 4 interaction(s) from 7 role(s), entry=Enforcer
+WORKER-DONE java/authentication_pwd/hprxkbrddd_grind 0.0449
+[INFO ] initialising from existing storage (/workspace/mining-sec-arcs-tactics/build/volumes/joern_cpg/catch-money_java-impetus__JAVASRC.cpg)
+WORKER-LOADED java/session_based_access_control/catch-money_java-impetus 0.080
+derived 5 interaction(s) from 6 role(s), entry=Authentication enforcer
+WORKER-DONE java/session_based_access_control/catch-money_java-impetus 0.0419
+[INFO ] initialising from existing storage (/workspace/mining-sec-arcs-tactics/build/volumes/joern_cpg/mosip_esignet__JAVASRC.cpg)
+WORKER-LOADED java/verifiable_token_based_authentication/mosip_esignet 0.077
+derived 3 interaction(s) from 4 role(s), entry=Enforcer
+WORKER-DONE java/verifiable_token_based_authentication/mosip_esignet 0.0639
+[INFO ] initialising from existing storage (/workspace/mining-sec-arcs-tactics/build/volumes/joern_cpg/factcast_factcast__JAVASRC.cpg)
+WORKER-LOADED java/limit_request_rate/factcast_factcast 0.101
+derived 2 interaction(s) from 4 role(s), entry=Enforcer
+WORKER-DONE java/limit_request_rate/factcast_factcast 0.1704
+[INFO ] initialising from existing storage (/workspace/mining-sec-arcs-tactics/build/volumes/joern_cpg/dialob_dialob-parent__JAVASRC.cpg)
+WORKER-LOADED java/obscure_token_based_access_control/dialob_dialob-parent 0.088
+derived 3 interaction(s) from 4 role(s), entry=Enforcer
+WORKER-DONE java/obscure_token_based_access_control/dialob_dialob-parent 0.0693
+[INFO ] initialising from existing storage (/workspace/mining-sec-arcs-tactics/build/volumes/joern_cpg/lbk-ones_easy4j__JAVASRC.cpg)
+WORKER-LOADED java/verifiable_token_based_authentication/lbk-ones_easy4j 0.081
+derived 2 interaction(s) from 4 role(s), entry=Enforcer
+WORKER-DONE java/verifiable_token_based_authentication/lbk-ones_easy4j 0.3855
+[INFO ] initialising from existing storage (/workspace/mining-sec-arcs-tactics/build/volumes/joern_cpg/EximeeBPMS_eximeebpms__JAVASRC.cpg)
+WORKER-LOADED java/limit_request_rate/EximeeBPMS_eximeebpms 0.199
+derived 1 interaction(s) from 4 role(s), entry=Enforcer
+WORKER-DONE java/limit_request_rate/EximeeBPMS_eximeebpms 7.3443
+[INFO ] initialising from existing storage (/workspace/mining-sec-arcs-tactics/build/volumes/joern_cpg/DSpace_DSpace__JAVASRC.cpg)
+WORKER-LOADED java/obscure_token_based_access_control/DSpace_DSpace 0.154
+derived 2 interaction(s) from 4 role(s), entry=Enforcer
+WORKER-DONE java/obscure_token_based_access_control/DSpace_DSpace 0.7123

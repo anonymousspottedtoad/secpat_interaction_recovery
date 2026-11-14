@@ -23,7 +23,7 @@ import atexit
 import json
 import logging
 import os
-import select
+import queue
 import shutil
 import subprocess
 import tempfile
@@ -107,6 +107,15 @@ class _Server:
             text=True, bufsize=1)
         self.lock = threading.Lock()
         self.count = 0
+        # One thread owns the pipe: select() on a buffered text stream misses lines that
+        # readline() already pulled into the buffer.
+        self.lines: queue.Queue = queue.Queue()
+        threading.Thread(target=self._pump, daemon=True).start()
+
+    def _pump(self):
+        for line in self.proc.stdout:
+            self.lines.put(line)
+        self.lines.put(None)
 
     def ask(self, job: dict, timeout: float) -> tuple[bool, str]:
         with self.lock:
@@ -115,12 +124,15 @@ class _Server:
             self.proc.stdin.write(json.dumps(job) + "\n")
             self.proc.stdin.flush()
             deadline = time.monotonic() + timeout
-            while time.monotonic() < deadline:
-                ready, _, _ = select.select([self.proc.stdout], [], [], max(0.0, deadline - time.monotonic()))
-                if not ready:
+            while True:
+                left = deadline - time.monotonic()
+                if left <= 0:
                     break
-                line = self.proc.stdout.readline()
-                if not line:
+                try:
+                    line = self.lines.get(timeout=left)
+                except queue.Empty:
+                    break
+                if line is None:
                     return False, "secpat-walk serve exited"
                 parts = line.split(" ", 2)
                 if len(parts) >= 2 and parts[1] == job["id"]:
