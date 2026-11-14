@@ -17,8 +17,10 @@ Recovery). The paper's Appendix C (Using Code Property Graphs for Interaction
 Recovery) describes the traversal rules and the edges the walk adds, and
 [`JOERN.md`](src/secpat_interaction_order/JOERN.md) works through one example. The
 appendix is at <https://doi.org/10.5281/zenodo.23664769>, and its Appendix G lists
-the other artifacts. The same walk derived the groundtruth interaction sequences of
-the paper's dataset, and IRC
+the other artifacts. The walk derived the groundtruth interaction sequences of the
+paper's dataset (in version 0.1.0; 0.2.0 removes repeated work without changing its
+rules or, on every order it was compared with, its output: see
+[Changelog.md](Changelog.md)), and IRC
 ([secpat_evaluation_metrics](https://github.com/anonymousspottedtoad/secpat_evaluation_metrics))
 walks both sides with it. It has rules for Java and Python, the two languages of
 the paper.
@@ -52,8 +54,8 @@ Two rules of the walk are not described in Appendix C:
 | `config.py` | `JOERN_*` env vars, read at import time |
 | `JOERN.md` | source -> CPG -> walk, with a worked example |
 
-The walk itself runs in Joern; nothing is walked in Python. The package has no
-dependencies.
+The walk itself runs in Joern (or, opt-in, in the native engine described below);
+nothing is walked in Python. The package has no dependencies.
 
 ## Where Joern runs
 
@@ -86,7 +88,7 @@ and kept. Two things to get right:
 
 ## Faster engines and builds
 
-Profiling (`profiling/PROFILING.md`, branch `profiling`) found that a local `joern --script` query
+Profiling (`profiling/PROFILING.md`) found that a local `joern --script` query
 spends ~11 s starting Joern for a walk that mostly takes well under a second. Two options, both
 returning the same orders:
 
@@ -113,6 +115,10 @@ The repository has no test suite. To check an install against known numbers, run
 secpatrec's Experiment 2 on the `pipeline` experiment: it walks the paper's
 recoveries again with this package, and its scores equal those stored in the
 dataset's `evaluation.json` files.
+
+## Changelog
+
+See [Changelog.md](Changelog.md).
 
 ## License
 
