@@ -1,0 +1,125 @@
+{
+ "phases": {
+  "1-callgraph": 0.350326445,
+  "2a-declarations": 6.957724437,
+  "2b-locate": 2.048336933,
+  "2c-ownership": 0.005547759,
+  "3-entry": 5.969670944,
+  "4-walk": 32.345225513,
+  "5-render": 0.004634119
+ },
+ "counters": {
+  "targetsOf.calls": 73918,
+  "walkBody.calls": 1,
+  "walkBody.entered": 1,
+  "walkBody.maxDepth": 0,
+  "enteredBodies.maxSize": 1,
+  "memo.missNoKey": 1,
+  "memo.missInvalid": 0,
+  "memo.missFull": 0,
+  "memo.keys": 0,
+  "memo.computed": 1,
+  "walk.nodesVisited": 243,
+  "walk.deadSkips": 6,
+  "kmr.altSkipped": 129,
+  "kmr.calls": 4,
+  "kmr.alternatives": 1,
+  "kmr.maxNesting": 1,
+  "graph.methods": 434980,
+  "graph.internalMethods": 236827,
+  "located": 4,
+  "edges.raw": 4,
+  "interactions": 4
+ },
+ "distinct": {
+  "targetsOf.sites": 73776,
+  "walkBody.methods": 1,
+  "walk.distinctNodes": 243
+ },
+ "inPhase": "",
+ "status": "done",
+ "elapsed": 47.705934036,
+ "loadS": 5.550036673,
+ "uptimeAtMainMs": 11526,
+ "heapAfterLoadMb": 6749,
+ "progress": [
+  {
+   "t": 3.684419198,
+   "counters": {},
+   "inPhase": "2a-declarations"
+  },
+  {
+   "t": 13.748641788,
+   "counters": {
+    "targetsOf.calls": 6
+   },
+   "inPhase": "3-entry"
+  },
+  {
+   "t": 23.759835465,
+   "counters": {
+    "targetsOf.calls": 218,
+    "walkBody.calls": 1,
+    "walkBody.entered": 1,
+    "walkBody.maxDepth": 0,
+    "enteredBodies.maxSize": 1,
+    "memo.missNoKey": 1,
+    "memo.missInvalid": 0,
+    "memo.missFull": 0,
+    "memo.keys": 0,
+    "memo.computed": 1,
+    "walk.nodesVisited": 41,
+    "walk.deadSkips": 2,
+    "kmr.altSkipped": 8,
+    "kmr.calls": 1,
+    "kmr.alternatives": 0,
+    "kmr.maxNesting": 1
+   },
+   "inPhase": "4-walk"
+  },
+  {
+   "t": 33.773582484,
+   "counters": {
+    "targetsOf.calls": 25618,
+    "walkBody.calls": 1,
+    "walkBody.entered": 1,
+    "walkBody.maxDepth": 0,
+    "enteredBodies.maxSize": 1,
+    "memo.missNoKey": 1,
+    "memo.missInvalid": 0,
+    "memo.missFull": 0,
+    "memo.keys": 0,
+    "memo.computed": 1,
+    "walk.nodesVisited": 41,
+    "walk.deadSkips": 2,
+    "kmr.altSkipped": 8,
+    "kmr.calls": 1,
+    "kmr.alternatives": 0,
+    "kmr.maxNesting": 1
+   },
+   "inPhase": "4-walk"
+  },
+  {
+   "t": 43.839021455,
+   "counters": {
+    "targetsOf.calls": 69533,
+    "walkBody.calls": 1,
+    "walkBody.entered": 1,
+    "walkBody.maxDepth": 0,
+    "enteredBodies.maxSize": 1,
+    "memo.missNoKey": 1,
+    "memo.missInvalid": 0,
+    "memo.missFull": 0,
+    "memo.keys": 0,
+    "memo.computed": 1,
+    "walk.nodesVisited": 41,
+    "walk.deadSkips": 2,
+    "kmr.altSkipped": 8,
+    "kmr.calls": 1,
+    "kmr.alternatives": 0,
+    "kmr.maxNesting": 1
+   },
+   "inPhase": "4-walk"
+  }
+ ]
+}

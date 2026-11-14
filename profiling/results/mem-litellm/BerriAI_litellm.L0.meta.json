@@ -1,0 +1,20 @@
+{
+ "repo": "BerriAI_litellm",
+ "launch": 0,
+ "jobs": [
+  "python/verifiable_token_based_authentication/BerriAI_litellm"
+ ],
+ "marks": {
+  "main": 13.02379109710455,
+  "loaded": 18.53258913382888,
+  "start:python/verifiable_token_based_authentication/BerriAI_litellm": 18.53259628266096,
+  "done:python/verifiable_token_based_authentication/BerriAI_litellm": 189.82497339695692,
+  "end": 189.82498144358397,
+  "exit": 191.82851487398148
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": true,
+ "xmx": "48g",
+ "budget": 300.0
+}

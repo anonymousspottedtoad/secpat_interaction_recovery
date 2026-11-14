@@ -228,10 +228,30 @@ Repository `/workspace/joern-rust` (`docs/PLAN.md`, `docs/WALK.md`, `docs/cpg-st
 | `secpat-walk` (Rust) | CPG open 2 ms; walk median 10 ms (Java) / 76 ms (Python), p90 0.24 / 1.1 s | ~2.3 min of walking (26 s Java, 112 s Python) |
 | `detect()` with `JOERN_ENGINE=rust` | 0.02–0.05 s on small repos (vs ~11–14 s) | – |
 
-**Memory:**
+**Memory** (peak RSS of the whole process tree, sampled every 50 ms; same drafts, each run alone;
+Joern runs `walk_opt3.sc` with `-Xmx48g`, close to the client's default of a quarter of the
+container's 180 GiB; results in `results/mem-*`):
+
+| Draft (CPG size) | `secpat-walk` | `joern --script` | Joern heap after GC, max |
+|---|---:|---:|---:|
+| ton-blockchain-mcp (541 MB) | 3.1 GB | 15.2 GB | 10.6 GB |
+| kailash-py, 2 drafts (494 MB) | 3.6 GB | 33.3 GB | 9.7 GB |
+| litellm (490 MB), never finishes | 15.3 GB at the 300 s limit | 31.1 GB when it died (StackOverflowError) | 8.5 GB |
+
 - Peak RSS per CPG in Rust: median 13 MB (Java) / 48 MB (Python).
-- But the 490–541 MB Python CPGs peak at 13.5–13.7 GB, against 6.6 GB of JVM heap after
-  `importCpg`. The Python profile's lookup indexes are the next thing to slim.
+- Of the Rust peaks, the decoded graph columns are 2.1–2.3 GB; the rest is the walk. The JVM holds
+  the whole graph in its heap (6.6 GB for litellm after `importCpg`) and lets garbage build up to
+  ~28 GB between collections, so its process grows to its 32–34 GB committed heap.
+- litellm is not comparable: its walk never ends, and Rust gets ~1,000× further before the limit
+  (16.6 M bodies walked and 526 k memo summaries, against 14.6 k bodies when the JVM's stack
+  overflowed). Its memo of walked bodies grows by up to ~120 MB/s.
+- An earlier version of this report said the 490–541 MB Python CPGs peak at 13.5–13.7 GB in Rust.
+  That was a measurement artefact. In the all-drafts batch, kailash-py and ton-blockchain-mcp ran
+  after litellm in the same process, and the allocator kept litellm's ~15 GB after its walk was
+  aborted, so their per-CPG peaks included it. Reproduced: ton-blockchain-mcp alone 3.1 GB, after
+  litellm in one process 16.0 GB. To do: give memory back after each draft (`malloc_trim`, or an
+  allocator that returns it) so a long-lived `serve` process does not keep it, and cap the walk
+  memo so an unbounded draft cannot grow without limit.
 
 **Bugs found in the Scala while porting,** reproduced faithfully, not fixed (they change outputs;
 for the authors to decide):
