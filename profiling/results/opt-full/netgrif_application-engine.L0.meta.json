@@ -1,0 +1,20 @@
+{
+ "repo": "netgrif_application-engine",
+ "launch": 0,
+ "jobs": [
+  "java/authentication_pwd/netgrif_application-engine"
+ ],
+ "marks": {
+  "main": 11.019765183329582,
+  "loaded": 12.021675929427147,
+  "start:java/authentication_pwd/netgrif_application-engine": 12.021679680794477,
+  "done:java/authentication_pwd/netgrif_application-engine": 12.522489547729492,
+  "end": 12.522495411336422,
+  "exit": 12.522519569844007
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

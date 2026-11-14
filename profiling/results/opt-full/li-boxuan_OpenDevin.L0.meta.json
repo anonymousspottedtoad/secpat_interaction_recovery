@@ -1,0 +1,23 @@
+{
+ "repo": "li-boxuan_OpenDevin",
+ "launch": 0,
+ "jobs": [
+  "python/obscure_token_based_access_control/li-boxuan_OpenDevin",
+  "python/session_based_access_control/li-boxuan_OpenDevin"
+ ],
+ "marks": {
+  "main": 11.520865608006716,
+  "loaded": 13.023680191487074,
+  "start:python/obscure_token_based_access_control/li-boxuan_OpenDevin": 13.023685544729233,
+  "done:python/obscure_token_based_access_control/li-boxuan_OpenDevin": 15.027180559933186,
+  "start:python/session_based_access_control/li-boxuan_OpenDevin": 15.027186755090952,
+  "done:python/session_based_access_control/li-boxuan_OpenDevin": 19.034383043646812,
+  "end": 19.03438987210393,
+  "exit": 19.03441336378455
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

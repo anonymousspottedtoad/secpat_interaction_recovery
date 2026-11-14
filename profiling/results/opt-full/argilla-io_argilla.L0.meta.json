@@ -1,0 +1,20 @@
+{
+ "repo": "argilla-io_argilla",
+ "launch": 0,
+ "jobs": [
+  "python/obscure_token_based_access_control/argilla-io_argilla"
+ ],
+ "marks": {
+  "main": 11.519379891455173,
+  "loaded": 13.021912351250648,
+  "start:python/obscure_token_based_access_control/argilla-io_argilla": 13.02191574126482,
+  "done:python/obscure_token_based_access_control/argilla-io_argilla": 15.025339979678392,
+  "end": 15.025346092879772,
+  "exit": 15.526344917714596
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

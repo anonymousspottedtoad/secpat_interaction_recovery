@@ -1,0 +1,20 @@
+{
+ "repo": "AAFC-BICoE_dina-base-api",
+ "launch": 0,
+ "jobs": [
+  "java/session_based_access_control/AAFC-BICoE_dina-base-api"
+ ],
+ "marks": {
+  "main": 11.019455656409264,
+  "loaded": 11.520209576934576,
+  "start:java/session_based_access_control/AAFC-BICoE_dina-base-api": 11.520213168114424,
+  "done:java/session_based_access_control/AAFC-BICoE_dina-base-api": 12.021094433963299,
+  "end": 12.021100848913193,
+  "exit": 12.021124120801687
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

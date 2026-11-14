@@ -52,3 +52,17 @@ JOERN_CPG_ROOT = Path(
 # Wall-clock ceiling for one local CPG build, in seconds. A build is the slow,
 # memory-bound step — minutes on a large repo.
 JOERN_BUILD_TIMEOUT_SECONDS = int(os.getenv("JOERN_BUILD_TIMEOUT_SECONDS", "3600"))
+
+# ── engine ────────────────────────────────────────────────────────────────────
+
+# Which engine runs the walk when JOERN_SERVICE_URL is unset: "joern" (`joern --script`, the
+# default) or "rust" (`secpat-walk` from the joern-rust repository, which reads the same CPGs
+# and returns the same result without Joern's ~10 s start-up per query).
+JOERN_ENGINE = os.getenv("JOERN_ENGINE", "joern").strip().lower() or "joern"
+
+# The native engine's binary, on PATH or a full path.
+SECPAT_WALK_BIN = os.getenv("SECPAT_WALK_BIN", "secpat-walk")
+
+# With the native engine: keep one `secpat-walk serve` process per Python process, so
+# consecutive queries on one repository read its CPG once.
+SECPAT_WALK_SERVE = os.getenv("SECPAT_WALK_SERVE", "").strip().lower() in ("1", "true", "yes")

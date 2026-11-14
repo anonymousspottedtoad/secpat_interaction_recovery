@@ -1,0 +1,20 @@
+{
+ "repo": "freqtrade_freqtrade",
+ "launch": 0,
+ "jobs": [
+  "python/verifiable_token_based_authentication/freqtrade_freqtrade"
+ ],
+ "marks": {
+  "main": 11.518475346267223,
+  "loaded": 12.52011951059103,
+  "start:python/verifiable_token_based_authentication/freqtrade_freqtrade": 12.520123071968555,
+  "done:python/verifiable_token_based_authentication/freqtrade_freqtrade": 14.52368013560772,
+  "end": 14.523686416447163,
+  "exit": 14.523710403591394
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

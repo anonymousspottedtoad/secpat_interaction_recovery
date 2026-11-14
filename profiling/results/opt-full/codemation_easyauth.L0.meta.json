@@ -1,0 +1,23 @@
+{
+ "repo": "codemation_easyauth",
+ "launch": 0,
+ "jobs": [
+  "python/authentication_pwd/codemation_easyauth",
+  "python/verifiable_token_based_authentication/codemation_easyauth"
+ ],
+ "marks": {
+  "main": 12.023358069360256,
+  "loaded": 12.524535797536373,
+  "start:python/authentication_pwd/codemation_easyauth": 13.02537526190281,
+  "done:python/authentication_pwd/codemation_easyauth": 13.025386784225702,
+  "start:python/verifiable_token_based_authentication/codemation_easyauth": 13.025391403585672,
+  "done:python/verifiable_token_based_authentication/codemation_easyauth": 13.526333212852478,
+  "end": 13.526340566575527,
+  "exit": 13.526363115757704
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

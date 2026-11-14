@@ -1,0 +1,20 @@
+{
+ "repo": "Amanbig_runapi",
+ "launch": 0,
+ "jobs": [
+  "python/limit_request_rate/Amanbig_runapi"
+ ],
+ "marks": {
+  "main": 12.018589049577713,
+  "loaded": 13.020492553710938,
+  "start:python/limit_request_rate/Amanbig_runapi": 13.020498506724834,
+  "done:python/limit_request_rate/Amanbig_runapi": 13.020505577325821,
+  "end": 13.020508702844381,
+  "exit": 13.020531248301268
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

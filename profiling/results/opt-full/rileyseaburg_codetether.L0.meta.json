@@ -1,0 +1,20 @@
+{
+ "repo": "rileyseaburg_codetether",
+ "launch": 0,
+ "jobs": [
+  "python/authentication_pwd/rileyseaburg_codetether"
+ ],
+ "marks": {
+  "main": 11.52056685462594,
+  "loaded": 12.522097926586866,
+  "start:python/authentication_pwd/rileyseaburg_codetether": 12.522101361304522,
+  "done:python/authentication_pwd/rileyseaburg_codetether": 14.524879567325115,
+  "end": 14.524885646998882,
+  "exit": 14.524908822029829
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

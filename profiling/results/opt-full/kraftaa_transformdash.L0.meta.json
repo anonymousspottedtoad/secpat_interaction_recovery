@@ -1,0 +1,20 @@
+{
+ "repo": "kraftaa_transformdash",
+ "launch": 0,
+ "jobs": [
+  "python/limit_request_rate/kraftaa_transformdash"
+ ],
+ "marks": {
+  "main": 12.018371723592281,
+  "loaded": 12.519312914460897,
+  "start:python/limit_request_rate/kraftaa_transformdash": 12.519318372011185,
+  "done:python/limit_request_rate/kraftaa_transformdash": 13.020311512053013,
+  "end": 13.02031745761633,
+  "exit": 13.020339902490377
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

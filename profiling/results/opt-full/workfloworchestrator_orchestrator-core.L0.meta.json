@@ -1,0 +1,20 @@
+{
+ "repo": "workfloworchestrator_orchestrator-core",
+ "launch": 0,
+ "jobs": [
+  "python/session_based_access_control/workfloworchestrator_orchestrator-core"
+ ],
+ "marks": {
+  "main": 11.522297408431768,
+  "loaded": 12.523753974586725,
+  "start:python/session_based_access_control/workfloworchestrator_orchestrator-core": 12.523759678006172,
+  "done:python/session_based_access_control/workfloworchestrator_orchestrator-core": 14.02661232277751,
+  "end": 14.026618041098118,
+  "exit": 14.026641875505447
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

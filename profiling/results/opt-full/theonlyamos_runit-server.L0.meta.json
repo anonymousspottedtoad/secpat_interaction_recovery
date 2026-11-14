@@ -1,0 +1,23 @@
+{
+ "repo": "theonlyamos_runit-server",
+ "launch": 0,
+ "jobs": [
+  "python/authentication_pwd/theonlyamos_runit-server",
+  "python/session_based_access_control/theonlyamos_runit-server"
+ ],
+ "marks": {
+  "main": 11.020548563450575,
+  "loaded": 12.022330295294523,
+  "start:python/authentication_pwd/theonlyamos_runit-server": 12.022337082773447,
+  "done:python/authentication_pwd/theonlyamos_runit-server": 12.523308161646128,
+  "start:python/session_based_access_control/theonlyamos_runit-server": 12.52331529557705,
+  "done:python/session_based_access_control/theonlyamos_runit-server": 12.523321852087975,
+  "end": 12.523325733840466,
+  "exit": 12.523350767791271
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

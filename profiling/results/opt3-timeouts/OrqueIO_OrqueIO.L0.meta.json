@@ -1,0 +1,20 @@
+{
+ "repo": "OrqueIO_OrqueIO",
+ "launch": 0,
+ "jobs": [
+  "java/limit_request_rate/OrqueIO_OrqueIO"
+ ],
+ "marks": {
+  "main": 11.018357373774052,
+  "loaded": 12.520613245666027,
+  "start:java/limit_request_rate/OrqueIO_OrqueIO": 12.5206195153296,
+  "done:java/limit_request_rate/OrqueIO_OrqueIO": 20.034401196986437,
+  "end": 20.034407202154398,
+  "exit": 20.03442979976535
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 300.0
+}

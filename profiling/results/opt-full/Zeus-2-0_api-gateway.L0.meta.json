@@ -1,0 +1,23 @@
+{
+ "repo": "Zeus-2-0_api-gateway",
+ "launch": 0,
+ "jobs": [
+  "java/authentication_pwd/Zeus-2-0_api-gateway",
+  "java/verifiable_token_based_authentication/Zeus-2-0_api-gateway"
+ ],
+ "marks": {
+  "main": 11.020289164036512,
+  "loaded": 11.521216996014118,
+  "start:java/authentication_pwd/Zeus-2-0_api-gateway": 11.521222081035376,
+  "done:java/authentication_pwd/Zeus-2-0_api-gateway": 12.022211156785488,
+  "start:java/verifiable_token_based_authentication/Zeus-2-0_api-gateway": 12.02221804857254,
+  "done:java/verifiable_token_based_authentication/Zeus-2-0_api-gateway": 12.022222761064768,
+  "end": 12.0222258977592,
+  "exit": 12.022249713540077
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

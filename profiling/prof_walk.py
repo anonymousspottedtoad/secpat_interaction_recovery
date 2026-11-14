@@ -341,6 +341,10 @@ COUNTERS = [
     ("    if (cands.isEmpty) missNoKey += 1\n",
      "    if (cands.isEmpty) missNoKey += 1\n    Prof.set(\"memo.missNoKey\", missNoKey); Prof.set(\"memo.missInvalid\", missInvalid); "
      "Prof.set(\"memo.missFull\", missFull); Prof.set(\"memo.keys\", memo.size)\n"),
+    ("                  alternativesSkipped += skipped.size\n",
+     "                  alternativesSkipped += skipped.size; Prof.inc(\"kmr.altSkipped\", skipped.size)\n"),
+    ("    if (!live(m, sources)) { deadSkips += 1; return }\n",
+     "    if (!live(m, sources)) { deadSkips += 1; Prof.inc(\"walk.deadSkips\"); return }\n"),
     ("    if (!live(m)) { deadSkips += 1; return }\n",
      "    if (!live(m)) { deadSkips += 1; Prof.inc(\"walk.deadSkips\"); return }\n"),
     ("  def targetsOf(c: Call): Resolution = targetsMemo.getOrElseUpdate(c.id, resolveTargets(c))\n",

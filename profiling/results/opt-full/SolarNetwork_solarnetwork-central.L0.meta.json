@@ -1,0 +1,29 @@
+{
+ "repo": "SolarNetwork_solarnetwork-central",
+ "launch": 0,
+ "jobs": [
+  "java/limit_request_rate/SolarNetwork_solarnetwork-central",
+  "java/obscure_token_based_access_control/SolarNetwork_solarnetwork-central",
+  "java/session_based_access_control/SolarNetwork_solarnetwork-central",
+  "java/verifiable_token_based_authentication/SolarNetwork_solarnetwork-central"
+ ],
+ "marks": {
+  "main": 10.519640907645226,
+  "loaded": 11.521324556320906,
+  "start:java/limit_request_rate/SolarNetwork_solarnetwork-central": 11.521331906318665,
+  "done:java/limit_request_rate/SolarNetwork_solarnetwork-central": 12.52329496666789,
+  "start:java/obscure_token_based_access_control/SolarNetwork_solarnetwork-central": 12.523301716893911,
+  "done:java/obscure_token_based_access_control/SolarNetwork_solarnetwork-central": 12.52330619096756,
+  "start:java/session_based_access_control/SolarNetwork_solarnetwork-central": 12.523309860378504,
+  "done:java/session_based_access_control/SolarNetwork_solarnetwork-central": 13.02425643056631,
+  "start:java/verifiable_token_based_authentication/SolarNetwork_solarnetwork-central": 13.02426278591156,
+  "done:java/verifiable_token_based_authentication/SolarNetwork_solarnetwork-central": 13.024267096072435,
+  "end": 13.024269167333841,
+  "exit": 13.525307685136795
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

@@ -1,0 +1,20 @@
+{
+ "repo": "admin4j_admin4j-framework",
+ "launch": 0,
+ "jobs": [
+  "java/limit_request_rate/admin4j_admin4j-framework"
+ ],
+ "marks": {
+  "main": 11.522332515567541,
+  "loaded": 12.023103520274162,
+  "start:java/limit_request_rate/admin4j_admin4j-framework": 12.023109246045351,
+  "done:java/limit_request_rate/admin4j_admin4j-framework": 12.524032942950726,
+  "end": 12.524039525538683,
+  "exit": 12.524062745273113
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

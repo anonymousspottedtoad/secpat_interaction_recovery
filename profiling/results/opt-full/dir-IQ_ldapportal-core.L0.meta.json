@@ -1,0 +1,23 @@
+{
+ "repo": "dir-IQ_ldapportal-core",
+ "launch": 0,
+ "jobs": [
+  "java/authentication_pwd/dir-IQ_ldapportal-core",
+  "java/limit_request_rate/dir-IQ_ldapportal-core"
+ ],
+ "marks": {
+  "main": 11.021135501563549,
+  "loaded": 12.022255517542362,
+  "start:java/authentication_pwd/dir-IQ_ldapportal-core": 12.022259030491114,
+  "done:java/authentication_pwd/dir-IQ_ldapportal-core": 12.523061987012625,
+  "start:java/limit_request_rate/dir-IQ_ldapportal-core": 12.523068219423294,
+  "done:java/limit_request_rate/dir-IQ_ldapportal-core": 12.523072645068169,
+  "end": 12.523075804114342,
+  "exit": 12.523100595921278
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

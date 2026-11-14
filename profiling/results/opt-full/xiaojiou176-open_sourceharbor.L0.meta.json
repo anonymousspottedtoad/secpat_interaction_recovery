@@ -1,0 +1,20 @@
+{
+ "repo": "xiaojiou176-open_sourceharbor",
+ "launch": 0,
+ "jobs": [
+  "python/obscure_token_based_access_control/xiaojiou176-open_sourceharbor"
+ ],
+ "marks": {
+  "main": 11.522120274603367,
+  "loaded": 12.523496139794588,
+  "start:python/obscure_token_based_access_control/xiaojiou176-open_sourceharbor": 12.523500215262175,
+  "done:python/obscure_token_based_access_control/xiaojiou176-open_sourceharbor": 14.526929464191198,
+  "end": 14.526936020702124,
+  "exit": 14.526959527283907
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

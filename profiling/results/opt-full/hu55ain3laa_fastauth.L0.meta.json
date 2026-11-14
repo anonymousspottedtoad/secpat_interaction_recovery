@@ -1,0 +1,20 @@
+{
+ "repo": "hu55ain3laa_fastauth",
+ "launch": 0,
+ "jobs": [
+  "python/authentication_pwd/hu55ain3laa_fastauth"
+ ],
+ "marks": {
+  "main": 12.521786507219076,
+  "loaded": 13.523386619985104,
+  "start:python/authentication_pwd/hu55ain3laa_fastauth": 13.523392084985971,
+  "done:python/authentication_pwd/hu55ain3laa_fastauth": 14.024435427039862,
+  "end": 14.024441312998533,
+  "exit": 14.024464715272188
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

@@ -1,0 +1,20 @@
+{
+ "repo": "ddeutils_ddeutil-observe",
+ "launch": 0,
+ "jobs": [
+  "python/verifiable_token_based_authentication/ddeutils_ddeutil-observe"
+ ],
+ "marks": {
+  "main": 12.021368630230427,
+  "loaded": 13.02344036102295,
+  "start:python/verifiable_token_based_authentication/ddeutils_ddeutil-observe": 13.023446552455425,
+  "done:python/verifiable_token_based_authentication/ddeutils_ddeutil-observe": 13.52455572038889,
+  "end": 13.5245620906353,
+  "exit": 13.52458642423153
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

@@ -1,0 +1,20 @@
+{
+ "repo": "eozoo_zoo",
+ "launch": 0,
+ "jobs": [
+  "java/limit_request_rate/eozoo_zoo"
+ ],
+ "marks": {
+  "main": 10.520349867641926,
+  "loaded": 11.522092018276453,
+  "start:java/limit_request_rate/eozoo_zoo": 11.522097188979387,
+  "done:java/limit_request_rate/eozoo_zoo": 12.02312883362174,
+  "end": 12.023135304450989,
+  "exit": 12.023158594965935
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

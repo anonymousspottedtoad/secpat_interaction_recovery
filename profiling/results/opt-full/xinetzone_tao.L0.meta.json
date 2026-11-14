@@ -1,0 +1,20 @@
+{
+ "repo": "xinetzone_tao",
+ "launch": 0,
+ "jobs": [
+  "python/authentication_pwd/xinetzone_tao"
+ ],
+ "marks": {
+  "main": 11.521816991269588,
+  "loaded": 12.523162115365267,
+  "start:python/authentication_pwd/xinetzone_tao": 12.523164924234152,
+  "done:python/authentication_pwd/xinetzone_tao": 14.025364276021719,
+  "end": 14.025370359420776,
+  "exit": 14.025394301861525
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

@@ -1,0 +1,23 @@
+{
+ "repo": "RS-PYTHON_rs-server",
+ "launch": 0,
+ "jobs": [
+  "python/obscure_token_based_access_control/RS-PYTHON_rs-server",
+  "python/session_based_access_control/RS-PYTHON_rs-server"
+ ],
+ "marks": {
+  "main": 12.02168819308281,
+  "loaded": 13.023334469646215,
+  "start:python/obscure_token_based_access_control/RS-PYTHON_rs-server": 13.02333976328373,
+  "done:python/obscure_token_based_access_control/RS-PYTHON_rs-server": 13.524311076849699,
+  "start:python/session_based_access_control/RS-PYTHON_rs-server": 13.524321302771568,
+  "done:python/session_based_access_control/RS-PYTHON_rs-server": 14.025192257016897,
+  "end": 14.02519816532731,
+  "exit": 14.025218095630407
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

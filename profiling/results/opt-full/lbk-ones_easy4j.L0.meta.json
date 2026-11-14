@@ -1,0 +1,20 @@
+{
+ "repo": "lbk-ones_easy4j",
+ "launch": 0,
+ "jobs": [
+  "java/verifiable_token_based_authentication/lbk-ones_easy4j"
+ ],
+ "marks": {
+  "main": 11.019240409135818,
+  "loaded": 12.020950503647327,
+  "start:java/verifiable_token_based_authentication/lbk-ones_easy4j": 12.02095377445221,
+  "done:java/verifiable_token_based_authentication/lbk-ones_easy4j": 12.52160944789648,
+  "end": 12.521614968776703,
+  "exit": 13.022605013102293
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

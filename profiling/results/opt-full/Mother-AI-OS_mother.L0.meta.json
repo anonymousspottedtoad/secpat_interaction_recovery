@@ -1,0 +1,20 @@
+{
+ "repo": "Mother-AI-OS_mother",
+ "launch": 0,
+ "jobs": [
+  "python/obscure_token_based_access_control/Mother-AI-OS_mother"
+ ],
+ "marks": {
+  "main": 11.52256627380848,
+  "loaded": 12.52422035112977,
+  "start:python/obscure_token_based_access_control/Mother-AI-OS_mother": 12.524225741624832,
+  "done:python/obscure_token_based_access_control/Mother-AI-OS_mother": 13.52603105828166,
+  "end": 13.52603693306446,
+  "exit": 14.027028121054173
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

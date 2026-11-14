@@ -1,0 +1,20 @@
+{
+ "repo": "fdev31_wirikiki",
+ "launch": 0,
+ "jobs": [
+  "python/authentication_pwd/fdev31_wirikiki"
+ ],
+ "marks": {
+  "main": 12.022969484329224,
+  "loaded": 13.024736501276493,
+  "start:python/authentication_pwd/fdev31_wirikiki": 13.024740390479565,
+  "done:python/authentication_pwd/fdev31_wirikiki": 13.525638595223427,
+  "end": 13.525644913315773,
+  "exit": 13.525669131428003
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

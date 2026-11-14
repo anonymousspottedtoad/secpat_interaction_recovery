@@ -1,0 +1,20 @@
+{
+ "repo": "camunda_camunda-bpm-platform",
+ "launch": 1,
+ "jobs": [
+  "java/session_based_access_control/camunda_camunda-bpm-platform"
+ ],
+ "marks": {
+  "main": 10.520624656230211,
+  "loaded": 12.02301686257124,
+  "start:java/session_based_access_control/camunda_camunda-bpm-platform": 12.023021966218948,
+  "done:java/session_based_access_control/camunda_camunda-bpm-platform": 16.030135326087475,
+  "end": 16.03014127537608,
+  "exit": 16.53115300089121
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

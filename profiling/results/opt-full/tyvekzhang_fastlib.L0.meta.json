@@ -1,0 +1,20 @@
+{
+ "repo": "tyvekzhang_fastlib",
+ "launch": 0,
+ "jobs": [
+  "python/verifiable_token_based_authentication/tyvekzhang_fastlib"
+ ],
+ "marks": {
+  "main": 11.018505521118641,
+  "loaded": 12.01987224072218,
+  "start:python/verifiable_token_based_authentication/tyvekzhang_fastlib": 12.019876703619957,
+  "done:python/verifiable_token_based_authentication/tyvekzhang_fastlib": 12.520667746663094,
+  "end": 12.520673673599958,
+  "exit": 12.520696233958006
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

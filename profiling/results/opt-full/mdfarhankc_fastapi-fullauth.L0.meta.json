@@ -1,0 +1,20 @@
+{
+ "repo": "mdfarhankc_fastapi-fullauth",
+ "launch": 0,
+ "jobs": [
+  "python/limit_request_rate/mdfarhankc_fastapi-fullauth"
+ ],
+ "marks": {
+  "main": 12.02063100785017,
+  "loaded": 12.521620687097311,
+  "start:python/limit_request_rate/mdfarhankc_fastapi-fullauth": 12.521625842899084,
+  "done:python/limit_request_rate/mdfarhankc_fastapi-fullauth": 13.523492157459259,
+  "end": 13.52349816635251,
+  "exit": 13.523521654307842
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

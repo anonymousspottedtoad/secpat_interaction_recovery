@@ -1,0 +1,23 @@
+{
+ "repo": "michaelruocco_naughts-and-crosses-api",
+ "launch": 0,
+ "jobs": [
+  "java/session_based_access_control/michaelruocco_naughts-and-crosses-api",
+  "java/verifiable_token_based_authentication/michaelruocco_naughts-and-crosses-api"
+ ],
+ "marks": {
+  "main": 11.020282227545977,
+  "loaded": 12.021977599710226,
+  "start:java/session_based_access_control/michaelruocco_naughts-and-crosses-api": 12.021983329206705,
+  "done:java/session_based_access_control/michaelruocco_naughts-and-crosses-api": 12.52299926802516,
+  "start:java/verifiable_token_based_authentication/michaelruocco_naughts-and-crosses-api": 12.523005869239569,
+  "done:java/verifiable_token_based_authentication/michaelruocco_naughts-and-crosses-api": 12.523010578006506,
+  "end": 12.523013919591904,
+  "exit": 12.523037262260914
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

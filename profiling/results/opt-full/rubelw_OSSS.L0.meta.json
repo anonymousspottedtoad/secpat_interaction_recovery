@@ -1,0 +1,20 @@
+{
+ "repo": "rubelw_OSSS",
+ "launch": 0,
+ "jobs": [
+  "python/session_based_access_control/rubelw_OSSS"
+ ],
+ "marks": {
+  "main": 11.52205953747034,
+  "loaded": 12.523560229688883,
+  "start:python/session_based_access_control/rubelw_OSSS": 12.523565337061882,
+  "done:python/session_based_access_control/rubelw_OSSS": 15.5290004350245,
+  "end": 15.52900579944253,
+  "exit": 16.030040189623833
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

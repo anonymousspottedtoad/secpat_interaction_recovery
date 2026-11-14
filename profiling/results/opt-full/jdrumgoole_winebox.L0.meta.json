@@ -1,0 +1,20 @@
+{
+ "repo": "jdrumgoole_winebox",
+ "launch": 0,
+ "jobs": [
+  "python/authentication_pwd/jdrumgoole_winebox"
+ ],
+ "marks": {
+  "main": 12.023460689932108,
+  "loaded": 13.025184009224176,
+  "start:python/authentication_pwd/jdrumgoole_winebox": 13.025187615305185,
+  "done:python/authentication_pwd/jdrumgoole_winebox": 13.525993559509516,
+  "end": 13.525999329984188,
+  "exit": 13.526024974882603
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

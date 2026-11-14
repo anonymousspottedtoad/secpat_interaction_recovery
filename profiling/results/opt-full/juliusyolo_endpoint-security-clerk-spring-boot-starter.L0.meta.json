@@ -1,0 +1,20 @@
+{
+ "repo": "juliusyolo_endpoint-security-clerk-spring-boot-starter",
+ "launch": 0,
+ "jobs": [
+  "java/session_based_access_control/juliusyolo_endpoint-security-clerk-spring-boot-starter"
+ ],
+ "marks": {
+  "main": 12.02330931276083,
+  "loaded": 13.025057811290026,
+  "start:java/session_based_access_control/juliusyolo_endpoint-security-clerk-spring-boot-starter": 13.025063060224056,
+  "done:java/session_based_access_control/juliusyolo_endpoint-security-clerk-spring-boot-starter": 13.02506897225976,
+  "end": 13.025071743875742,
+  "exit": 13.52601919323206
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

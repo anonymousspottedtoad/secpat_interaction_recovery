@@ -1,0 +1,20 @@
+{
+ "repo": "Fi0x_HomeServerStuff",
+ "launch": 0,
+ "jobs": [
+  "java/authentication_pwd/Fi0x_HomeServerStuff"
+ ],
+ "marks": {
+  "main": 11.021552544087172,
+  "loaded": 12.02348018437624,
+  "start:java/authentication_pwd/Fi0x_HomeServerStuff": 12.023485630750656,
+  "done:java/authentication_pwd/Fi0x_HomeServerStuff": 12.023492239415646,
+  "end": 12.023496009409428,
+  "exit": 12.023518539965153
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

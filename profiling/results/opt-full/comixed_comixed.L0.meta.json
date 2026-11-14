@@ -1,0 +1,23 @@
+{
+ "repo": "comixed_comixed",
+ "launch": 0,
+ "jobs": [
+  "java/authentication_pwd/comixed_comixed",
+  "java/verifiable_token_based_authentication/comixed_comixed"
+ ],
+ "marks": {
+  "main": 11.520262334495783,
+  "loaded": 12.021131630986929,
+  "start:java/authentication_pwd/comixed_comixed": 12.021136790513992,
+  "done:java/authentication_pwd/comixed_comixed": 12.5220831297338,
+  "start:java/verifiable_token_based_authentication/comixed_comixed": 12.522089879959822,
+  "done:java/verifiable_token_based_authentication/comixed_comixed": 12.522094696760178,
+  "end": 12.522098030894995,
+  "exit": 12.5221195705235
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

@@ -1,0 +1,20 @@
+{
+ "repo": "iFrugal_gateway",
+ "launch": 0,
+ "jobs": [
+  "java/verifiable_token_based_authentication/iFrugal_gateway"
+ ],
+ "marks": {
+  "main": 11.021902613341808,
+  "loaded": 11.522810999304056,
+  "start:java/verifiable_token_based_authentication/iFrugal_gateway": 11.522816523909569,
+  "done:java/verifiable_token_based_authentication/iFrugal_gateway": 12.02372557669878,
+  "end": 12.023730345070362,
+  "exit": 12.023748680949211
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

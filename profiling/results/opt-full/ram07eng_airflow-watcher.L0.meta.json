@@ -1,0 +1,20 @@
+{
+ "repo": "ram07eng_airflow-watcher",
+ "launch": 0,
+ "jobs": [
+  "python/limit_request_rate/ram07eng_airflow-watcher"
+ ],
+ "marks": {
+  "main": 11.520181711763144,
+  "loaded": 13.022662419825792,
+  "start:python/limit_request_rate/ram07eng_airflow-watcher": 13.022667538374662,
+  "done:python/limit_request_rate/ram07eng_airflow-watcher": 13.523646850138903,
+  "end": 13.523652449250221,
+  "exit": 13.523677617311478
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

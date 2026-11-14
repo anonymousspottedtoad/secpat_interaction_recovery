@@ -1,0 +1,20 @@
+{
+ "repo": "idsec-solutions_signservice-integration-rest",
+ "launch": 0,
+ "jobs": [
+  "java/authentication_pwd/idsec-solutions_signservice-integration-rest"
+ ],
+ "marks": {
+  "main": 11.020316664129496,
+  "loaded": 11.52121577784419,
+  "start:java/authentication_pwd/idsec-solutions_signservice-integration-rest": 11.521221719682217,
+  "done:java/authentication_pwd/idsec-solutions_signservice-integration-rest": 11.521228831261396,
+  "end": 11.521232422441244,
+  "exit": 12.022229876369238
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

@@ -1,0 +1,20 @@
+{
+ "repo": "als-apg_osprey",
+ "launch": 0,
+ "jobs": [
+  "python/session_based_access_control/als-apg_osprey"
+ ],
+ "marks": {
+  "main": 11.521922904998064,
+  "loaded": 14.52746331319213,
+  "start:python/session_based_access_control/als-apg_osprey": 14.527468960732222,
+  "done:python/session_based_access_control/als-apg_osprey": 28.544490441679955,
+  "end": 28.54449574276805,
+  "exit": 29.54642415046692
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

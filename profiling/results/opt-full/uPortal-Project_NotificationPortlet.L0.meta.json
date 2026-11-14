@@ -1,0 +1,20 @@
+{
+ "repo": "uPortal-Project_NotificationPortlet",
+ "launch": 0,
+ "jobs": [
+  "java/verifiable_token_based_authentication/uPortal-Project_NotificationPortlet"
+ ],
+ "marks": {
+  "main": 11.021206203848124,
+  "loaded": 12.023078136146069,
+  "start:java/verifiable_token_based_authentication/uPortal-Project_NotificationPortlet": 12.023083861917257,
+  "done:java/verifiable_token_based_authentication/uPortal-Project_NotificationPortlet": 12.023090958595276,
+  "end": 12.023094166070223,
+  "exit": 12.524062100797892
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

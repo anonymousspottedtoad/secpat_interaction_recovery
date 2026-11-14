@@ -1,0 +1,23 @@
+{
+ "repo": "auth0_auth0-spring-security-api",
+ "launch": 0,
+ "jobs": [
+  "java/session_based_access_control/auth0_auth0-spring-security-api",
+  "java/verifiable_token_based_authentication/auth0_auth0-spring-security-api"
+ ],
+ "marks": {
+  "main": 11.522748336195946,
+  "loaded": 12.524891715496778,
+  "start:java/session_based_access_control/auth0_auth0-spring-security-api": 12.524897802621126,
+  "done:java/session_based_access_control/auth0_auth0-spring-security-api": 12.524904564023018,
+  "start:java/verifiable_token_based_authentication/auth0_auth0-spring-security-api": 12.524908635765314,
+  "done:java/verifiable_token_based_authentication/auth0_auth0-spring-security-api": 12.524912398308516,
+  "end": 12.524915549904108,
+  "exit": 12.524939607828856
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

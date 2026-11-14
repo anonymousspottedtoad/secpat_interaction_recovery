@@ -1,0 +1,20 @@
+{
+ "repo": "promregator_promregator",
+ "launch": 0,
+ "jobs": [
+  "java/session_based_access_control/promregator_promregator"
+ ],
+ "marks": {
+  "main": 11.021637070924044,
+  "loaded": 11.522498488426208,
+  "start:java/session_based_access_control/promregator_promregator": 11.522504329681396,
+  "done:java/session_based_access_control/promregator_promregator": 12.023477222770452,
+  "end": 12.023483276367188,
+  "exit": 12.023507792502642
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

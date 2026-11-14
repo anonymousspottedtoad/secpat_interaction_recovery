@@ -1,0 +1,20 @@
+{
+ "repo": "wjs1995_sb-jwt-auth-starter",
+ "launch": 0,
+ "jobs": [
+  "java/verifiable_token_based_authentication/wjs1995_sb-jwt-auth-starter"
+ ],
+ "marks": {
+  "main": 11.022430047392845,
+  "loaded": 11.52361648529768,
+  "start:java/verifiable_token_based_authentication/wjs1995_sb-jwt-auth-starter": 11.523624513298273,
+  "done:java/verifiable_token_based_authentication/wjs1995_sb-jwt-auth-starter": 12.024653121829033,
+  "end": 12.024659119546413,
+  "exit": 12.024681068956852
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

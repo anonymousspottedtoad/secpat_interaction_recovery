@@ -1,0 +1,20 @@
+{
+ "repo": "holgi_fastapi-permissions",
+ "launch": 0,
+ "jobs": [
+  "python/verifiable_token_based_authentication/holgi_fastapi-permissions"
+ ],
+ "marks": {
+  "main": 11.522150587290525,
+  "loaded": 12.023001737892628,
+  "start:python/verifiable_token_based_authentication/holgi_fastapi-permissions": 12.023007560521364,
+  "done:python/verifiable_token_based_authentication/holgi_fastapi-permissions": 12.523997858166695,
+  "end": 12.524004071950912,
+  "exit": 12.524027656763792
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

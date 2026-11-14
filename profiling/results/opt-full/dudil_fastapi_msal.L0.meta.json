@@ -1,0 +1,20 @@
+{
+ "repo": "dudil_fastapi_msal",
+ "launch": 0,
+ "jobs": [
+  "python/session_based_access_control/dudil_fastapi_msal"
+ ],
+ "marks": {
+  "main": 12.029308635741472,
+  "loaded": 13.031325098127127,
+  "start:python/session_based_access_control/dudil_fastapi_msal": 13.031330574303865,
+  "done:python/session_based_access_control/dudil_fastapi_msal": 13.532422807067633,
+  "end": 13.532429307699203,
+  "exit": 13.532453212887049
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

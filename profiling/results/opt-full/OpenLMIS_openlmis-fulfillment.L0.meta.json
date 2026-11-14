@@ -1,0 +1,20 @@
+{
+ "repo": "OpenLMIS_openlmis-fulfillment",
+ "launch": 0,
+ "jobs": [
+  "java/obscure_token_based_access_control/OpenLMIS_openlmis-fulfillment"
+ ],
+ "marks": {
+  "main": 10.52089425176382,
+  "loaded": 11.522701621055603,
+  "start:java/obscure_token_based_access_control/OpenLMIS_openlmis-fulfillment": 11.522706966847181,
+  "done:java/obscure_token_based_access_control/OpenLMIS_openlmis-fulfillment": 12.023710414767265,
+  "end": 12.02371683716774,
+  "exit": 12.023739624768496
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

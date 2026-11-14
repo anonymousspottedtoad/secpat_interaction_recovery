@@ -1,0 +1,20 @@
+{
+ "repo": "youtaqiu_shore",
+ "launch": 0,
+ "jobs": [
+  "java/obscure_token_based_access_control/youtaqiu_shore"
+ ],
+ "marks": {
+  "main": 11.019801769405603,
+  "loaded": 12.021654803305864,
+  "start:java/obscure_token_based_access_control/youtaqiu_shore": 12.021660640835762,
+  "done:java/obscure_token_based_access_control/youtaqiu_shore": 12.522694494575262,
+  "end": 12.522701196372509,
+  "exit": 12.522722736001015
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

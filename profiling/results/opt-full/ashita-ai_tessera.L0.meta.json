@@ -1,0 +1,23 @@
+{
+ "repo": "ashita-ai_tessera",
+ "launch": 0,
+ "jobs": [
+  "python/obscure_token_based_access_control/ashita-ai_tessera",
+  "python/session_based_access_control/ashita-ai_tessera"
+ ],
+ "marks": {
+  "main": 11.519746892154217,
+  "loaded": 12.5213792771101,
+  "start:python/obscure_token_based_access_control/ashita-ai_tessera": 12.521385349333286,
+  "done:python/obscure_token_based_access_control/ashita-ai_tessera": 14.02412348613143,
+  "start:python/session_based_access_control/ashita-ai_tessera": 14.02412984892726,
+  "done:python/session_based_access_control/ashita-ai_tessera": 14.525135070085526,
+  "end": 14.525142181664705,
+  "exit": 14.525165364146233
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

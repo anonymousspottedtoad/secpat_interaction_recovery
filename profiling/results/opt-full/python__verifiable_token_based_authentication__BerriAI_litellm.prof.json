@@ -1,0 +1,243 @@
+{
+ "phases": {
+  "1-callgraph": 0.295887589,
+  "2a-declarations": 5.510938496,
+  "2b-locate": 4.223269166,
+  "2c-ownership": 0.007100106,
+  "3-entry": 10.81030597,
+  "4-walk": 105.535631245
+ },
+ "counters": {
+  "targetsOf.calls": 1578218,
+  "walkBody.calls": 668631,
+  "walkBody.entered": 391952,
+  "walkBody.maxDepth": 395,
+  "enteredBodies.maxSize": 4987,
+  "memo.missNoKey": 98085,
+  "memo.missInvalid": 29589,
+  "memo.missFull": 88,
+  "memo.keys": 97747,
+  "memo.computed": 127674,
+  "walk.nodesVisited": 16914333,
+  "walk.deadSkips": 5157953,
+  "kmr.calls": 90040,
+  "kmr.alternatives": 5365023,
+  "kmr.maxNesting": 83,
+  "walkBody.memoHits": 276679,
+  "memo.replays": 264278
+ },
+ "distinct": {
+  "targetsOf.sites": 107813,
+  "walkBody.methods": 3438,
+  "walk.distinctNodes": 472672
+ },
+ "inPhase": "",
+ "status": "error: java.lang.StackOverflowError",
+ "elapsed": 126.390668458,
+ "loadS": 5.206580109,
+ "uptimeAtMainMs": 10505,
+ "heapAfterLoadMb": 6593,
+ "progress": [
+  {
+   "t": 4.697131938,
+   "counters": {},
+   "inPhase": "2a-declarations"
+  },
+  {
+   "t": 14.763770215,
+   "counters": {
+    "targetsOf.calls": 15
+   },
+   "inPhase": "3-entry"
+  },
+  {
+   "t": 24.912550224,
+   "counters": {
+    "targetsOf.calls": 13908
+   },
+   "inPhase": "4-walk"
+  },
+  {
+   "t": 34.920608379,
+   "counters": {
+    "targetsOf.calls": 22844
+   },
+   "inPhase": "4-walk"
+  },
+  {
+   "t": 44.928963211,
+   "counters": {
+    "targetsOf.calls": 23779
+   },
+   "inPhase": "4-walk"
+  },
+  {
+   "t": 54.939773934,
+   "counters": {
+    "targetsOf.calls": 23779
+   },
+   "inPhase": "4-walk"
+  },
+  {
+   "t": 64.97389226,
+   "counters": {
+    "targetsOf.calls": 194012,
+    "walkBody.calls": 45663,
+    "walkBody.entered": 19669,
+    "walkBody.maxDepth": 158,
+    "enteredBodies.maxSize": 823,
+    "memo.missNoKey": 8258,
+    "memo.missInvalid": 1315,
+    "memo.missFull": 0,
+    "memo.keys": 8128,
+    "memo.computed": 9573,
+    "walk.nodesVisited": 1380093,
+    "walk.deadSkips": 449735,
+    "kmr.calls": 6689,
+    "kmr.alternatives": 462104,
+    "kmr.maxNesting": 41,
+    "walkBody.memoHits": 25994,
+    "memo.replays": 10096
+   },
+   "inPhase": "4-walk"
+  },
+  {
+   "t": 75.02742571,
+   "counters": {
+    "targetsOf.calls": 693118,
+    "walkBody.calls": 255300,
+    "walkBody.entered": 139406,
+    "walkBody.maxDepth": 266,
+    "enteredBodies.maxSize": 2202,
+    "memo.missNoKey": 45158,
+    "memo.missInvalid": 8729,
+    "memo.missFull": 0,
+    "memo.keys": 44938,
+    "memo.computed": 53887,
+    "walk.nodesVisited": 7080272,
+    "walk.deadSkips": 2069928,
+    "kmr.calls": 35932,
+    "kmr.alternatives": 2139774,
+    "kmr.maxNesting": 62,
+    "walkBody.memoHits": 115894,
+    "memo.replays": 85519
+   },
+   "inPhase": "4-walk"
+  },
+  {
+   "t": 85.035745639,
+   "counters": {
+    "targetsOf.calls": 925234,
+    "walkBody.calls": 365959,
+    "walkBody.entered": 208826,
+    "walkBody.maxDepth": 266,
+    "enteredBodies.maxSize": 2530,
+    "memo.missNoKey": 60422,
+    "memo.missInvalid": 13598,
+    "memo.missFull": 5,
+    "memo.keys": 60213,
+    "memo.computed": 74020,
+    "walk.nodesVisited": 9686710,
+    "walk.deadSkips": 2869754,
+    "kmr.calls": 50372,
+    "kmr.alternatives": 2978911,
+    "kmr.maxNesting": 62,
+    "walkBody.memoHits": 157133,
+    "memo.replays": 134806
+   },
+   "inPhase": "4-walk"
+  },
+  {
+   "t": 95.044079056,
+   "counters": {
+    "targetsOf.calls": 927624,
+    "walkBody.calls": 365959,
+    "walkBody.entered": 208826,
+    "walkBody.maxDepth": 266,
+    "enteredBodies.maxSize": 2530,
+    "memo.missNoKey": 60422,
+    "memo.missInvalid": 13598,
+    "memo.missFull": 5,
+    "memo.keys": 60213,
+    "memo.computed": 74020,
+    "walk.nodesVisited": 9686710,
+    "walk.deadSkips": 2869754,
+    "kmr.calls": 50372,
+    "kmr.alternatives": 2978911,
+    "kmr.maxNesting": 62,
+    "walkBody.memoHits": 157133,
+    "memo.replays": 134806
+   },
+   "inPhase": "4-walk"
+  },
+  {
+   "t": 105.052407839,
+   "counters": {
+    "targetsOf.calls": 933335,
+    "walkBody.calls": 365959,
+    "walkBody.entered": 208826,
+    "walkBody.maxDepth": 266,
+    "enteredBodies.maxSize": 2530,
+    "memo.missNoKey": 60422,
+    "memo.missInvalid": 13598,
+    "memo.missFull": 5,
+    "memo.keys": 60213,
+    "memo.computed": 74020,
+    "walk.nodesVisited": 9686710,
+    "walk.deadSkips": 2869754,
+    "kmr.calls": 50372,
+    "kmr.alternatives": 2978911,
+    "kmr.maxNesting": 62,
+    "walkBody.memoHits": 157133,
+    "memo.replays": 134806
+   },
+   "inPhase": "4-walk"
+  },
+  {
+   "t": 115.060894416,
+   "counters": {
+    "targetsOf.calls": 1113233,
+    "walkBody.calls": 445615,
+    "walkBody.entered": 255454,
+    "walkBody.maxDepth": 383,
+    "enteredBodies.maxSize": 3691,
+    "memo.missNoKey": 68880,
+    "memo.missInvalid": 18809,
+    "memo.missFull": 39,
+    "memo.keys": 68499,
+    "memo.computed": 87689,
+    "walk.nodesVisited": 11633104,
+    "walk.deadSkips": 3521748,
+    "kmr.calls": 61126,
+    "kmr.alternatives": 3657574,
+    "kmr.maxNesting": 80,
+    "walkBody.memoHits": 190161,
+    "memo.replays": 167765
+   },
+   "inPhase": "4-walk"
+  },
+  {
+   "t": 125.151738599,
+   "counters": {
+    "targetsOf.calls": 1543370,
+    "walkBody.calls": 647649,
+    "walkBody.entered": 378828,
+    "walkBody.maxDepth": 395,
+    "enteredBodies.maxSize": 4673,
+    "memo.missNoKey": 97395,
+    "memo.missInvalid": 27707,
+    "memo.missFull": 52,
+    "memo.keys": 97046,
+    "memo.computed": 125102,
+    "walk.nodesVisited": 16532102,
+    "walk.deadSkips": 5019050,
+    "kmr.calls": 87628,
+    "kmr.alternatives": 5221459,
+    "kmr.maxNesting": 83,
+    "walkBody.memoHits": 268821,
+    "memo.replays": 253726
+   },
+   "inPhase": "4-walk"
+  }
+ ]
+}

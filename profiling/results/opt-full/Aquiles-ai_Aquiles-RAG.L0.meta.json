@@ -1,0 +1,20 @@
+{
+ "repo": "Aquiles-ai_Aquiles-RAG",
+ "launch": 0,
+ "jobs": [
+  "python/authentication_pwd/Aquiles-ai_Aquiles-RAG"
+ ],
+ "marks": {
+  "main": 11.5201077722013,
+  "loaded": 12.521915972232819,
+  "start:python/authentication_pwd/Aquiles-ai_Aquiles-RAG": 12.521923959255219,
+  "done:python/authentication_pwd/Aquiles-ai_Aquiles-RAG": 13.022970713675022,
+  "end": 13.022976897656918,
+  "exit": 13.02300077304244
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

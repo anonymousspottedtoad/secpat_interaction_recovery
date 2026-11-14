@@ -1,0 +1,20 @@
+{
+ "repo": "ThalesGroup_fred",
+ "launch": 0,
+ "jobs": [
+  "python/verifiable_token_based_authentication/ThalesGroup_fred"
+ ],
+ "marks": {
+  "main": 11.519185833632946,
+  "loaded": 12.520410608500242,
+  "start:python/verifiable_token_based_authentication/ThalesGroup_fred": 12.520414005964994,
+  "done:python/verifiable_token_based_authentication/ThalesGroup_fred": 21.03581564128399,
+  "end": 21.035821489989758,
+  "exit": 21.53682892769575
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

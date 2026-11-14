@@ -1,0 +1,20 @@
+{
+ "repo": "spring-cloud_spring-cloud-gateway",
+ "launch": 0,
+ "jobs": [
+  "java/limit_request_rate/spring-cloud_spring-cloud-gateway"
+ ],
+ "marks": {
+  "main": 10.515192724764347,
+  "loaded": 11.516954008489847,
+  "start:java/limit_request_rate/spring-cloud_spring-cloud-gateway": 11.516957826912403,
+  "done:java/limit_request_rate/spring-cloud_spring-cloud-gateway": 12.017808217555285,
+  "end": 12.017813988029957,
+  "exit": 12.017835907638073
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

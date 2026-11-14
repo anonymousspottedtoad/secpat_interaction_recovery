@@ -1,0 +1,20 @@
+{
+ "repo": "saichowdary007_docu-query",
+ "launch": 0,
+ "jobs": [
+  "python/obscure_token_based_access_control/saichowdary007_docu-query"
+ ],
+ "marks": {
+  "main": 12.023520596325397,
+  "loaded": 13.025335747748613,
+  "start:python/obscure_token_based_access_control/saichowdary007_docu-query": 13.025341711938381,
+  "done:python/obscure_token_based_access_control/saichowdary007_docu-query": 13.02534830197692,
+  "end": 13.025351598858833,
+  "exit": 13.52637965977192
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

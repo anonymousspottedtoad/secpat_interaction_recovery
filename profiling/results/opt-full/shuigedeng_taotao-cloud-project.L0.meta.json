@@ -1,0 +1,23 @@
+{
+ "repo": "shuigedeng_taotao-cloud-project",
+ "launch": 0,
+ "jobs": [
+  "java/authentication_pwd/shuigedeng_taotao-cloud-project",
+  "java/limit_request_rate/shuigedeng_taotao-cloud-project"
+ ],
+ "marks": {
+  "main": 10.516266446560621,
+  "loaded": 11.518035683780909,
+  "start:java/authentication_pwd/shuigedeng_taotao-cloud-project": 11.518038418143988,
+  "done:java/authentication_pwd/shuigedeng_taotao-cloud-project": 13.020491793751717,
+  "start:java/limit_request_rate/shuigedeng_taotao-cloud-project": 13.020498301833868,
+  "done:java/limit_request_rate/shuigedeng_taotao-cloud-project": 14.022023562341928,
+  "end": 14.022030841559172,
+  "exit": 14.022054456174374
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

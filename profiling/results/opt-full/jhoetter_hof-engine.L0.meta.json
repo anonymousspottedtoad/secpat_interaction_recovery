@@ -1,0 +1,20 @@
+{
+ "repo": "jhoetter_hof-engine",
+ "launch": 0,
+ "jobs": [
+  "python/authentication_pwd/jhoetter_hof-engine"
+ ],
+ "marks": {
+  "main": 12.021945767104626,
+  "loaded": 13.023812532424927,
+  "start:python/authentication_pwd/jhoetter_hof-engine": 13.023815430700779,
+  "done:python/authentication_pwd/jhoetter_hof-engine": 14.025542713701725,
+  "end": 14.025548405945301,
+  "exit": 14.025572661310434
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

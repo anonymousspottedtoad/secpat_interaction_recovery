@@ -1,0 +1,20 @@
+{
+ "repo": "syndesisio_syndesis",
+ "launch": 0,
+ "jobs": [
+  "java/session_based_access_control/syndesisio_syndesis"
+ ],
+ "marks": {
+  "main": 11.021536696702242,
+  "loaded": 11.522190481424332,
+  "start:java/session_based_access_control/syndesisio_syndesis": 11.522195864468813,
+  "done:java/session_based_access_control/syndesisio_syndesis": 12.023255161941051,
+  "end": 12.023261092603207,
+  "exit": 12.023284643888474
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

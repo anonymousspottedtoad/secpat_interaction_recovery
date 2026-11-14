@@ -1,0 +1,20 @@
+{
+ "repo": "ctrl-gaurav_effGen",
+ "launch": 0,
+ "jobs": [
+  "python/limit_request_rate/ctrl-gaurav_effGen"
+ ],
+ "marks": {
+  "main": 12.017902247607708,
+  "loaded": 13.019161958247423,
+  "start:python/limit_request_rate/ctrl-gaurav_effGen": 13.01916704326868,
+  "done:python/limit_request_rate/ctrl-gaurav_effGen": 17.026187881827354,
+  "end": 17.02619345486164,
+  "exit": 17.527212236076593
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

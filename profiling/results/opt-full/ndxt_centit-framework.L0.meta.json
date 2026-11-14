@@ -1,0 +1,20 @@
+{
+ "repo": "ndxt_centit-framework",
+ "launch": 0,
+ "jobs": [
+  "java/authentication_pwd/ndxt_centit-framework"
+ ],
+ "marks": {
+  "main": 11.020973809063435,
+  "loaded": 12.022155564278364,
+  "start:java/authentication_pwd/ndxt_centit-framework": 12.02215913683176,
+  "done:java/authentication_pwd/ndxt_centit-framework": 12.02216363325715,
+  "end": 12.022165447473526,
+  "exit": 12.52296069636941
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

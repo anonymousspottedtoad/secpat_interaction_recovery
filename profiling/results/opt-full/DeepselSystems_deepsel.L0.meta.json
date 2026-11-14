@@ -1,0 +1,20 @@
+{
+ "repo": "DeepselSystems_deepsel",
+ "launch": 0,
+ "jobs": [
+  "python/session_based_access_control/DeepselSystems_deepsel"
+ ],
+ "marks": {
+  "main": 11.52028277888894,
+  "loaded": 12.521985489875078,
+  "start:python/session_based_access_control/DeepselSystems_deepsel": 12.521991364657879,
+  "done:python/session_based_access_control/DeepselSystems_deepsel": 13.524056505411863,
+  "end": 13.524062171578407,
+  "exit": 13.524086859077215
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

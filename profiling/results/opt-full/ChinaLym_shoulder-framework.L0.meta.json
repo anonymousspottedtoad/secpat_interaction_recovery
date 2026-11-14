@@ -1,0 +1,23 @@
+{
+ "repo": "ChinaLym_shoulder-framework",
+ "launch": 0,
+ "jobs": [
+  "java/obscure_token_based_access_control/ChinaLym_shoulder-framework",
+  "java/session_based_access_control/ChinaLym_shoulder-framework"
+ ],
+ "marks": {
+  "main": 11.018084306269884,
+  "loaded": 12.019680716097355,
+  "start:java/obscure_token_based_access_control/ChinaLym_shoulder-framework": 12.019686307758093,
+  "done:java/obscure_token_based_access_control/ChinaLym_shoulder-framework": 12.520714737474918,
+  "start:java/session_based_access_control/ChinaLym_shoulder-framework": 12.52072099223733,
+  "done:java/session_based_access_control/ChinaLym_shoulder-framework": 12.52072599902749,
+  "end": 12.520729325711727,
+  "exit": 12.520753655582666
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

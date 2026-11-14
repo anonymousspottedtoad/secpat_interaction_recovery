@@ -1,0 +1,23 @@
+{
+ "repo": "glawson6_jaiclaw",
+ "launch": 0,
+ "jobs": [
+  "java/obscure_token_based_access_control/glawson6_jaiclaw",
+  "java/session_based_access_control/glawson6_jaiclaw"
+ ],
+ "marks": {
+  "main": 11.021333273500204,
+  "loaded": 12.023279082030058,
+  "start:java/obscure_token_based_access_control/glawson6_jaiclaw": 12.023285068571568,
+  "done:java/obscure_token_based_access_control/glawson6_jaiclaw": 12.524299290031195,
+  "start:java/session_based_access_control/glawson6_jaiclaw": 12.524305623024702,
+  "done:java/session_based_access_control/glawson6_jaiclaw": 13.02529687806964,
+  "end": 13.025303795933723,
+  "exit": 13.025327570736408
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

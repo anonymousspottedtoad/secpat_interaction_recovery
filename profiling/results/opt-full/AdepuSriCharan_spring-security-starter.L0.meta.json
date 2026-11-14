@@ -1,0 +1,20 @@
+{
+ "repo": "AdepuSriCharan_spring-security-starter",
+ "launch": 0,
+ "jobs": [
+  "java/limit_request_rate/AdepuSriCharan_spring-security-starter"
+ ],
+ "marks": {
+  "main": 10.5208775177598,
+  "loaded": 11.522427286952734,
+  "start:java/limit_request_rate/AdepuSriCharan_spring-security-starter": 11.522433388978243,
+  "done:java/limit_request_rate/AdepuSriCharan_spring-security-starter": 12.023453384637833,
+  "end": 12.023459769785404,
+  "exit": 12.023482710123062
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

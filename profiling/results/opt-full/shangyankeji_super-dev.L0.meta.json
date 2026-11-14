@@ -1,0 +1,20 @@
+{
+ "repo": "shangyankeji_super-dev",
+ "launch": 0,
+ "jobs": [
+  "python/limit_request_rate/shangyankeji_super-dev"
+ ],
+ "marks": {
+  "main": 11.518189892172813,
+  "loaded": 12.519481446594,
+  "start:python/limit_request_rate/shangyankeji_super-dev": 12.519484139978886,
+  "done:python/limit_request_rate/shangyankeji_super-dev": 13.520622126758099,
+  "end": 13.52062787488103,
+  "exit": 14.021628573536873
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

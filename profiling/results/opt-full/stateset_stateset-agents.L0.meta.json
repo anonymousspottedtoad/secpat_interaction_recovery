@@ -1,0 +1,20 @@
+{
+ "repo": "stateset_stateset-agents",
+ "launch": 0,
+ "jobs": [
+  "python/limit_request_rate/stateset_stateset-agents"
+ ],
+ "marks": {
+  "main": 12.020211137831211,
+  "loaded": 13.021520473062992,
+  "start:python/limit_request_rate/stateset_stateset-agents": 13.021525707095861,
+  "done:python/limit_request_rate/stateset_stateset-agents": 17.028302263468504,
+  "end": 17.02830834314227,
+  "exit": 17.028332345187664
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

@@ -1,0 +1,20 @@
+{
+ "repo": "ulisesbocchio_spring-boot-security-saml",
+ "launch": 0,
+ "jobs": [
+  "java/session_based_access_control/ulisesbocchio_spring-boot-security-saml"
+ ],
+ "marks": {
+  "main": 10.519503477960825,
+  "loaded": 11.521353915333748,
+  "start:java/session_based_access_control/ulisesbocchio_spring-boot-security-saml": 11.52135968953371,
+  "done:java/session_based_access_control/ulisesbocchio_spring-boot-security-saml": 11.521366983652115,
+  "end": 11.521370366215706,
+  "exit": 12.022393304854631
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

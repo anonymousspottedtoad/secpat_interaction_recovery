@@ -1,0 +1,20 @@
+{
+ "repo": "ijazfx_graphenee",
+ "launch": 0,
+ "jobs": [
+  "java/verifiable_token_based_authentication/ijazfx_graphenee"
+ ],
+ "marks": {
+  "main": 10.517624918371439,
+  "loaded": 11.519261632114649,
+  "start:java/verifiable_token_based_authentication/ijazfx_graphenee": 11.519267607480288,
+  "done:java/verifiable_token_based_authentication/ijazfx_graphenee": 12.020387578755617,
+  "end": 12.020393207669258,
+  "exit": 12.020418394356966
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

@@ -1,0 +1,20 @@
+{
+ "repo": "scality_osis",
+ "launch": 0,
+ "jobs": [
+  "java/authentication_pwd/scality_osis"
+ ],
+ "marks": {
+  "main": 11.521693412214518,
+  "loaded": 12.022559829056263,
+  "start:java/authentication_pwd/scality_osis": 12.022565428167582,
+  "done:java/authentication_pwd/scality_osis": 12.523566007614136,
+  "end": 12.523572050035,
+  "exit": 12.523594535887241
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

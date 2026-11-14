@@ -1,0 +1,20 @@
+{
+ "repo": "squirrels-analytics_squirrels",
+ "launch": 0,
+ "jobs": [
+  "python/session_based_access_control/squirrels-analytics_squirrels"
+ ],
+ "marks": {
+  "main": 12.020182512700558,
+  "loaded": 13.021745830774307,
+  "start:python/session_based_access_control/squirrels-analytics_squirrels": 13.021751653403044,
+  "done:python/session_based_access_control/squirrels-analytics_squirrels": 14.023617133498192,
+  "end": 14.02362272515893,
+  "exit": 14.023647099733353
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

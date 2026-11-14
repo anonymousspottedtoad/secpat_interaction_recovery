@@ -1,0 +1,20 @@
+{
+ "repo": "LearningHouseService_learninghouse",
+ "launch": 0,
+ "jobs": [
+  "python/obscure_token_based_access_control/LearningHouseService_learninghouse"
+ ],
+ "marks": {
+  "main": 12.022842723876238,
+  "loaded": 12.523800414055586,
+  "start:python/obscure_token_based_access_control/LearningHouseService_learninghouse": 12.523806169629097,
+  "done:python/obscure_token_based_access_control/LearningHouseService_learninghouse": 13.024792797863483,
+  "end": 13.024799264967442,
+  "exit": 13.02482246607542
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

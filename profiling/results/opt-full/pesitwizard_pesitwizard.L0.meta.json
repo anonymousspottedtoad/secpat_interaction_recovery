@@ -1,0 +1,20 @@
+{
+ "repo": "pesitwizard_pesitwizard",
+ "launch": 0,
+ "jobs": [
+  "java/limit_request_rate/pesitwizard_pesitwizard"
+ ],
+ "marks": {
+  "main": 11.020756088197231,
+  "loaded": 11.521732289344072,
+  "start:java/limit_request_rate/pesitwizard_pesitwizard": 11.521739069372416,
+  "done:java/limit_request_rate/pesitwizard_pesitwizard": 12.022978328168392,
+  "end": 12.022984161973,
+  "exit": 12.023007791489363
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

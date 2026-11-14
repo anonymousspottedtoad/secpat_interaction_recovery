@@ -1,0 +1,23 @@
+{
+ "repo": "Saturn99X_Etherion",
+ "launch": 0,
+ "jobs": [
+  "python/limit_request_rate/Saturn99X_Etherion",
+  "python/session_based_access_control/Saturn99X_Etherion"
+ ],
+ "marks": {
+  "main": 11.51907404512167,
+  "loaded": 12.520827557891607,
+  "start:python/limit_request_rate/Saturn99X_Etherion": 12.520833037793636,
+  "done:python/limit_request_rate/Saturn99X_Etherion": 15.023713119328022,
+  "start:python/session_based_access_control/Saturn99X_Etherion": 15.023716725409031,
+  "done:python/session_based_access_control/Saturn99X_Etherion": 15.52424144372344,
+  "end": 15.52424580231309,
+  "exit": 16.025062169879675
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

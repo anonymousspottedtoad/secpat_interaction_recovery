@@ -1,0 +1,20 @@
+{
+ "repo": "Lampx83_LakeFlow",
+ "launch": 0,
+ "jobs": [
+  "python/verifiable_token_based_authentication/Lampx83_LakeFlow"
+ ],
+ "marks": {
+  "main": 11.52209047600627,
+  "loaded": 12.523833498358727,
+  "start:python/verifiable_token_based_authentication/Lampx83_LakeFlow": 12.5238391533494,
+  "done:python/verifiable_token_based_authentication/Lampx83_LakeFlow": 13.024754952639341,
+  "end": 13.024761106818914,
+  "exit": 13.024783786386251
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

@@ -1,0 +1,20 @@
+{
+ "repo": "fabioformosa_quartz-manager",
+ "launch": 0,
+ "jobs": [
+  "java/verifiable_token_based_authentication/fabioformosa_quartz-manager"
+ ],
+ "marks": {
+  "main": 11.017597034573555,
+  "loaded": 12.019224356859922,
+  "start:java/verifiable_token_based_authentication/fabioformosa_quartz-manager": 12.019229926168919,
+  "done:java/verifiable_token_based_authentication/fabioformosa_quartz-manager": 12.019236959517002,
+  "end": 12.019240207970142,
+  "exit": 12.019262451678514
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

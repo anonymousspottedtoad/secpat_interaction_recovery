@@ -1,0 +1,20 @@
+{
+ "repo": "OpenElementsLabs_spring-services",
+ "launch": 0,
+ "jobs": [
+  "java/obscure_token_based_access_control/OpenElementsLabs_spring-services"
+ ],
+ "marks": {
+  "main": 11.522755205631256,
+  "loaded": 12.524578258395195,
+  "start:java/obscure_token_based_access_control/OpenElementsLabs_spring-services": 12.524581156671047,
+  "done:java/obscure_token_based_access_control/OpenElementsLabs_spring-services": 12.524584241211414,
+  "end": 12.52458568289876,
+  "exit": 13.025362960994244
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

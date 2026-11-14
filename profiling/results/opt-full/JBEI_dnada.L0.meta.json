@@ -1,0 +1,20 @@
+{
+ "repo": "JBEI_dnada",
+ "launch": 0,
+ "jobs": [
+  "python/authentication_pwd/JBEI_dnada"
+ ],
+ "marks": {
+  "main": 12.02206202596426,
+  "loaded": 13.024133641272783,
+  "start:python/authentication_pwd/JBEI_dnada": 13.02413896843791,
+  "done:python/authentication_pwd/JBEI_dnada": 14.026077225804329,
+  "end": 14.026083543896675,
+  "exit": 14.02610693871975
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

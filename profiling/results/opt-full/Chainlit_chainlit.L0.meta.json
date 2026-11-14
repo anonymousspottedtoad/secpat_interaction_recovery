@@ -1,0 +1,20 @@
+{
+ "repo": "Chainlit_chainlit",
+ "launch": 0,
+ "jobs": [
+  "python/verifiable_token_based_authentication/Chainlit_chainlit"
+ ],
+ "marks": {
+  "main": 12.023442186415195,
+  "loaded": 13.025332305580378,
+  "start:python/verifiable_token_based_authentication/Chainlit_chainlit": 13.025338143110275,
+  "done:python/verifiable_token_based_authentication/Chainlit_chainlit": 14.027293521910906,
+  "end": 14.027299053966999,
+  "exit": 14.027322806417942
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

@@ -1,0 +1,23 @@
+{
+ "repo": "officefloor_OfficeFloor",
+ "launch": 0,
+ "jobs": [
+  "java/limit_request_rate/officefloor_OfficeFloor",
+  "java/session_based_access_control/officefloor_OfficeFloor"
+ ],
+ "marks": {
+  "main": 11.020325928926468,
+  "loaded": 11.521253321319818,
+  "start:java/limit_request_rate/officefloor_OfficeFloor": 11.521258808672428,
+  "done:java/limit_request_rate/officefloor_OfficeFloor": 13.02418864890933,
+  "start:java/session_based_access_control/officefloor_OfficeFloor": 13.024194736033678,
+  "done:java/session_based_access_control/officefloor_OfficeFloor": 13.024199698120356,
+  "end": 13.024203009903431,
+  "exit": 13.525216281414032
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

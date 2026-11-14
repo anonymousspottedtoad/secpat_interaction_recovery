@@ -1,0 +1,20 @@
+{
+ "repo": "flowerfine_carp",
+ "launch": 0,
+ "jobs": [
+  "java/session_based_access_control/flowerfine_carp"
+ ],
+ "marks": {
+  "main": 11.025695957243443,
+  "loaded": 11.526757944375277,
+  "start:java/session_based_access_control/flowerfine_carp": 11.526779416948557,
+  "done:java/session_based_access_control/flowerfine_carp": 12.027806956321001,
+  "end": 12.0278251580894,
+  "exit": 12.027885183691978
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

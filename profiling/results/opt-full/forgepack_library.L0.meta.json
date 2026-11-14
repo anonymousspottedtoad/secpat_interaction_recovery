@@ -1,0 +1,20 @@
+{
+ "repo": "forgepack_library",
+ "launch": 0,
+ "jobs": [
+  "java/limit_request_rate/forgepack_library"
+ ],
+ "marks": {
+  "main": 11.020057655870914,
+  "loaded": 11.520943578332663,
+  "start:java/limit_request_rate/forgepack_library": 11.520949833095074,
+  "done:java/limit_request_rate/forgepack_library": 12.022115036845207,
+  "end": 12.02212181687355,
+  "exit": 12.022144805639982
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

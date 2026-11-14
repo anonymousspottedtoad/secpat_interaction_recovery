@@ -1,0 +1,20 @@
+{
+ "repo": "ligoj_ligoj",
+ "launch": 0,
+ "jobs": [
+  "java/obscure_token_based_access_control/ligoj_ligoj"
+ ],
+ "marks": {
+  "main": 11.51916766911745,
+  "loaded": 12.520386304706335,
+  "start:java/obscure_token_based_access_control/ligoj_ligoj": 12.52039185166359,
+  "done:java/obscure_token_based_access_control/ligoj_ligoj": 12.520398575812578,
+  "end": 12.52040210366249,
+  "exit": 13.021407414227724
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

@@ -1,0 +1,20 @@
+{
+ "repo": "manulera_OpenCloning_backend",
+ "launch": 0,
+ "jobs": [
+  "python/authentication_pwd/manulera_OpenCloning_backend"
+ ],
+ "marks": {
+  "main": 11.518037114292383,
+  "loaded": 12.51966007053852,
+  "start:python/authentication_pwd/manulera_OpenCloning_backend": 12.519665822386742,
+  "done:python/authentication_pwd/manulera_OpenCloning_backend": 13.521595850586891,
+  "end": 13.521601840853691,
+  "exit": 13.521625999361277
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

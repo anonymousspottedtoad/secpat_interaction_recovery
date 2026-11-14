@@ -1,0 +1,20 @@
+{
+ "repo": "dialob_dialob-parent",
+ "launch": 0,
+ "jobs": [
+  "java/obscure_token_based_access_control/dialob_dialob-parent"
+ ],
+ "marks": {
+  "main": 10.517202097922564,
+  "loaded": 11.519015464931726,
+  "start:java/obscure_token_based_access_control/dialob_dialob-parent": 11.51902087032795,
+  "done:java/obscure_token_based_access_control/dialob_dialob-parent": 12.020025238394737,
+  "end": 12.0200308971107,
+  "exit": 12.020055379718542
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

@@ -1,0 +1,20 @@
+{
+ "repo": "allen0099_FastAPI-CacheX",
+ "launch": 0,
+ "jobs": [
+  "python/session_based_access_control/allen0099_FastAPI-CacheX"
+ ],
+ "marks": {
+  "main": 11.520096357911825,
+  "loaded": 12.521699629724026,
+  "start:python/session_based_access_control/allen0099_FastAPI-CacheX": 12.521705389022827,
+  "done:python/session_based_access_control/allen0099_FastAPI-CacheX": 13.022510513663292,
+  "end": 13.022516015917063,
+  "exit": 13.523561272770166
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

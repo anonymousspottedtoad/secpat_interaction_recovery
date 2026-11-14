@@ -1,0 +1,20 @@
+{
+ "repo": "roksprogar_fastapi-otp-auth",
+ "launch": 0,
+ "jobs": [
+  "python/verifiable_token_based_authentication/roksprogar_fastapi-otp-auth"
+ ],
+ "marks": {
+  "main": 12.022910416126251,
+  "loaded": 13.024852860718966,
+  "start:python/verifiable_token_based_authentication/roksprogar_fastapi-otp-auth": 13.024858184158802,
+  "done:python/verifiable_token_based_authentication/roksprogar_fastapi-otp-auth": 13.024865161627531,
+  "end": 13.02486863732338,
+  "exit": 13.02489909902215
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

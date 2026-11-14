@@ -1,0 +1,20 @@
+{
+ "repo": "etiya-pair2_microservices",
+ "launch": 0,
+ "jobs": [
+  "java/authentication_pwd/etiya-pair2_microservices"
+ ],
+ "marks": {
+  "main": 10.521032519638538,
+  "loaded": 11.522916045039892,
+  "start:java/authentication_pwd/etiya-pair2_microservices": 11.522921849042177,
+  "done:java/authentication_pwd/etiya-pair2_microservices": 11.522929519414902,
+  "end": 11.522932711988688,
+  "exit": 12.023953769356012
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

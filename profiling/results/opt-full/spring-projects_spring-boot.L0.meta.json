@@ -1,0 +1,20 @@
+{
+ "repo": "spring-projects_spring-boot",
+ "launch": 0,
+ "jobs": [
+  "java/verifiable_token_based_authentication/spring-projects_spring-boot"
+ ],
+ "marks": {
+  "main": 11.020627725869417,
+  "loaded": 12.022172894328833,
+  "start:java/verifiable_token_based_authentication/spring-projects_spring-boot": 12.022178813815117,
+  "done:java/verifiable_token_based_authentication/spring-projects_spring-boot": 13.024043962359428,
+  "end": 13.024049915373325,
+  "exit": 13.525054398924112
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

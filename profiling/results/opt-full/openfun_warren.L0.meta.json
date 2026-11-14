@@ -1,0 +1,23 @@
+{
+ "repo": "openfun_warren",
+ "launch": 0,
+ "jobs": [
+  "python/session_based_access_control/openfun_warren",
+  "python/verifiable_token_based_authentication/openfun_warren"
+ ],
+ "marks": {
+  "main": 12.521180849522352,
+  "loaded": 13.522629044950008,
+  "start:python/session_based_access_control/openfun_warren": 13.522632617503405,
+  "done:python/session_based_access_control/openfun_warren": 13.522636849433184,
+  "start:python/verifiable_token_based_authentication/openfun_warren": 13.522641386836767,
+  "done:python/verifiable_token_based_authentication/openfun_warren": 14.023499105125666,
+  "end": 14.023506373167038,
+  "exit": 14.02353174611926
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

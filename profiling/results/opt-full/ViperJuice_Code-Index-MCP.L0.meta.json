@@ -1,0 +1,20 @@
+{
+ "repo": "ViperJuice_Code-Index-MCP",
+ "launch": 0,
+ "jobs": [
+  "python/limit_request_rate/ViperJuice_Code-Index-MCP"
+ ],
+ "marks": {
+  "main": 11.520623628050089,
+  "loaded": 13.023122891783714,
+  "start:python/limit_request_rate/ViperJuice_Code-Index-MCP": 13.023128271102905,
+  "done:python/limit_request_rate/ViperJuice_Code-Index-MCP": 16.52966060116887,
+  "end": 16.529666140675545,
+  "exit": 16.52969093620777
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

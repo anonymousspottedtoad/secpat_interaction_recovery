@@ -1,0 +1,20 @@
+{
+ "repo": "ir-msob_jima-security",
+ "launch": 0,
+ "jobs": [
+  "java/verifiable_token_based_authentication/ir-msob_jima-security"
+ ],
+ "marks": {
+  "main": 11.518015291541815,
+  "loaded": 12.519326586276293,
+  "start:java/verifiable_token_based_authentication/ir-msob_jima-security": 12.519330136477947,
+  "done:java/verifiable_token_based_authentication/ir-msob_jima-security": 12.51933442056179,
+  "end": 12.51933617144823,
+  "exit": 13.019923824816942
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

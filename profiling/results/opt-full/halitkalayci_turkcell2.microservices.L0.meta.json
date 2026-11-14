@@ -1,0 +1,20 @@
+{
+ "repo": "halitkalayci_turkcell2.microservices",
+ "launch": 0,
+ "jobs": [
+  "java/verifiable_token_based_authentication/halitkalayci_turkcell2.microservices"
+ ],
+ "marks": {
+  "main": 11.522126253694296,
+  "loaded": 12.523925848305225,
+  "start:java/verifiable_token_based_authentication/halitkalayci_turkcell2.microservices": 12.52393177896738,
+  "done:java/verifiable_token_based_authentication/halitkalayci_turkcell2.microservices": 13.02497924119234,
+  "end": 13.024985551834106,
+  "exit": 13.025009669363499
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

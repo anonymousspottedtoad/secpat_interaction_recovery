@@ -1,0 +1,20 @@
+{
+ "repo": "gavincui1026_Fastapi-Backend",
+ "launch": 0,
+ "jobs": [
+  "python/verifiable_token_based_authentication/gavincui1026_Fastapi-Backend"
+ ],
+ "marks": {
+  "main": 11.520880375057459,
+  "loaded": 12.522639743983746,
+  "start:python/verifiable_token_based_authentication/gavincui1026_Fastapi-Backend": 12.522647961974144,
+  "done:python/verifiable_token_based_authentication/gavincui1026_Fastapi-Backend": 12.522661905735731,
+  "end": 12.522668313235044,
+  "exit": 13.023739520460367
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

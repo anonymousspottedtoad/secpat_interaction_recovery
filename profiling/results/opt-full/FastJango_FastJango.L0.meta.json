@@ -1,0 +1,20 @@
+{
+ "repo": "FastJango_FastJango",
+ "launch": 0,
+ "jobs": [
+  "python/session_based_access_control/FastJango_FastJango"
+ ],
+ "marks": {
+  "main": 12.020910128951073,
+  "loaded": 13.022721815854311,
+  "start:python/session_based_access_control/FastJango_FastJango": 13.022726759314537,
+  "done:python/session_based_access_control/FastJango_FastJango": 13.523724719882011,
+  "end": 13.523730143904686,
+  "exit": 13.52375340089202
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

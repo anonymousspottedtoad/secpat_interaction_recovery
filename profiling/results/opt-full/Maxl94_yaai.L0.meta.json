@@ -1,0 +1,20 @@
+{
+ "repo": "Maxl94_yaai",
+ "launch": 0,
+ "jobs": [
+  "python/session_based_access_control/Maxl94_yaai"
+ ],
+ "marks": {
+  "main": 11.5207714214921,
+  "loaded": 12.522119838744402,
+  "start:python/session_based_access_control/Maxl94_yaai": 12.522125508636236,
+  "done:python/session_based_access_control/Maxl94_yaai": 13.02304445579648,
+  "end": 13.023050297051668,
+  "exit": 13.524031434208155
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

@@ -1,0 +1,20 @@
+{
+ "repo": "love-vector_yda",
+ "launch": 0,
+ "jobs": [
+  "java/obscure_token_based_access_control/love-vector_yda"
+ ],
+ "marks": {
+  "main": 11.019318759441376,
+  "loaded": 12.021183237433434,
+  "start:java/obscure_token_based_access_control/love-vector_yda": 12.021189145743847,
+  "done:java/obscure_token_based_access_control/love-vector_yda": 12.021196447312832,
+  "end": 12.021199721843004,
+  "exit": 12.021224111318588
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

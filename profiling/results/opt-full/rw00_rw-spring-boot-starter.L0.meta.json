@@ -1,0 +1,20 @@
+{
+ "repo": "rw00_rw-spring-boot-starter",
+ "launch": 0,
+ "jobs": [
+  "java/authentication_pwd/rw00_rw-spring-boot-starter"
+ ],
+ "marks": {
+  "main": 11.020856659859419,
+  "loaded": 11.521751120686531,
+  "start:java/authentication_pwd/rw00_rw-spring-boot-starter": 11.521756492555141,
+  "done:java/authentication_pwd/rw00_rw-spring-boot-starter": 11.521763194352388,
+  "end": 11.521767005324364,
+  "exit": 12.022742740809917
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

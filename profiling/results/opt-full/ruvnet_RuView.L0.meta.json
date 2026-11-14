@@ -1,0 +1,20 @@
+{
+ "repo": "ruvnet_RuView",
+ "launch": 0,
+ "jobs": [
+  "python/limit_request_rate/ruvnet_RuView"
+ ],
+ "marks": {
+  "main": 11.521640926599503,
+  "loaded": 12.523212879896164,
+  "start:python/limit_request_rate/ruvnet_RuView": 12.523216098546982,
+  "done:python/limit_request_rate/ruvnet_RuView": 13.524510528892279,
+  "end": 13.524516142904758,
+  "exit": 13.524538893252611
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

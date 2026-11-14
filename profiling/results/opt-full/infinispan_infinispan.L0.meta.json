@@ -1,0 +1,20 @@
+{
+ "repo": "infinispan_infinispan",
+ "launch": 0,
+ "jobs": [
+  "java/limit_request_rate/infinispan_infinispan"
+ ],
+ "marks": {
+  "main": 10.514881491661072,
+  "loaded": 11.516215533018112,
+  "start:java/limit_request_rate/infinispan_infinispan": 11.516220647841692,
+  "done:java/limit_request_rate/infinispan_infinispan": 13.018935404717922,
+  "end": 13.018941055983305,
+  "exit": 13.519956067204475
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

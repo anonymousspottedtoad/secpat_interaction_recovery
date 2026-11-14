@@ -1,0 +1,20 @@
+{
+ "repo": "TsukasaHwan_jwt-security-spring-boot-starter",
+ "launch": 0,
+ "jobs": [
+  "java/verifiable_token_based_authentication/TsukasaHwan_jwt-security-spring-boot-starter"
+ ],
+ "marks": {
+  "main": 10.520223822444677,
+  "loaded": 11.021149728447199,
+  "start:java/verifiable_token_based_authentication/TsukasaHwan_jwt-security-spring-boot-starter": 11.021155159920454,
+  "done:java/verifiable_token_based_authentication/TsukasaHwan_jwt-security-spring-boot-starter": 11.522185232490301,
+  "end": 11.52219145745039,
+  "exit": 11.52221642434597
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

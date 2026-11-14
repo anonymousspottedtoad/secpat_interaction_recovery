@@ -1,0 +1,23 @@
+{
+ "repo": "cloudfoundry_uaa",
+ "launch": 0,
+ "jobs": [
+  "java/limit_request_rate/cloudfoundry_uaa",
+  "java/session_based_access_control/cloudfoundry_uaa"
+ ],
+ "marks": {
+  "main": 10.519729405641556,
+  "loaded": 11.521128937602043,
+  "start:java/limit_request_rate/cloudfoundry_uaa": 11.521131578832865,
+  "done:java/limit_request_rate/cloudfoundry_uaa": 12.021704103797674,
+  "start:java/session_based_access_control/cloudfoundry_uaa": 12.021706964820623,
+  "done:java/session_based_access_control/cloudfoundry_uaa": 12.021708518266678,
+  "end": 12.021709971129894,
+  "exit": 12.52242887020111
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

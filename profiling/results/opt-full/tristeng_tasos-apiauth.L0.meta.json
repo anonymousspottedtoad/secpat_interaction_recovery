@@ -1,0 +1,23 @@
+{
+ "repo": "tristeng_tasos-apiauth",
+ "launch": 0,
+ "jobs": [
+  "python/authentication_pwd/tristeng_tasos-apiauth",
+  "python/verifiable_token_based_authentication/tristeng_tasos-apiauth"
+ ],
+ "marks": {
+  "main": 12.023054752498865,
+  "loaded": 12.523990098387003,
+  "start:python/authentication_pwd/tristeng_tasos-apiauth": 12.523995842784643,
+  "done:python/authentication_pwd/tristeng_tasos-apiauth": 13.025008406490088,
+  "start:python/verifiable_token_based_authentication/tristeng_tasos-apiauth": 13.025015387684107,
+  "done:python/verifiable_token_based_authentication/tristeng_tasos-apiauth": 13.025020085275173,
+  "end": 13.025023747235537,
+  "exit": 13.025046296417713
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

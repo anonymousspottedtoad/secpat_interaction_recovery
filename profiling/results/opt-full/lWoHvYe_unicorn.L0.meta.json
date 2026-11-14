@@ -1,0 +1,20 @@
+{
+ "repo": "lWoHvYe_unicorn",
+ "launch": 0,
+ "jobs": [
+  "java/authentication_pwd/lWoHvYe_unicorn"
+ ],
+ "marks": {
+  "main": 11.021008647978306,
+  "loaded": 11.52193021401763,
+  "start:java/authentication_pwd/lWoHvYe_unicorn": 11.521935574710369,
+  "done:java/authentication_pwd/lWoHvYe_unicorn": 12.022945880889893,
+  "end": 12.022952400147915,
+  "exit": 12.022975768893957
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

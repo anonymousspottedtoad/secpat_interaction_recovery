@@ -1,0 +1,23 @@
+{
+ "repo": "smjkzsl_IRAILS",
+ "launch": 0,
+ "jobs": [
+  "python/session_based_access_control/smjkzsl_IRAILS",
+  "python/verifiable_token_based_authentication/smjkzsl_IRAILS"
+ ],
+ "marks": {
+  "main": 12.019233286380768,
+  "loaded": 13.020554032176733,
+  "start:python/session_based_access_control/smjkzsl_IRAILS": 13.020557794719934,
+  "done:python/session_based_access_control/smjkzsl_IRAILS": 13.52133084461093,
+  "start:python/verifiable_token_based_authentication/smjkzsl_IRAILS": 13.521338008344173,
+  "done:python/verifiable_token_based_authentication/smjkzsl_IRAILS": 13.521343018859625,
+  "end": 13.521346408873796,
+  "exit": 14.022343646734953
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

@@ -1,0 +1,23 @@
+{
+ "repo": "gradio-app_gradio",
+ "launch": 0,
+ "jobs": [
+  "python/authentication_pwd/gradio-app_gradio",
+  "python/session_based_access_control/gradio-app_gradio"
+ ],
+ "marks": {
+  "main": 11.520615834742785,
+  "loaded": 12.521756004542112,
+  "start:python/authentication_pwd/gradio-app_gradio": 12.521758984774351,
+  "done:python/authentication_pwd/gradio-app_gradio": 14.524244859814644,
+  "start:python/session_based_access_control/gradio-app_gradio": 14.524251285940409,
+  "done:python/session_based_access_control/gradio-app_gradio": 15.025263413786888,
+  "end": 15.02527105808258,
+  "exit": 15.025294326245785
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

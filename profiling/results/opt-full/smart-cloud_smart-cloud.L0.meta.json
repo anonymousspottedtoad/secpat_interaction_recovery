@@ -1,0 +1,20 @@
+{
+ "repo": "smart-cloud_smart-cloud",
+ "launch": 0,
+ "jobs": [
+  "java/limit_request_rate/smart-cloud_smart-cloud"
+ ],
+ "marks": {
+  "main": 10.520921524614096,
+  "loaded": 11.522714961320162,
+  "start:java/limit_request_rate/smart-cloud_smart-cloud": 11.522720698267221,
+  "done:java/limit_request_rate/smart-cloud_smart-cloud": 11.522727575153112,
+  "end": 11.522730849683285,
+  "exit": 12.02371982857585
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

@@ -1,0 +1,20 @@
+{
+ "repo": "kuehne-trustable-de_adcsCert",
+ "launch": 0,
+ "jobs": [
+  "java/session_based_access_control/kuehne-trustable-de_adcsCert"
+ ],
+ "marks": {
+  "main": 11.021489258855581,
+  "loaded": 12.023106753826141,
+  "start:java/session_based_access_control/kuehne-trustable-de_adcsCert": 12.023112256079912,
+  "done:java/session_based_access_control/kuehne-trustable-de_adcsCert": 12.023119240999222,
+  "end": 12.023122508078814,
+  "exit": 12.023145709186792
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

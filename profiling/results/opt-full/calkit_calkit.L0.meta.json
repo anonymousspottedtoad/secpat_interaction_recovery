@@ -1,0 +1,20 @@
+{
+ "repo": "calkit_calkit",
+ "launch": 0,
+ "jobs": [
+  "python/verifiable_token_based_authentication/calkit_calkit"
+ ],
+ "marks": {
+  "main": 11.518806409090757,
+  "loaded": 12.520258747041225,
+  "start:python/verifiable_token_based_authentication/calkit_calkit": 12.520264487713575,
+  "done:python/verifiable_token_based_authentication/calkit_calkit": 14.023109652101994,
+  "end": 14.023115195333958,
+  "exit": 14.02313881739974
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

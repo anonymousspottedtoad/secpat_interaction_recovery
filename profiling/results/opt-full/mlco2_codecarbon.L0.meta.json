@@ -1,0 +1,20 @@
+{
+ "repo": "mlco2_codecarbon",
+ "launch": 0,
+ "jobs": [
+  "python/session_based_access_control/mlco2_codecarbon"
+ ],
+ "marks": {
+  "main": 11.522151250392199,
+  "loaded": 12.523582361638546,
+  "start:python/session_based_access_control/mlco2_codecarbon": 12.52358628436923,
+  "done:python/session_based_access_control/mlco2_codecarbon": 13.524928983300924,
+  "end": 13.524935197085142,
+  "exit": 13.524959120899439
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

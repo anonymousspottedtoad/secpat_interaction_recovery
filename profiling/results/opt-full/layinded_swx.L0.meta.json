@@ -1,0 +1,23 @@
+{
+ "repo": "layinded_swx",
+ "launch": 0,
+ "jobs": [
+  "python/limit_request_rate/layinded_swx",
+  "python/session_based_access_control/layinded_swx"
+ ],
+ "marks": {
+  "main": 11.519508510828018,
+  "loaded": 12.52115286514163,
+  "start:python/limit_request_rate/layinded_swx": 12.521158058196306,
+  "done:python/limit_request_rate/layinded_swx": 13.52306942269206,
+  "start:python/session_based_access_control/layinded_swx": 13.523075602948666,
+  "done:python/session_based_access_control/layinded_swx": 13.523079920560122,
+  "end": 13.523082941770554,
+  "exit": 13.523106392472982
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

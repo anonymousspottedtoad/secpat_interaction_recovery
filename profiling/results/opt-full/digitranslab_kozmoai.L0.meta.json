@@ -1,0 +1,20 @@
+{
+ "repo": "digitranslab_kozmoai",
+ "launch": 0,
+ "jobs": [
+  "python/authentication_pwd/digitranslab_kozmoai"
+ ],
+ "marks": {
+  "main": 11.517830468714237,
+  "loaded": 13.020407516509295,
+  "start:python/authentication_pwd/digitranslab_kozmoai": 13.020412739366293,
+  "done:python/authentication_pwd/digitranslab_kozmoai": 14.523188326507807,
+  "end": 14.523194346576929,
+  "exit": 14.523218553513288
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

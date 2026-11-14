@@ -1,0 +1,20 @@
+{
+ "repo": "factcast_factcast",
+ "launch": 0,
+ "jobs": [
+  "java/limit_request_rate/factcast_factcast"
+ ],
+ "marks": {
+  "main": 11.0198874771595,
+  "loaded": 12.021756686270237,
+  "start:java/limit_request_rate/factcast_factcast": 12.021765254437923,
+  "done:java/limit_request_rate/factcast_factcast": 12.522768348455429,
+  "end": 12.522774524986744,
+  "exit": 12.522801399230957
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 300.0
+}

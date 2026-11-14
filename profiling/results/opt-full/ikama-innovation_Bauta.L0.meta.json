@@ -1,0 +1,20 @@
+{
+ "repo": "ikama-innovation_Bauta",
+ "launch": 0,
+ "jobs": [
+  "java/session_based_access_control/ikama-innovation_Bauta"
+ ],
+ "marks": {
+  "main": 11.016420856118202,
+  "loaded": 12.017894893884659,
+  "start:java/session_based_access_control/ikama-innovation_Bauta": 12.017900679260492,
+  "done:java/session_based_access_control/ikama-innovation_Bauta": 12.017907619476318,
+  "end": 12.017910934984684,
+  "exit": 12.518889296799898
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

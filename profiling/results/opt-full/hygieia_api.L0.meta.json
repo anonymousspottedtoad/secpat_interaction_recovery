@@ -1,0 +1,23 @@
+{
+ "repo": "hygieia_api",
+ "launch": 0,
+ "jobs": [
+  "java/obscure_token_based_access_control/hygieia_api",
+  "java/session_based_access_control/hygieia_api"
+ ],
+ "marks": {
+  "main": 10.520037405192852,
+  "loaded": 11.521856095641851,
+  "start:java/obscure_token_based_access_control/hygieia_api": 11.521861389279366,
+  "done:java/obscure_token_based_access_control/hygieia_api": 12.022889286279678,
+  "start:java/session_based_access_control/hygieia_api": 12.022895857691765,
+  "done:java/session_based_access_control/hygieia_api": 12.022900365293026,
+  "end": 12.022903732955456,
+  "exit": 12.022926662117243
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

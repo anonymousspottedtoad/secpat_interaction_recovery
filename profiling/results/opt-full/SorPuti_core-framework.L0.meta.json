@@ -1,0 +1,23 @@
+{
+ "repo": "SorPuti_core-framework",
+ "launch": 0,
+ "jobs": [
+  "python/limit_request_rate/SorPuti_core-framework",
+  "python/session_based_access_control/SorPuti_core-framework"
+ ],
+ "marks": {
+  "main": 11.518216226249933,
+  "loaded": 12.519984193146229,
+  "start:python/limit_request_rate/SorPuti_core-framework": 12.519989933818579,
+  "done:python/limit_request_rate/SorPuti_core-framework": 13.521874208003283,
+  "start:python/session_based_access_control/SorPuti_core-framework": 13.521880824118853,
+  "done:python/session_based_access_control/SorPuti_core-framework": 14.023092698305845,
+  "end": 14.023099407553673,
+  "exit": 14.524108536541462
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

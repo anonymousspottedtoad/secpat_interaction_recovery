@@ -1,0 +1,20 @@
+{
+ "repo": "yizzuide_Milkomeda",
+ "launch": 0,
+ "jobs": [
+  "java/session_based_access_control/yizzuide_Milkomeda"
+ ],
+ "marks": {
+  "main": 11.522583432495594,
+  "loaded": 12.524485293775797,
+  "start:java/session_based_access_control/yizzuide_Milkomeda": 12.524490341544151,
+  "done:java/session_based_access_control/yizzuide_Milkomeda": 13.025491420179605,
+  "end": 13.025497436523438,
+  "exit": 13.025522194802761
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

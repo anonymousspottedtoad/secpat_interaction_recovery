@@ -1,0 +1,20 @@
+{
+ "repo": "coderspack_spring-boot-starter-jwt",
+ "launch": 0,
+ "jobs": [
+  "java/verifiable_token_based_authentication/coderspack_spring-boot-starter-jwt"
+ ],
+ "marks": {
+  "main": 11.02194894477725,
+  "loaded": 11.522893019020557,
+  "start:java/verifiable_token_based_authentication/coderspack_spring-boot-starter-jwt": 11.522899225354195,
+  "done:java/verifiable_token_based_authentication/coderspack_spring-boot-starter-jwt": 12.023912448436022,
+  "end": 12.023918602615595,
+  "exit": 12.023942314088345
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

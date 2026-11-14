@@ -1,0 +1,26 @@
+{
+ "repo": "ParisNeo_lollms",
+ "launch": 0,
+ "jobs": [
+  "python/authentication_pwd/ParisNeo_lollms",
+  "python/session_based_access_control/ParisNeo_lollms",
+  "python/verifiable_token_based_authentication/ParisNeo_lollms"
+ ],
+ "marks": {
+  "main": 11.522138923406601,
+  "loaded": 12.523818779736757,
+  "start:python/authentication_pwd/ParisNeo_lollms": 12.523822378367186,
+  "done:python/authentication_pwd/ParisNeo_lollms": 13.525464218109846,
+  "start:python/session_based_access_control/ParisNeo_lollms": 13.525470465421677,
+  "done:python/session_based_access_control/ParisNeo_lollms": 14.026368521153927,
+  "start:python/verifiable_token_based_authentication/ParisNeo_lollms": 14.026375718414783,
+  "done:python/verifiable_token_based_authentication/ParisNeo_lollms": 14.527354583144188,
+  "end": 14.527360074222088,
+  "exit": 14.527382422238588
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

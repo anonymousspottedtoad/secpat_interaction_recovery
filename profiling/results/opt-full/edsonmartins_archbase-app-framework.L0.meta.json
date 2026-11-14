@@ -1,0 +1,20 @@
+{
+ "repo": "edsonmartins_archbase-app-framework",
+ "launch": 0,
+ "jobs": [
+  "java/verifiable_token_based_authentication/edsonmartins_archbase-app-framework"
+ ],
+ "marks": {
+  "main": 11.020405922085047,
+  "loaded": 12.022222500294447,
+  "start:java/verifiable_token_based_authentication/edsonmartins_archbase-app-framework": 12.022226739674807,
+  "done:java/verifiable_token_based_authentication/edsonmartins_archbase-app-framework": 12.523151319473982,
+  "end": 12.52315716445446,
+  "exit": 12.523180600255728
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}
