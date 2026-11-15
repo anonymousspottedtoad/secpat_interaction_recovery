@@ -50,12 +50,14 @@ much work the traversal has done. The traversal's output is unchanged (see Outpu
 - `profiling/prof_walk.py` patches either `exec` (with or without the progress calls), so it
   still profiles older traversals; its counter patches apply to the new `walk.sc` exactly as to
   `walk_opt3.sc`.
-- README: a Progress section, `rust_walk.py` and `progress.py` in the module table, and the
-  tests in "Checking an install". JOERN.md: a note on `Progress`.
-- README: a "Running from the command line" section: `detect()` from a shell on each engine,
-  `walk.sc` run directly with `joern --script` and its `--param`s as `joern_local.py` builds them,
-  and the batch runners in `profiling/` (`extract_jobs.py`, `prof_walk.py`, `warm_worker.py`,
-  `compare_golden.py`) with their inputs and outputs. Every command in it was run.
+- README rewritten for reviewers: what is needed, how to check one case (one dataset record with
+  `joern --script`, or any record with secpatrec's `secpat interaction --repo --pattern`), how to
+  reproduce the whole dataset, and the native engine. Every command in it was run on the paper's
+  dataset, and its outputs are shown next to it.
+- The rest of the former README moved to the new `docs/USAGE.md`: how the output maps to the
+  paper, the modules, where Joern runs and its settings, the faster engines and builds, the
+  progress display, `detect()` from a shell (now on a dataset record), the script's `--param`s and
+  the batch runners in `profiling/`. JOERN.md: a note on `Progress`.
 
 ### Output
 
