@@ -41,6 +41,8 @@ from pathlib import Path
 
 from . import config
 from .joern_service import frontend_for
+from .progress import Display
+from .progress import run as run_streaming
 
 logger = logging.getLogger(__name__)
 
@@ -66,19 +68,21 @@ def query(
     script: str,
     repo_path: Path,
     params: dict[str, str] | None = None,
+    display: Display | None = None,
 ) -> dict | None:
     """Run ``script`` against ``repo``'s CPG with local Joern; its JSON result, or ``None``.
 
     ``params`` are passed to the script's ``@main`` as ``--param k=v``, beside the
     ``cpgPath`` / ``inputPath`` / ``outputPath`` / ``language`` this supplies itself.
-    The CPG is built first if the store has none.
+    The CPG is built first if the store has none. An active ``display`` gets the
+    traversal's progress lines as they come (:mod:`.progress`).
     """
     repo_path = Path(repo_path).absolute()
     if not repo_path.is_dir():
         logger.warning("joern: no checkout for %s at %s", repo, repo_path)
         return None
     frontend = frontend_for(language)
-    cpg = _ensure_cpg(repo, frontend, repo_path)
+    cpg = _ensure_cpg(repo, frontend, repo_path, display)
     if cpg is None:
         return None
 
@@ -100,7 +104,9 @@ def query(
 
         logger.info("joern: querying %s (%s) with local Joern, CPG %s", repo, frontend or "auto", cpg)
         started = time.monotonic()
-        completed = _run(command, workdir, config.JOERN_TIMEOUT_SECONDS, repo, "query")
+        if display is not None:
+            display.phase("starting joern")
+        completed = _run(command, workdir, config.JOERN_TIMEOUT_SECONDS, repo, "query", display=display)
         if completed is None:
             return None
         if completed.returncode != 0 or not output.is_file():
@@ -122,7 +128,7 @@ def query(
         shutil.rmtree(workdir, ignore_errors=True)
 
 
-def _ensure_cpg(repo: str, frontend: str, repo_path: Path) -> Path | None:
+def _ensure_cpg(repo: str, frontend: str, repo_path: Path, display: Display | None = None) -> Path | None:
     """The stored CPG for ``repo``, building it first if there is none.
 
     A lock file per CPG keeps two processes of one parallel batch from building the
@@ -149,6 +155,8 @@ def _ensure_cpg(repo: str, frontend: str, repo_path: Path) -> Path | None:
             command += ["--frontend-args", *_FRONTEND_ARGS[frontend]]
 
         logger.info("joern: building the CPG for %s — %s", repo, " ".join(command))
+        if display is not None:
+            display.phase("building the CPG")
         started = time.monotonic()
         workdir = Path(tempfile.mkdtemp(prefix="secpat-joern-parse-"))
         env = None
@@ -177,10 +185,17 @@ def _ensure_cpg(repo: str, frontend: str, repo_path: Path) -> Path | None:
 
 
 def _run(
-    command: list[str], cwd: Path, timeout: int, repo: str, what: str, env: dict | None = None
+    command: list[str], cwd: Path, timeout: int, repo: str, what: str, env: dict | None = None,
+    display: Display | None = None,
 ) -> subprocess.CompletedProcess | None:
-    """Run one Joern binary; ``None`` (logged) when it is missing or times out."""
+    """Run one Joern binary; ``None`` (logged) when it is missing or times out.
+
+    With an active ``display`` the run is streamed: its progress lines go to the display, and
+    everything else is captured as before.
+    """
     try:
+        if display is not None and display.active:
+            return run_streaming(command, timeout=timeout, display=display, cwd=str(cwd), env=env)
         return subprocess.run(
             command, cwd=str(cwd), env=env or dict(os.environ),
             capture_output=True, text=True, timeout=timeout, check=False,

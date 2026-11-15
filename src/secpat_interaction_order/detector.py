@@ -51,7 +51,7 @@ import logging
 from dataclasses import dataclass, field
 from pathlib import Path
 
-from . import config, joern_local, joern_service, rust_walk
+from . import config, joern_local, joern_service, progress, rust_walk
 
 logger = logging.getLogger(__name__)
 
@@ -243,6 +243,7 @@ def detect(
     behaviour: list[dict] | None = None,
     entry: str = "",
     repo_path: Path | None = None,
+    label: str = "",
 ) -> DetectionResult:
     """The interaction order for ``mappings``, derived on Joern.
 
@@ -254,6 +255,9 @@ def detect(
     ``repo_path`` is the checkout on this machine. The service ignores it — it has
     its own checkouts — but a local Joern (``JOERN_SERVICE_URL`` unset) needs it,
     both to build the CPG and to read source the walk consults.
+
+    ``label`` names this draft in the progress display (``SECPAT_PROGRESS``, see
+    :mod:`.progress`), e.g. its pattern; the default is the entry role and the number of roles.
     """
     script = _script(language)
     if script is None:
@@ -281,8 +285,7 @@ def detect(
         "entry": entry or entry_role(behaviour or [], mappings),
     }
     if config.JOERN_SERVICE_URL:
-        result = joern_service.query(repo, language, script, params=params)
-        where = "the Joern query service"
+        engine, where = "service", "the Joern query service"
     elif repo_path is None:
         return DetectionResult(
             reason=(
@@ -291,11 +294,17 @@ def detect(
             )
         )
     elif config.JOERN_ENGINE == "rust":
-        result = rust_walk.query(repo, language, repo_path, params)
-        where = "the native engine (secpat-walk)"
+        engine, where = "rust", "the native engine (secpat-walk)"
     else:
-        result = joern_local.query(repo, language, script, repo_path, params=params)
-        where = "local Joern"
+        engine, where = "joern", "local Joern"
+    draft = label or f"{params['entry'] or 'no entry role'}, {len(roles)} roles"
+    with progress.Display(repo, draft, engine) as display:
+        if engine == "service":
+            result = joern_service.query(repo, language, script, params=params, display=display)
+        elif engine == "rust":
+            result = rust_walk.query(repo, language, repo_path, params, display=display)
+        else:
+            result = joern_local.query(repo, language, script, repo_path, params=params, display=display)
     if result is None:
         return DetectionResult(
             reason=(

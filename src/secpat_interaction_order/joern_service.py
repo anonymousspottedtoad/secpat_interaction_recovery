@@ -83,12 +83,14 @@ class ServiceError(RuntimeError):
 
 
 def query(
-    repo: str, language: str, script: str, params: dict[str, str] | None = None
+    repo: str, language: str, script: str, params: dict[str, str] | None = None, display=None
 ) -> dict | None:
     """Run ``script`` against ``repo``'s CPG; its JSON result, or ``None``.
 
     ``params`` are passed to the script's ``@main`` as ``--param k=v``, on top of
     the ``cpgPath`` / ``inputPath`` / ``outputPath`` the service supplies itself.
+    The service answers only when the traversal is over, so a progress ``display``
+    (:class:`.progress.Display`) can show no more than that it is waiting, and for how long.
 
     ``None`` rather than an exception: every way this fails is a fact about the
     service or the deployment, not about the repo being analysed, and the caller
@@ -120,6 +122,8 @@ def query(
     }
 
     logger.info("joern: querying %s (%s) at %s", repo, language or "auto", url)
+    if display is not None:
+        display.phase("waiting for the query service")
     body = _post(url, "/query", payload, repo)
     if body is _NOT_BUILT:
         logger.warning(

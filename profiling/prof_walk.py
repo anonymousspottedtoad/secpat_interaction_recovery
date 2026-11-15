@@ -14,6 +14,10 @@ the walk computes:
   JVM (so JFR, when on, dumps its recording). The harness restarts the JVM with the
   jobs after the one that timed out.
 
+With a progress display on (SECPAT_PROGRESS, see the package's progress.py; by default when
+stderr is a terminal), an outer bar counts the drafts ([i/N], the current repository, ETA), and
+the traversal's own progress lines (walk.sc, SECPAT_PROGRESS=lines) show the draft that runs.
+
     python3 profiling/prof_walk.py --run NAME [--ids ID ...] [--repos REPO ...]
         [--max-bytes N] [--min-bytes N] [--budget 300] [--jfr] [--xmx 48g]
 
@@ -38,6 +42,9 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 JOERN_DIR = HERE.parent / "src" / "secpat_interaction_order" / "joern"
+sys.path.insert(0, str(HERE.parent / "src"))
+from secpat_interaction_order import progress  # noqa: E402  (stdlib only)
+
 JOERN = os.environ.get("JOERN_BIN", "/opt/joern/joern-cli/joern")
 PROFILES = {"python": "python.sc", "java": "java.sc"}
 CG = Path("/sys/fs/cgroup")
@@ -45,7 +52,7 @@ MAX_PIDS, MIN_FREE_GIB = 2500, 25
 
 
 def log(msg: str) -> None:
-    print(time.strftime("%H:%M:%S"), msg, flush=True)
+    progress.write(f"{time.strftime('%H:%M:%S')} {msg}")
 
 
 def pids() -> int:
@@ -142,6 +149,28 @@ EXEC_NEW = '''def exec(
   Prof.set("interactions", interactions.size)
   println(s"derived ${interactions.size} interaction(s) from ${located.size} role(s), entry=${start.role}")
 }'''
+
+# walk.sc with progress lines (SECPAT_PROGRESS): the same `exec`, plus four `Progress` calls,
+# kept in the instrumented one.
+EXEC_OLD_PROGRESS = (
+    EXEC_OLD
+    .replace(") = {\n  loadGraph(", ") = {\n  Progress.begin(cpgPath, inputPath)   "
+             "// progress lines on stderr, only with SECPAT_PROGRESS=lines\n  loadGraph(")
+    .replace("  val repo = new Repo(inputPath)\n", "  val repo = new Repo(inputPath)\n  Progress.phase(\"locate\")\n")
+    .replace("  val walker = new Walker(graph, ownership)\n",
+             "  val walker = new Walker(graph, ownership)\n  Progress.phase(\"traverse\", walker)\n")
+    .replace("  writeResult(outputPath, render(graph, located, start, interactions))\n",
+             "  writeResult(outputPath, render(graph, located, start, interactions))\n"
+             "  Progress.done(interactions.size)\n")
+)
+EXEC_NEW_PROGRESS = (
+    EXEC_NEW
+    .replace(") = {\n  if (cpgPath.nonEmpty)", ") = {\n  Progress.begin(cpgPath, inputPath)\n  if (cpgPath.nonEmpty)")
+    .replace("  val repo = new Repo(inputPath)\n", "  val repo = new Repo(inputPath)\n  Progress.phase(\"locate\")\n")
+    .replace("  Prof.walker = walker\n", "  Prof.walker = walker\n  Progress.phase(\"traverse\", walker)\n")
+    .replace("    i\n  }\n", "    i\n  }\n  Progress.done(interactions.size)\n")
+)
+assert EXEC_OLD_PROGRESS.count("Progress.") == 4 and EXEC_NEW_PROGRESS.count("Progress.") == 4
 
 PROF_OBJECT = r'''
 
@@ -246,6 +275,7 @@ object Watch {
     Watch.started = System.nanoTime
     Watch.deadline = Watch.started + (budgetS.toDouble * 1e9).toLong
     Watch.job = id
+    /*progress-draft*/
     println(s"BATCH-START $id")
     val t0 = System.nanoTime
     val status = try {
@@ -358,17 +388,19 @@ COUNTERS = [
 def instrumented_script(language: str, walk: Path | None = None) -> str:
     """walk.sc (or `walk`) + the profile, with phase timers, counters and the batch main."""
     src = (walk or WALK).read_text(encoding="utf-8")
-    src = patch(src, EXEC_OLD, EXEC_NEW)
+    with_progress = "object Progress" in src
+    src = patch(src, EXEC_OLD_PROGRESS, EXEC_NEW_PROGRESS) if with_progress else patch(src, EXEC_OLD, EXEC_NEW)
     for old, new in COUNTERS:
         src = patch(src, old, new, required=False)
     profile = (JOERN_DIR / PROFILES[language]).read_text(encoding="utf-8")
-    return src + "\n" + profile + PROF_OBJECT
+    main = PROF_OBJECT.replace("/*progress-draft*/", "Progress.draft = id" if with_progress else "")
+    return src + "\n" + profile + main
 
 
 # ── running ───────────────────────────────────────────────────────────────────
 
-def run_launch(job, jobs, workdir, out_dir, launch, budget, xmx, jfr, walk=None):
-    """One JVM over `jobs`. Returns ({id: status}, meta)."""
+def run_launch(job, jobs, workdir, out_dir, launch, budget, xmx, jfr, walk=None, batch=None):
+    """One JVM over `jobs`. Returns ({id: status}, meta). `batch` counts each draft that ends."""
     lang = jobs[0]["language"]
     script = workdir / "batch.sc"
     script.write_text(instrumented_script(lang, walk), encoding="utf-8")
@@ -385,6 +417,9 @@ def run_launch(job, jobs, workdir, out_dir, launch, budget, xmx, jfr, walk=None)
         opts += [f"-XX:StartFlightRecording=filename={out_dir / (tag + '.%p.jfr')},dumponexit=true,settings=profile",
                  "-XX:FlightRecorderOptions=stackdepth=2048"]
     env = dict(os.environ, JAVA_TOOL_OPTIONS=" ".join(opts))
+    shown = progress.mode() != "off"
+    if shown:
+        env["SECPAT_PROGRESS"] = "lines"
     cmd = [JOERN, "--script", str(script), "--param", f"cpgPath={jobs[0]['cpg']}",
            "--param", f"inputPath={jobs[0]['input']}", "--param", f"jobsPath={workdir / 'jobs.json'}",
            "--param", f"language={jobs[0]['frontend']}", "--param", f"budgetS={budget}"]
@@ -392,6 +427,29 @@ def run_launch(job, jobs, workdir, out_dir, launch, budget, xmx, jfr, walk=None)
     status, marks = {}, {}
     t_start = time.monotonic()
     killed = ""
+    # The draft that runs now, shown with the traversal's progress lines.
+    display = None
+
+    def show(job_id: str, phase: str = "") -> None:
+        nonlocal display
+        if shown and (display is None or display.draft != job_id.split("/")[1]):
+            if display is not None:
+                display.close()
+            display = progress.Display(repo, job_id.split("/")[1], "joern")
+        if display is not None and phase:
+            display.phase(phase)
+
+    def ended(job_id: str, how: str, now: float) -> None:
+        nonlocal display
+        status[job_id] = how
+        marks[f"done:{job_id}"] = now
+        if display is not None:
+            display.close()
+            display = None
+        if batch is not None:
+            batch.advance()
+
+    show(jobs[0]["id"], "starting joern")
     with open(out_txt, "w") as out:
         proc = subprocess.Popen(cmd, stdout=out, stderr=subprocess.STDOUT, stdin=subprocess.DEVNULL,
                                 env=env, cwd=str(workdir), start_new_session=True)
@@ -403,13 +461,18 @@ def run_launch(job, jobs, workdir, out_dir, launch, budget, xmx, jfr, walk=None)
             for ln in lines[seen:]:
                 p = ln.split(" ", 2)
                 now = time.monotonic() - t_start
-                if p[0] == "BATCH-MAIN": marks["main"] = now
+                if p[0] == "BATCH-MAIN":
+                    marks["main"] = now
+                    if display is not None:
+                        display.phase("loading the CPG")
                 elif p[0] == "BATCH-LOADED": marks["loaded"] = now; t_mark = time.monotonic()
-                elif p[0] == "BATCH-START": marks[f"start:{p[1]}"] = now; t_mark = time.monotonic()
-                elif p[0] == "BATCH-DONE": status[p[1]] = "done"; marks[f"done:{p[1]}"] = now
-                elif p[0] == "BATCH-ERROR": status[p[1]] = "error"; marks[f"done:{p[1]}"] = now
-                elif p[0] == "BATCH-TIMEOUT": status[p[1]] = "timeout"; marks[f"done:{p[1]}"] = now
+                elif p[0] == "BATCH-START": marks[f"start:{p[1]}"] = now; t_mark = time.monotonic(); show(p[1])
+                elif p[0] == "BATCH-DONE": ended(p[1], "done", now)
+                elif p[0] == "BATCH-ERROR": ended(p[1], "error", now)
+                elif p[0] == "BATCH-TIMEOUT": ended(p[1], "timeout", now)
                 elif p[0] == "BATCH-END": marks["end"] = now
+                elif display is not None:
+                    display.feed(ln)
             seen = len(lines)
             if done:
                 break
@@ -430,12 +493,16 @@ def run_launch(job, jobs, workdir, out_dir, launch, budget, xmx, jfr, walk=None)
                 break
             time.sleep(0.5)
     marks["exit"] = time.monotonic() - t_start
+    if display is not None:
+        display.close()
     current = next((j["id"] for j in jobs if j["id"] not in status), None)
     if killed and current:
         status[current] = "killed"
     timed_out = any(v == "timeout" for v in status.values())
     if not killed and not timed_out and current and status.get(current) is None and "end" not in marks:
         status[current] = f"crash(rc={proc.returncode})"
+    if batch is not None and current in status:
+        batch.advance()
     meta = {"repo": repo, "launch": launch, "jobs": [j["id"] for j in jobs], "marks": marks,
             "returncode": proc.returncode, "killed": killed, "jfr": jfr, "xmx": xmx, "budget": budget}
     (out_dir / f"{tag}.meta.json").write_text(json.dumps(meta, indent=1))
@@ -475,17 +542,20 @@ def main() -> int:
     order = sorted(groups, key=lambda r: (groups[r][0]["cpg_bytes"], r))
     log(f"{len(jobs)} job(s) over {len(order)} repo(s) -> {out_dir}")
     scratch_root = Path(os.environ.get("PROF_SCRATCH", tempfile.gettempdir()))
+    batch = progress.Batch(len(jobs), Path(a.run).name, log=log)
     for i, repo in enumerate(order, 1):
         while pids() > 1500 or free_gib() < 60:
             log(f"  waiting: pids {pids()}, free {free_gib():.0f} GiB")
             time.sleep(30)
         todo = groups[repo]
         log(f"[{i}/{len(order)}] {repo}: {len(todo)} job(s), CPG {todo[0]['cpg_bytes']/1e6:.1f} MB")
+        batch.current(repo)
         launch = 0
         while todo:
             workdir = Path(tempfile.mkdtemp(prefix="prof-", dir=scratch_root))
             try:
-                status, meta = run_launch(None, todo, workdir, out_dir, launch, a.budget, a.xmx, a.jfr, a.walk)
+                status, meta = run_launch(None, todo, workdir, out_dir, launch, a.budget, a.xmx, a.jfr, a.walk,
+                                          batch)
             finally:
                 shutil.rmtree(workdir, ignore_errors=True)
             m = meta["marks"]
@@ -495,6 +565,7 @@ def main() -> int:
             launch += 1
             if launch > 20:
                 break
+    batch.close()
     write_summary(out_dir)
     log("done")
     return 0

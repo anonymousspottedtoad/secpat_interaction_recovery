@@ -49,13 +49,16 @@ Two rules of the traversal are not described in Appendix C:
 | `detector.py` | `detect()` -> `DetectionResult`; sends the mapping, reads the order back |
 | `joern_service.py` | the HTTP client — POSTs `walk.sc` + a profile to a query service |
 | `joern_local.py` | the local runner — `joern-parse` / `joern --script` on this machine |
+| `rust_walk.py` | the native engine runner (`JOERN_ENGINE=rust`, see below) |
+| `progress.py` | the progress display (`SECPAT_PROGRESS`, see below) |
 | `joern/walk.sc` | the traversal: locates roles, steps the CFG, returns interactions |
 | `joern/python.sc`, `joern/java.sc` | `LangSpec` profiles — what differs between frontends |
 | `config.py` | `JOERN_*` env vars, read at import time |
 | `JOERN.md` | source -> CPG -> traversal, with a worked example |
 
 The traversal itself runs in Joern (or, opt-in, in the native engine described below);
-nothing is traversed in Python. The package has no dependencies.
+nothing is traversed in Python. The package has no dependencies; the optional `progress`
+extra adds tqdm for the progress bar.
 
 ## Where Joern runs
 
@@ -100,6 +103,34 @@ returning the same orders:
 | `JOERN_PARSE_DATAFLOW` | off | builds skip reaching definitions (`--max-num-def 0`), which the traversal never reads |
 | `JOERN_PARSE_XMX` | unset | heap cap for every JVM a build starts, delombok's children included |
 
+## Progress
+
+A traversal can take from a fraction of a second to minutes. While `detect()` runs, it can show
+which repository and draft it is on and how much work the traversal has done:
+
+```
+camunda_camunda-bpm-platform / limit_request_rate [00:16], joern traverse | CPG 1.39M nodes 8.09M edges 51.9k methods | bodies=2.12k replayed=481 methods=149 calls=8.39k cfg=39.9k interactions=0 alts=475 depth=23/48
+```
+
+| Setting | Default | |
+| ------- | ------- | - |
+| `SECPAT_PROGRESS` | `auto` | `auto`: a progress line when stderr is a terminal, else nothing. `on` (or `bar`): the same, and when stderr is not a terminal a log line (logger `secpat_interaction_order.progress`, INFO) at most every 10 s. `lines`: the engine's raw progress lines, passed through to stderr. `off`: nothing |
+
+The counters come from the traversal itself, in Joern (`walk.sc`) or in the native engine, which
+both write one `SECPAT_PROGRESS {json}` line to stderr at most twice a second when run with
+`SECPAT_PROGRESS=lines`: the CPG's node, edge and method counts, then the bodies the traversal
+entered (`bodies`; `replayed` of them from its memo), distinct methods entered, call sites
+resolved, CFG nodes stepped, interactions emitted so far, the body depth (current / maximum)
+and `keepMostRoles` alternatives traversed. Before the traversal starts, the line says what
+runs instead (building the CPG, starting Joern). A query service cannot stream them, so against
+one the line shows only how long the query has been waiting. The lines never change the result.
+
+The line is drawn with tqdm when it is installed
+(`pip install "secpat-interaction-order[progress] @ git+..."`), else by the package itself.
+`detect(..., label=...)` names the draft (the default is the entry role and the number of roles).
+The profiling runners (`profiling/prof_walk.py`, `profiling/warm_worker.py`) add an outer bar
+over their drafts with `[i/N]`, the current repository and an ETA.
+
 ## Install
 
 ```bash
@@ -111,10 +142,10 @@ URL as well (pip will not resolve it from an index).
 
 ## Checking an install
 
-The repository has no test suite. To check an install against known numbers, run
-secpatrec's Experiment 2 on the `pipeline` experiment: it traverses the paper's
-recoveries again with this package, and its scores equal those stored in the
-dataset's `evaluation.json` files.
+`tests/` covers the progress display only (`pip install -e ".[dev]"`, then `pytest`). To check
+an install against known numbers, run secpatrec's Experiment 2 on the `pipeline` experiment:
+it traverses the paper's recoveries again with this package, and its scores equal those stored
+in the dataset's `evaluation.json` files.
 
 ## Changelog
 

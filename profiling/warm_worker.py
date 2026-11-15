@@ -12,7 +12,9 @@ per stdin line, loads the job's CPG with CpgLoader only when it differs from the
 
 Jobs are grouped by language (one worker per language, since the profile differs) and sent
 smallest CPG first. A job past the budget kills the worker; it is restarted for the rest.
-Writes profiling/results/NAME/<id>.result.json and timings.json.
+Writes profiling/results/NAME/<id>.result.json and timings.json. With a progress display on
+(SECPAT_PROGRESS, as in prof_walk.py), an outer bar counts the drafts and the traversal's own
+progress lines show the one that runs.
 """
 from __future__ import annotations
 
@@ -49,6 +51,7 @@ var loadedPath = ""
       val j = ujson.read(line)
       val id = j("id").str
       try {
+        /*progress-draft*/
         val path = j("cpgPath").str
         if (path != loadedPath) {
           val t = System.nanoTime
@@ -78,7 +81,8 @@ def worker_script(language: str, walk: Path | None) -> str:
     src = pw.patch(src, "  loadGraph(cpgPath, inputPath, language)\n  val repo = new Repo(inputPath)",
                    "  if (cpgPath.nonEmpty) loadGraph(cpgPath, inputPath, language)\n  val repo = new Repo(inputPath)")
     profile = (pw.JOERN_DIR / pw.PROFILES[language]).read_text(encoding="utf-8")
-    return src + "\n" + profile + WORKER_MAIN
+    draft = "Progress.draft = id" if "object Progress" in src else ""
+    return src + "\n" + profile + WORKER_MAIN.replace("/*progress-draft*/", draft)
 
 
 class Worker:
@@ -94,8 +98,10 @@ class Worker:
             [pw.JOERN, "--script", str(script), "--param", f"fifo={self.fifo}"],
             stdin=subprocess.DEVNULL, stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT, text=True, bufsize=1, cwd=str(workdir), start_new_session=True,
-            env=dict(os.environ, JAVA_TOOL_OPTIONS=f"-Xmx{xmx}"))
+            env=dict(os.environ, JAVA_TOOL_OPTIONS=f"-Xmx{xmx}",
+                     **({"SECPAT_PROGRESS": "lines"} if pw.progress.mode() != "off" else {})))
         self.log = log
+        self.display = None   # the job that runs, fed the traversal's progress lines
         self.ready_s = None
         self.lines: queue.Queue = queue.Queue()
         threading.Thread(target=self._pump, daemon=True).start()
@@ -135,12 +141,19 @@ class Worker:
                 return None
             if line is None:
                 return None
+            if self.display is not None and self.display.feed(line):
+                continue
             self.log.write(line)
             self.log.flush()
             if line.startswith(prefixes):
                 return line.rstrip("\n")
 
-    def run(self, job: dict, timeout: float):
+    def run(self, job: dict, timeout: float, repo: str = ""):
+        with pw.progress.Display(repo, job["id"].split("/")[1], "joern") as self.display:
+            self.display.phase("loading the CPG")
+            return self._run(job, timeout)
+
+    def _run(self, job: dict, timeout: float):
         self.jobs.write(json.dumps(job) + "\n")
         self.jobs.flush()
         load_s = 0.0
@@ -190,6 +203,7 @@ def main() -> int:
     scratch = Path(os.environ.get("PROF_SCRATCH", tempfile.gettempdir()))
     timings = []
     t_all = time.monotonic()
+    batch = pw.progress.Batch(len(jobs), Path(a.run).name, log=pw.log)
     for lang in ("java", "python"):
         todo = sorted([j for j in jobs if j["language"] == lang], key=lambda j: (j["cpg_bytes"], j["id"]))
         if not todo:
@@ -205,7 +219,9 @@ def main() -> int:
             payload = {"id": j["id"], "cpgPath": j["cpg"], "inputPath": j["input"], "language": j["frontend"],
                        "roles": j["roles"], "entry": j["entry"], "behaviour": j["behaviour"],
                        "outputPath": str(out / f"{pw.safe(j['id'])}.result.json")}
-            status, load_s, walk_s, wall = w.run(payload, a.budget + 120)
+            batch.current(j["repo"])
+            status, load_s, walk_s, wall = w.run(payload, a.budget + 120, j["repo"])
+            batch.advance()
             timings.append({"id": j["id"], "status": status, "load_s": load_s, "walk_s": walk_s,
                             "wall_s": round(wall, 3), "cpg_mb": round(j["cpg_bytes"] / 1e6, 2)})
             pw.log(f"  {status:8s} load={load_s:6.2f}s walk={walk_s if walk_s is not None else -1:8.3f}s {j['id']}")
@@ -220,6 +236,7 @@ def main() -> int:
             except subprocess.TimeoutExpired:
                 w.kill()
         logf.close()
+    batch.close()
     pw.log(f"all done in {time.monotonic() - t_all:.0f}s")
     return 0
 
