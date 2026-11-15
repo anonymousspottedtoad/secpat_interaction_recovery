@@ -52,6 +52,10 @@ much work the traversal has done. The traversal's output is unchanged (see Outpu
   `walk_opt3.sc`.
 - README: a Progress section, `rust_walk.py` and `progress.py` in the module table, and the
   tests in "Checking an install". JOERN.md: a note on `Progress`.
+- README: a "Running from the command line" section: `detect()` from a shell on each engine,
+  `walk.sc` run directly with `joern --script` and its `--param`s as `joern_local.py` builds them,
+  and the batch runners in `profiling/` (`extract_jobs.py`, `prof_walk.py`, `warm_worker.py`,
+  `compare_golden.py`) with their inputs and outputs. Every command in it was run.
 
 ### Output
 
