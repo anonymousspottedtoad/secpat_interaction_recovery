@@ -1,0 +1,238 @@
+{
+ "phases": {
+  "1-callgraph": 0.486112349,
+  "2a-declarations": 4.357222558,
+  "2b-locate": 5.084003104,
+  "lazy.methodsOfType": 0.911002189,
+  "2c-ownership": 0.919198181,
+  "3-entry": 9.574375466,
+  "4-walk": 256.649817703,
+  "5-render": 0.005676719
+ },
+ "counters": {
+  "targetsOf.calls": 93649,
+  "walkBody.calls": 2,
+  "walkBody.entered": 2,
+  "walkBody.maxDepth": 1,
+  "enteredBodies.maxSize": 2,
+  "memo.missNoKey": 2,
+  "memo.missInvalid": 0,
+  "memo.missFull": 0,
+  "memo.keys": 0,
+  "memo.computed": 2,
+  "walk.deadSkips": 11,
+  "walk.nodesVisited": 130,
+  "graph.methods": 377102,
+  "graph.internalMethods": 190644,
+  "located": 7,
+  "edges.raw": 5,
+  "interactions": 5
+ },
+ "distinct": {
+  "targetsOf.sites": 93600,
+  "walkBody.methods": 2,
+  "walk.distinctNodes": 130
+ },
+ "inPhase": "",
+ "status": "done",
+ "elapsed": 277.09908843,
+ "loadS": 3.450738744,
+ "uptimeAtMainMs": 10228,
+ "heapAfterLoadMb": 5775,
+ "progress": [
+  {
+   "t": 5.933030755,
+   "counters": {},
+   "inPhase": "2b-locate"
+  },
+  {
+   "t": 16.152534905,
+   "counters": {
+    "targetsOf.calls": 16
+   },
+   "inPhase": "3-entry"
+  },
+  {
+   "t": 26.161401277,
+   "counters": {
+    "targetsOf.calls": 72
+   },
+   "inPhase": "4-walk"
+  },
+  {
+   "t": 36.16875329,
+   "counters": {
+    "targetsOf.calls": 2520
+   },
+   "inPhase": "4-walk"
+  },
+  {
+   "t": 46.17636763,
+   "counters": {
+    "targetsOf.calls": 4748
+   },
+   "inPhase": "4-walk"
+  },
+  {
+   "t": 56.184280511,
+   "counters": {
+    "targetsOf.calls": 7840
+   },
+   "inPhase": "4-walk"
+  },
+  {
+   "t": 66.192210079,
+   "counters": {
+    "targetsOf.calls": 9960
+   },
+   "inPhase": "4-walk"
+  },
+  {
+   "t": 76.199035543,
+   "counters": {
+    "targetsOf.calls": 11018
+   },
+   "inPhase": "4-walk"
+  },
+  {
+   "t": 86.206046345,
+   "counters": {
+    "targetsOf.calls": 11156
+   },
+   "inPhase": "4-walk"
+  },
+  {
+   "t": 96.212835573,
+   "counters": {
+    "targetsOf.calls": 11156
+   },
+   "inPhase": "4-walk"
+  },
+  {
+   "t": 106.220294156,
+   "counters": {
+    "targetsOf.calls": 13443
+   },
+   "inPhase": "4-walk"
+  },
+  {
+   "t": 116.227774621,
+   "counters": {
+    "targetsOf.calls": 19975
+   },
+   "inPhase": "4-walk"
+  },
+  {
+   "t": 126.234876531,
+   "counters": {
+    "targetsOf.calls": 22264
+   },
+   "inPhase": "4-walk"
+  },
+  {
+   "t": 136.240737194,
+   "counters": {
+    "targetsOf.calls": 24432
+   },
+   "inPhase": "4-walk"
+  },
+  {
+   "t": 146.246512898,
+   "counters": {
+    "targetsOf.calls": 28587
+   },
+   "inPhase": "4-walk"
+  },
+  {
+   "t": 156.252326569,
+   "counters": {
+    "targetsOf.calls": 30480
+   },
+   "inPhase": "4-walk"
+  },
+  {
+   "t": 166.258689924,
+   "counters": {
+    "targetsOf.calls": 31408
+   },
+   "inPhase": "4-walk"
+  },
+  {
+   "t": 176.302014872,
+   "counters": {
+    "targetsOf.calls": 34571
+   },
+   "inPhase": "4-walk"
+  },
+  {
+   "t": 186.308728232,
+   "counters": {
+    "targetsOf.calls": 39443
+   },
+   "inPhase": "4-walk"
+  },
+  {
+   "t": 196.315404526,
+   "counters": {
+    "targetsOf.calls": 45504
+   },
+   "inPhase": "4-walk"
+  },
+  {
+   "t": 206.322185975,
+   "counters": {
+    "targetsOf.calls": 49999
+   },
+   "inPhase": "4-walk"
+  },
+  {
+   "t": 216.328694665,
+   "counters": {
+    "targetsOf.calls": 56258
+   },
+   "inPhase": "4-walk"
+  },
+  {
+   "t": 226.335481628,
+   "counters": {
+    "targetsOf.calls": 56258
+   },
+   "inPhase": "4-walk"
+  },
+  {
+   "t": 236.374416117,
+   "counters": {
+    "targetsOf.calls": 73165
+   },
+   "inPhase": "4-walk"
+  },
+  {
+   "t": 246.383415886,
+   "counters": {
+    "targetsOf.calls": 74452
+   },
+   "inPhase": "4-walk"
+  },
+  {
+   "t": 256.39025385,
+   "counters": {
+    "targetsOf.calls": 89632
+   },
+   "inPhase": "4-walk"
+  },
+  {
+   "t": 266.396982595,
+   "counters": {
+    "targetsOf.calls": 89632
+   },
+   "inPhase": "4-walk"
+  },
+  {
+   "t": 276.403604382,
+   "counters": {
+    "targetsOf.calls": 91665
+   },
+   "inPhase": "4-walk"
+  }
+ ]
+}

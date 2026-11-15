@@ -1,0 +1,20 @@
+{
+ "repo": "bothuany_crm-microservices-turkcell-final-project",
+ "launch": 0,
+ "jobs": [
+  "java/verifiable_token_based_authentication/bothuany_crm-microservices-turkcell-final-project"
+ ],
+ "marks": {
+  "main": 11.520710166543722,
+  "loaded": 12.02162442728877,
+  "start:java/verifiable_token_based_authentication/bothuany_crm-microservices-turkcell-final-project": 12.021631095558405,
+  "done:java/verifiable_token_based_authentication/bothuany_crm-microservices-turkcell-final-project": 12.522648993879557,
+  "end": 12.522655352950096,
+  "exit": 12.522679641842842
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

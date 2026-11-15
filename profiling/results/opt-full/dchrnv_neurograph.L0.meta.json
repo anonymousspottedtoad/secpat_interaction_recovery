@@ -1,0 +1,20 @@
+{
+ "repo": "dchrnv_neurograph",
+ "launch": 0,
+ "jobs": [
+  "python/limit_request_rate/dchrnv_neurograph"
+ ],
+ "marks": {
+  "main": 12.021372482180595,
+  "loaded": 13.023426808416843,
+  "start:python/limit_request_rate/dchrnv_neurograph": 13.023432120680809,
+  "done:python/limit_request_rate/dchrnv_neurograph": 13.524337515234947,
+  "end": 13.52434366941452,
+  "exit": 14.02532072737813
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

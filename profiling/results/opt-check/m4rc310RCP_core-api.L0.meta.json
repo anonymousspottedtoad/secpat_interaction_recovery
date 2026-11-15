@@ -1,0 +1,20 @@
+{
+ "repo": "m4rc310RCP_core-api",
+ "launch": 0,
+ "jobs": [
+  "java/verifiable_token_based_authentication/m4rc310RCP_core-api"
+ ],
+ "marks": {
+  "main": 11.020462799817324,
+  "loaded": 11.521483089774847,
+  "start:java/verifiable_token_based_authentication/m4rc310RCP_core-api": 11.521489072591066,
+  "done:java/verifiable_token_based_authentication/m4rc310RCP_core-api": 12.02249364927411,
+  "end": 12.022500086575747,
+  "exit": 12.02252572402358
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 300.0
+}

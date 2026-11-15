@@ -1,0 +1,20 @@
+{
+ "repo": "liuxiaotong_ai-dataset-radar",
+ "launch": 0,
+ "jobs": [
+  "python/limit_request_rate/liuxiaotong_ai-dataset-radar"
+ ],
+ "marks": {
+  "main": 11.52485241740942,
+  "loaded": 12.526605792343616,
+  "start:python/limit_request_rate/liuxiaotong_ai-dataset-radar": 12.526613418012857,
+  "done:python/limit_request_rate/liuxiaotong_ai-dataset-radar": 13.52817589789629,
+  "end": 13.528181593865156,
+  "exit": 13.528203655034304
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

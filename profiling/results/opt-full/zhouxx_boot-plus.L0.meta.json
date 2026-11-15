@@ -1,0 +1,20 @@
+{
+ "repo": "zhouxx_boot-plus",
+ "launch": 0,
+ "jobs": [
+  "java/verifiable_token_based_authentication/zhouxx_boot-plus"
+ ],
+ "marks": {
+  "main": 11.02040919661522,
+  "loaded": 12.021848924458027,
+  "start:java/verifiable_token_based_authentication/zhouxx_boot-plus": 12.021854683756828,
+  "done:java/verifiable_token_based_authentication/zhouxx_boot-plus": 12.02186143770814,
+  "end": 12.021864637732506,
+  "exit": 12.021888129413128
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

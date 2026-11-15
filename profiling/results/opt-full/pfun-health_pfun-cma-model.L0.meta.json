@@ -1,0 +1,20 @@
+{
+ "repo": "pfun-health_pfun-cma-model",
+ "launch": 0,
+ "jobs": [
+  "python/session_based_access_control/pfun-health_pfun-cma-model"
+ ],
+ "marks": {
+  "main": 12.044435124844313,
+  "loaded": 13.046201288700104,
+  "start:python/session_based_access_control/pfun-health_pfun-cma-model": 13.04620760306716,
+  "done:python/session_based_access_control/pfun-health_pfun-cma-model": 13.046214498579502,
+  "end": 13.04621760174632,
+  "exit": 13.547197375446558
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

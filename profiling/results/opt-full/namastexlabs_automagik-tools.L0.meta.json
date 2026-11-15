@@ -1,0 +1,20 @@
+{
+ "repo": "namastexlabs_automagik-tools",
+ "launch": 0,
+ "jobs": [
+  "python/session_based_access_control/namastexlabs_automagik-tools"
+ ],
+ "marks": {
+  "main": 11.52237693592906,
+  "loaded": 12.524135958403349,
+  "start:python/session_based_access_control/namastexlabs_automagik-tools": 12.524141769856215,
+  "done:python/session_based_access_control/namastexlabs_automagik-tools": 14.026993431150913,
+  "end": 14.026999074965715,
+  "exit": 14.027021892368793
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

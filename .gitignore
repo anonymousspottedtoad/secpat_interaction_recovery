@@ -7,3 +7,7 @@ __pycache__/
 .ruff_cache/
 dist/
 build/
+
+# profiling: JVM recordings and raw JVM logs are large; summaries and prof.json are kept
+profiling/results/**/*.jfr
+profiling/results/**/*.out

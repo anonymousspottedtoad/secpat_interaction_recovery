@@ -1,0 +1,19 @@
+{
+ "repo": "cadenzaflow_cadenzaflow-bpm-platform",
+ "launch": 0,
+ "jobs": [
+  "java/limit_request_rate/cadenzaflow_cadenzaflow-bpm-platform"
+ ],
+ "marks": {
+  "main": 11.01923019066453,
+  "loaded": 12.020940467715263,
+  "start:java/limit_request_rate/cadenzaflow_cadenzaflow-bpm-platform": 12.020944219082594,
+  "done:java/limit_request_rate/cadenzaflow_cadenzaflow-bpm-platform": 192.3590933457017,
+  "exit": 192.860185675323
+ },
+ "returncode": 1,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

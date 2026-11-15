@@ -1,0 +1,20 @@
+{
+ "repo": "pocketcombats_spring-jpa-admin",
+ "launch": 0,
+ "jobs": [
+  "java/session_based_access_control/pocketcombats_spring-jpa-admin"
+ ],
+ "marks": {
+  "main": 11.519647847861052,
+  "loaded": 12.521510034799576,
+  "start:java/session_based_access_control/pocketcombats_spring-jpa-admin": 12.52151558548212,
+  "done:java/session_based_access_control/pocketcombats_spring-jpa-admin": 13.0225333198905,
+  "end": 13.022539298981428,
+  "exit": 13.02256465703249
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

@@ -1,0 +1,20 @@
+{
+ "repo": "aegisql_conveyor",
+ "launch": 0,
+ "jobs": [
+  "java/verifiable_token_based_authentication/aegisql_conveyor"
+ ],
+ "marks": {
+  "main": 11.017969828099012,
+  "loaded": 12.019693449139595,
+  "start:java/verifiable_token_based_authentication/aegisql_conveyor": 12.019699100404978,
+  "done:java/verifiable_token_based_authentication/aegisql_conveyor": 12.520678475499153,
+  "end": 12.520684141665697,
+  "exit": 12.520708575844765
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

@@ -1,0 +1,23 @@
+{
+ "repo": "bluesky_tiled",
+ "launch": 0,
+ "jobs": [
+  "python/authentication_pwd/bluesky_tiled",
+  "python/obscure_token_based_access_control/bluesky_tiled"
+ ],
+ "marks": {
+  "main": 11.523408766835928,
+  "loaded": 12.52469839155674,
+  "start:python/authentication_pwd/bluesky_tiled": 12.52470076456666,
+  "done:python/authentication_pwd/bluesky_tiled": 14.027098212391138,
+  "start:python/obscure_token_based_access_control/bluesky_tiled": 14.027138520032167,
+  "done:python/obscure_token_based_access_control/bluesky_tiled": 14.027143485844135,
+  "end": 14.027146823704243,
+  "exit": 14.528142917901278
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

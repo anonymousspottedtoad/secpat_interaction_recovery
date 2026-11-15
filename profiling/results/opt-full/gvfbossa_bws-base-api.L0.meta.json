@@ -1,0 +1,23 @@
+{
+ "repo": "gvfbossa_bws-base-api",
+ "launch": 0,
+ "jobs": [
+  "java/session_based_access_control/gvfbossa_bws-base-api",
+  "java/verifiable_token_based_authentication/gvfbossa_bws-base-api"
+ ],
+ "marks": {
+  "main": 11.021570976823568,
+  "loaded": 12.023432452231646,
+  "start:java/session_based_access_control/gvfbossa_bws-base-api": 12.023438222706318,
+  "done:java/session_based_access_control/gvfbossa_bws-base-api": 12.02344498038292,
+  "start:java/verifiable_token_based_authentication/gvfbossa_bws-base-api": 12.02344860136509,
+  "done:java/verifiable_token_based_authentication/gvfbossa_bws-base-api": 12.023452296853065,
+  "end": 12.023455552756786,
+  "exit": 12.023478284478188
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

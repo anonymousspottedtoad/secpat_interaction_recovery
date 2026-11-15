@@ -1,0 +1,23 @@
+{
+ "repo": "ctlabs-dev_auth-spring-boot-starter",
+ "launch": 0,
+ "jobs": [
+  "java/authentication_pwd/ctlabs-dev_auth-spring-boot-starter",
+  "java/obscure_token_based_access_control/ctlabs-dev_auth-spring-boot-starter"
+ ],
+ "marks": {
+  "main": 11.021141953766346,
+  "loaded": 11.522069785743952,
+  "start:java/authentication_pwd/ctlabs-dev_auth-spring-boot-starter": 11.522075824439526,
+  "done:java/authentication_pwd/ctlabs-dev_auth-spring-boot-starter": 12.023107212036848,
+  "start:java/obscure_token_based_access_control/ctlabs-dev_auth-spring-boot-starter": 12.023113820701838,
+  "done:java/obscure_token_based_access_control/ctlabs-dev_auth-spring-boot-starter": 12.023118529468775,
+  "end": 12.023122005164623,
+  "exit": 12.023146707564592
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

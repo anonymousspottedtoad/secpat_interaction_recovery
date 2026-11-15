@@ -1,0 +1,42 @@
+{
+ "phases": {
+  "1-callgraph": 0.010988519,
+  "2a-declarations": 0.164853952,
+  "2b-locate": 0.040580142,
+  "2c-ownership": 3.54451E-4,
+  "3-entry": 0.035336369,
+  "4-walk": 0.003974064,
+  "5-render": 0.001137937
+ },
+ "counters": {
+  "targetsOf.calls": 121,
+  "walkBody.calls": 2,
+  "walkBody.entered": 2,
+  "walkBody.maxDepth": 1,
+  "enteredBodies.maxSize": 2,
+  "memo.missNoKey": 2,
+  "memo.missInvalid": 0,
+  "memo.missFull": 0,
+  "memo.keys": 0,
+  "memo.computed": 2,
+  "walk.deadSkips": 1,
+  "walk.nodesVisited": 425,
+  "graph.methods": 21969,
+  "graph.internalMethods": 3604,
+  "located": 4,
+  "edges.raw": 2,
+  "interactions": 2
+ },
+ "distinct": {
+  "targetsOf.sites": 84,
+  "walkBody.methods": 2,
+  "walk.distinctNodes": 425
+ },
+ "inPhase": "",
+ "status": "done",
+ "elapsed": 0.257444864,
+ "loadS": 0.432371539,
+ "uptimeAtMainMs": 10107,
+ "heapAfterLoadMb": 347,
+ "progress": []
+}

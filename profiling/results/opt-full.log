@@ -1,0 +1,616 @@
+03:03:53 379 job(s) over 306 repo(s) -> /workspace/replicate/secpat_interaction_recovery/profiling/results/opt-full
+03:03:53 [1/306] raphw_jenesis-repository: 3 job(s), CPG 0.0 MB
+03:04:05     L0: main@11.0s loaded@11.5s exit@11.5s  limit_request_rate=done, obscure_token_based_access_control=done, verifiable_token_based_authentication=done
+03:04:05 [2/306] movewp3_microservice-security-autoconfiguration: 1 job(s), CPG 0.1 MB
+03:04:16     L0: main@10.5s loaded@11.5s exit@11.5s  verifiable_token_based_authentication=done
+03:04:16 [3/306] wjs1995_sb-jwt-auth-starter: 1 job(s), CPG 0.2 MB
+03:04:28     L0: main@11.0s loaded@11.5s exit@12.0s  verifiable_token_based_authentication=done
+03:04:28 [4/306] coderspack_spring-boot-starter-jwt: 1 job(s), CPG 0.2 MB
+03:04:40     L0: main@11.0s loaded@11.5s exit@12.0s  verifiable_token_based_authentication=done
+03:04:40 [5/306] sargsyanhayko_rsha_auth: 1 job(s), CPG 0.2 MB
+03:04:54     L0: main@12.0s loaded@13.0s exit@13.5s  verifiable_token_based_authentication=done
+03:04:54 [6/306] auth0_auth0-spring-security-api: 2 job(s), CPG 0.2 MB
+03:05:06     L0: main@11.5s loaded@12.5s exit@12.5s  session_based_access_control=done, verifiable_token_based_authentication=done
+03:05:06 [7/306] ErtanSidar_turkcell-common: 1 job(s), CPG 0.2 MB
+03:05:19     L0: main@11.0s loaded@12.0s exit@12.0s  verifiable_token_based_authentication=done
+03:05:19 [8/306] aaronfernandes21_secureflux-security-starter: 1 job(s), CPG 0.2 MB
+03:05:31     L0: main@11.0s loaded@12.0s exit@12.0s  verifiable_token_based_authentication=done
+03:05:31 [9/306] ANST-Tracker_security: 1 job(s), CPG 0.2 MB
+03:05:43     L0: main@11.0s loaded@12.0s exit@12.0s  session_based_access_control=done
+03:05:43 [10/306] gvfbossa_bws-base-api: 2 job(s), CPG 0.2 MB
+03:05:55     L0: main@11.0s loaded@12.0s exit@12.0s  session_based_access_control=done, verifiable_token_based_authentication=done
+03:05:55 [11/306] hacks1ash_keycloak-spring-boot-adapter: 1 job(s), CPG 0.2 MB
+03:06:07     L0: main@11.5s loaded@12.5s exit@12.5s  session_based_access_control=done
+03:06:07 [12/306] juliusyolo_endpoint-security-clerk-spring-boot-starter: 1 job(s), CPG 0.2 MB
+03:06:21     L0: main@12.0s loaded@13.0s exit@13.5s  session_based_access_control=done
+03:06:21 [13/306] halitkalayci_turkcell2.microservices: 1 job(s), CPG 0.2 MB
+03:06:34     L0: main@11.5s loaded@12.5s exit@13.0s  verifiable_token_based_authentication=done
+03:06:34 [14/306] LUICIT_luis-projects-core: 1 job(s), CPG 0.3 MB
+03:06:46     L0: main@11.0s loaded@12.0s exit@12.5s  limit_request_rate=done
+03:06:46 [15/306] ir-msob_jima-security: 1 job(s), CPG 0.3 MB
+03:06:59     L0: main@11.5s loaded@12.5s exit@13.0s  verifiable_token_based_authentication=done
+03:06:59 [16/306] RazorNd_telegram-login: 1 job(s), CPG 0.3 MB
+03:07:11     L0: main@10.5s loaded@11.5s exit@12.0s  session_based_access_control=done
+03:07:11 [17/306] ZhongYingHao_msAuth: 1 job(s), CPG 0.3 MB
+03:07:24     L0: main@11.5s loaded@12.0s exit@12.5s  session_based_access_control=done
+03:07:24 [18/306] ddphin_ddphin-security: 1 job(s), CPG 0.3 MB
+03:07:37     L0: main@11.5s loaded@12.5s exit@13.0s  verifiable_token_based_authentication=done
+03:07:37 [19/306] melih-vardar_e-commerce-microservices: 2 job(s), CPG 0.3 MB
+03:07:49     L0: main@11.0s loaded@12.0s exit@12.5s  session_based_access_control=done, verifiable_token_based_authentication=done
+03:07:49 [20/306] 42BV_rest-secure-spring-boot-starter: 1 job(s), CPG 0.3 MB
+03:08:01     L0: main@11.0s loaded@12.0s exit@12.0s  authentication_pwd=done
+03:08:01 [21/306] icexmoon_spring-easy: 1 job(s), CPG 0.3 MB
+03:08:14     L0: main@11.5s loaded@12.0s exit@12.5s  authentication_pwd=done
+03:08:14 [22/306] spawn-guy_fastapi-auth0: 1 job(s), CPG 0.3 MB
+03:08:27     L0: main@11.5s loaded@12.5s exit@13.0s  verifiable_token_based_authentication=done
+03:08:27 [23/306] fdev31_wirikiki: 1 job(s), CPG 0.3 MB
+03:08:41     L0: main@12.0s loaded@13.0s exit@13.5s  authentication_pwd=done
+03:08:41 [24/306] vnpy_vnpy_webtrader: 1 job(s), CPG 0.3 MB
+03:08:54     L0: main@12.0s loaded@13.0s exit@13.5s  authentication_pwd=done
+03:08:54 [25/306] idsec-solutions_signservice-integration-rest: 1 job(s), CPG 0.3 MB
+03:09:06     L0: main@11.0s loaded@11.5s exit@12.0s  authentication_pwd=done
+03:09:06 [26/306] roksprogar_fastapi-otp-auth: 1 job(s), CPG 0.3 MB
+03:09:19     L0: main@12.0s loaded@13.0s exit@13.0s  verifiable_token_based_authentication=done
+03:09:19 [27/306] Jenson058_JTool: 1 job(s), CPG 0.4 MB
+03:09:32     L0: main@11.0s loaded@12.0s exit@12.5s  verifiable_token_based_authentication=done
+03:09:32 [28/306] holgi_fastapi-permissions: 1 job(s), CPG 0.4 MB
+03:09:44     L0: main@11.5s loaded@12.0s exit@12.5s  verifiable_token_based_authentication=done
+03:09:44 [29/306] drewwills_fbms: 1 job(s), CPG 0.4 MB
+03:09:56     L0: main@11.0s loaded@12.0s exit@12.0s  session_based_access_control=done
+03:09:56 [30/306] marcosbarbero_spring-cloud-zuul-ratelimit: 1 job(s), CPG 0.4 MB
+03:10:08     L0: main@11.0s loaded@11.5s exit@12.0s  limit_request_rate=done
+03:10:08 [31/306] sameerchereddy_boomerang: 1 job(s), CPG 0.4 MB
+03:10:20     L0: main@11.0s loaded@12.0s exit@12.0s  session_based_access_control=done
+03:10:20 [32/306] contentmunch_contentmunch-parent: 2 job(s), CPG 0.4 MB
+03:10:32     L0: main@11.0s loaded@12.0s exit@12.0s  authentication_pwd=done, verifiable_token_based_authentication=done
+03:10:32 [33/306] jwcarman_who: 1 job(s), CPG 0.4 MB
+03:10:44     L0: main@11.0s loaded@11.5s exit@12.0s  obscure_token_based_access_control=done
+03:10:44 [34/306] dudil_fastapi_msal: 1 job(s), CPG 0.4 MB
+03:10:58     L0: main@12.0s loaded@13.0s exit@13.5s  session_based_access_control=done
+03:10:58 [35/306] Zeus-2-0_api-gateway: 2 job(s), CPG 0.4 MB
+03:11:10     L0: main@11.0s loaded@11.5s exit@12.0s  authentication_pwd=done, verifiable_token_based_authentication=done
+03:11:10 [36/306] georgekhananaev_fastapi-docshield: 1 job(s), CPG 0.5 MB
+03:11:23     L0: main@11.5s loaded@12.5s exit@13.0s  authentication_pwd=done
+03:11:23 [37/306] lockss_lockss-spring-bundle: 1 job(s), CPG 0.5 MB
+03:11:34     L0: main@10.5s loaded@11.5s exit@11.5s  authentication_pwd=done
+03:11:34 [38/306] iFrugal_gateway: 1 job(s), CPG 0.5 MB
+03:11:47     L0: main@11.0s loaded@11.5s exit@12.0s  verifiable_token_based_authentication=done
+03:11:47 [39/306] rw00_rw-spring-boot-starter: 1 job(s), CPG 0.5 MB
+03:11:59     L0: main@11.0s loaded@11.5s exit@12.0s  authentication_pwd=done
+03:11:59 [40/306] opentmf_openid-rbac-security: 1 job(s), CPG 0.5 MB
+03:12:11     L0: main@11.0s loaded@11.5s exit@12.0s  session_based_access_control=done
+03:12:11 [41/306] TsukasaHwan_jwt-security-spring-boot-starter: 1 job(s), CPG 0.5 MB
+03:12:22     L0: main@10.5s loaded@11.0s exit@11.5s  verifiable_token_based_authentication=done
+03:12:22 [42/306] AngelDanielSanchezCastillo_oauth2fast-fastapi: 1 job(s), CPG 0.5 MB
+03:12:35     L0: main@11.5s loaded@12.5s exit@13.0s  authentication_pwd=done
+03:12:35 [43/306] sahajrajmalla_greatapi: 1 job(s), CPG 0.5 MB
+03:12:48     L0: main@11.5s loaded@12.5s exit@13.0s  verifiable_token_based_authentication=done
+03:12:48 [44/306] iamumarjaved_FastGenAPI: 1 job(s), CPG 0.5 MB
+03:13:02     L0: main@12.0s loaded@13.0s exit@13.5s  session_based_access_control=done
+03:13:02 [45/306] gavincui1026_Fastapi-Backend: 1 job(s), CPG 0.5 MB
+03:13:15     L0: main@11.5s loaded@12.5s exit@13.0s  verifiable_token_based_authentication=done
+03:13:15 [46/306] osinn_spring-security-auth-starter: 1 job(s), CPG 0.5 MB
+03:13:27     L0: main@11.0s loaded@12.0s exit@12.5s  authentication_pwd=done
+03:13:27 [47/306] etiya-pair2_microservices: 1 job(s), CPG 0.5 MB
+03:13:39     L0: main@10.5s loaded@11.5s exit@12.0s  authentication_pwd=done
+03:13:39 [48/306] yaroslaff_fastapi-simple-auth: 1 job(s), CPG 0.6 MB
+03:13:53     L0: main@12.5s loaded@13.0s exit@13.5s  verifiable_token_based_authentication=done
+03:13:53 [49/306] structure-projects_structure-security: 2 job(s), CPG 0.6 MB
+03:14:05     L0: main@11.0s loaded@11.5s exit@12.0s  session_based_access_control=done, verifiable_token_based_authentication=done
+03:14:05 [50/306] ulisesbocchio_spring-boot-security-saml: 1 job(s), CPG 0.6 MB
+03:14:17     L0: main@10.5s loaded@11.5s exit@12.0s  session_based_access_control=done
+03:14:17 [51/306] ctlabs-dev_auth-spring-boot-starter: 2 job(s), CPG 0.6 MB
+03:14:29     L0: main@11.0s loaded@11.5s exit@12.0s  authentication_pwd=done, obscure_token_based_access_control=done
+03:14:29 [52/306] codebarista-de_shopware-app-server: 1 job(s), CPG 0.6 MB
+03:14:41     L0: main@11.0s loaded@11.5s exit@12.0s  obscure_token_based_access_control=done
+03:14:41 [53/306] m4rc310RCP_core-api: 2 job(s), CPG 0.6 MB
+03:14:53     L0: main@11.0s loaded@11.5s exit@12.0s  authentication_pwd=done, verifiable_token_based_authentication=done
+03:14:53 [54/306] fabioformosa_quartz-manager: 1 job(s), CPG 0.6 MB
+03:15:05     L0: main@11.0s loaded@12.0s exit@12.0s  verifiable_token_based_authentication=done
+03:15:05 [55/306] forgepack_library: 1 job(s), CPG 0.6 MB
+03:15:17     L0: main@11.0s loaded@11.5s exit@12.0s  limit_request_rate=done
+03:15:17 [56/306] beanone_apikey: 1 job(s), CPG 0.7 MB
+03:15:30     L0: main@11.5s loaded@12.5s exit@13.0s  verifiable_token_based_authentication=done
+03:15:30 [57/306] pavanad_beegen: 1 job(s), CPG 0.7 MB
+03:15:43     L0: main@11.5s loaded@12.5s exit@13.0s  obscure_token_based_access_control=done
+03:15:43 [58/306] love-vector_yda: 1 job(s), CPG 0.7 MB
+03:15:55     L0: main@11.0s loaded@12.0s exit@12.0s  obscure_token_based_access_control=done
+03:15:55 [59/306] cn-luyang_luyang-framework: 1 job(s), CPG 0.7 MB
+03:16:07     L0: main@11.0s loaded@12.0s exit@12.0s  session_based_access_control=done
+03:16:07 [60/306] HesandaLiyanage_theVaultOfficial: 3 job(s), CPG 0.7 MB
+03:16:20     L0: main@11.0s loaded@12.0s exit@12.5s  obscure_token_based_access_control=done, session_based_access_control=done, verifiable_token_based_authentication=done
+03:16:20 [61/306] fastapi-keycloak_fastapi-keycloak: 1 job(s), CPG 0.7 MB
+03:16:33     L0: main@12.0s loaded@13.0s exit@13.5s  verifiable_token_based_authentication=done
+03:16:33 [62/306] Nanguage_executor-http: 1 job(s), CPG 0.8 MB
+03:16:47     L0: main@12.5s loaded@13.5s exit@14.0s  authentication_pwd=done
+03:16:47 [63/306] cxmjg_yaml-to-backend: 1 job(s), CPG 0.8 MB
+03:17:01     L0: main@12.0s loaded@13.0s exit@13.5s  authentication_pwd=done
+03:17:01 [64/306] AdepuSriCharan_spring-security-starter: 1 job(s), CPG 0.8 MB
+03:17:13     L0: main@10.5s loaded@11.5s exit@12.0s  limit_request_rate=done
+03:17:13 [65/306] Fi0x_HomeServerStuff: 1 job(s), CPG 0.8 MB
+03:17:25     L0: main@11.0s loaded@12.0s exit@12.0s  authentication_pwd=done
+03:17:25 [66/306] xywa23_agentsudo: 1 job(s), CPG 0.8 MB
+03:17:38     L0: main@12.0s loaded@12.5s exit@13.0s  obscure_token_based_access_control=done
+03:17:38 [67/306] devonfw-forge_devon4j-legacy-modules: 1 job(s), CPG 0.8 MB
+03:17:49     L0: main@10.5s loaded@11.5s exit@11.5s  authentication_pwd=done
+03:17:49 [68/306] bothuany_crm-microservices-turkcell-final-project: 1 job(s), CPG 0.8 MB
+03:18:02     L0: main@11.5s loaded@12.0s exit@12.5s  verifiable_token_based_authentication=done
+03:18:02 [69/306] Echo298327_auth-gateway-serverkit: 1 job(s), CPG 0.8 MB
+03:18:16     L0: main@12.0s loaded@13.0s exit@13.5s  verifiable_token_based_authentication=done
+03:18:16 [70/306] bratkartoffel_security-jwt: 2 job(s), CPG 0.8 MB
+03:18:28     L0: main@11.0s loaded@11.5s exit@12.0s  authentication_pwd=done, session_based_access_control=done
+03:18:28 [71/306] namastexlabs_murmurai: 1 job(s), CPG 0.9 MB
+03:18:41     L0: main@12.0s loaded@13.0s exit@13.5s  obscure_token_based_access_control=done
+03:18:41 [72/306] AtlasServer-Core_AtlasServer-Core: 1 job(s), CPG 0.9 MB
+03:18:54     L0: main@12.0s loaded@12.5s exit@13.0s  session_based_access_control=done
+03:18:54 [73/306] tristeng_tasos-apiauth: 2 job(s), CPG 0.9 MB
+03:19:07     L0: main@12.0s loaded@12.5s exit@13.0s  authentication_pwd=done, verifiable_token_based_authentication=done
+03:19:07 [74/306] adrian-lorenz_privacy-guard: 1 job(s), CPG 0.9 MB
+03:19:21     L0: main@12.0s loaded@13.0s exit@13.5s  obscure_token_based_access_control=done
+03:19:21 [75/306] Katoo2706_backend-common: 1 job(s), CPG 1.0 MB
+03:19:34     L0: main@12.5s loaded@13.5s exit@13.5s  obscure_token_based_access_control=done
+03:19:34 [76/306] zhouxx_boot-plus: 1 job(s), CPG 1.0 MB
+03:19:46     L0: main@11.0s loaded@12.0s exit@12.0s  verifiable_token_based_authentication=done
+03:19:46 [77/306] promregator_promregator: 1 job(s), CPG 1.0 MB
+03:19:58     L0: main@11.0s loaded@11.5s exit@12.0s  session_based_access_control=done
+03:19:58 [78/306] OpenElementsLabs_spring-services: 1 job(s), CPG 1.0 MB
+03:20:11     L0: main@11.5s loaded@12.5s exit@13.0s  obscure_token_based_access_control=done
+03:20:11 [79/306] anelendata_zix: 2 job(s), CPG 1.0 MB
+03:20:25     L0: main@12.0s loaded@13.0s exit@13.5s  session_based_access_control=done, verifiable_token_based_authentication=done
+03:20:25 [80/306] saichowdary007_docu-query: 1 job(s), CPG 1.0 MB
+03:20:38     L0: main@12.0s loaded@13.0s exit@13.5s  obscure_token_based_access_control=done
+03:20:38 [81/306] hprxkbrddd_grind: 1 job(s), CPG 1.1 MB
+03:20:51     L0: main@11.0s loaded@12.0s exit@12.5s  authentication_pwd=done
+03:20:51 [82/306] ddeutils_ddeutil-observe: 1 job(s), CPG 1.1 MB
+03:21:04     L0: main@12.0s loaded@13.0s exit@13.5s  verifiable_token_based_authentication=done
+03:21:04 [83/306] Nostalgia-Season-Train_DesksetBack: 1 job(s), CPG 1.1 MB
+03:21:18     L0: main@12.0s loaded@13.0s exit@13.5s  authentication_pwd=done
+03:21:18 [84/306] ligoj_ligoj: 1 job(s), CPG 1.1 MB
+03:21:31     L0: main@11.5s loaded@12.5s exit@13.0s  obscure_token_based_access_control=done
+03:21:31 [85/306] youtaqiu_shore: 1 job(s), CPG 1.1 MB
+03:21:44     L0: main@11.0s loaded@12.0s exit@12.5s  obscure_token_based_access_control=done
+03:21:44 [86/306] kuehne-trustable-de_adcsCert: 1 job(s), CPG 1.2 MB
+03:21:56     L0: main@11.0s loaded@12.0s exit@12.0s  session_based_access_control=done
+03:21:56 [87/306] 42signal_anyforce: 2 job(s), CPG 1.2 MB
+03:22:10     L0: main@12.6s loaded@13.6s exit@14.1s  session_based_access_control=done, verifiable_token_based_authentication=done
+03:22:10 [88/306] patternhelloworld_spring-oauth2-easyplus: 2 job(s), CPG 1.2 MB
+03:22:23     L0: main@12.0s loaded@13.0s exit@13.5s  session_based_access_control=done, verifiable_token_based_authentication=done
+03:22:23 [89/306] Clinical-Genomics_statina: 1 job(s), CPG 1.2 MB
+03:22:37     L0: main@12.5s loaded@13.5s exit@14.0s  authentication_pwd=done
+03:22:37 [90/306] rocketbase-io_commons-auth: 1 job(s), CPG 1.2 MB
+03:22:50     L0: main@11.0s loaded@12.0s exit@12.5s  verifiable_token_based_authentication=done
+03:22:50 [91/306] scality_osis: 1 job(s), CPG 1.2 MB
+03:23:02     L0: main@11.5s loaded@12.0s exit@12.5s  authentication_pwd=done
+03:23:02 [92/306] cdswindell_PyTrainApi: 1 job(s), CPG 1.2 MB
+03:23:16     L0: main@12.0s loaded@13.0s exit@13.5s  verifiable_token_based_authentication=done
+03:23:16 [93/306] RicardoMorim_Auth-Provider: 3 job(s), CPG 1.2 MB
+03:23:28     L0: main@11.5s loaded@12.0s exit@12.5s  authentication_pwd=done, limit_request_rate=done, verifiable_token_based_authentication=done
+03:23:28 [94/306] uPortal-Project_NotificationPortlet: 1 job(s), CPG 1.2 MB
+03:23:41     L0: main@11.0s loaded@12.0s exit@12.5s  verifiable_token_based_authentication=done
+03:23:41 [95/306] yingzhuo_spring-turbo-modules: 1 job(s), CPG 1.3 MB
+03:23:53     L0: main@11.0s loaded@12.0s exit@12.5s  verifiable_token_based_authentication=done
+03:23:53 [96/306] pocketcombats_spring-jpa-admin: 1 job(s), CPG 1.3 MB
+03:24:06     L0: main@11.5s loaded@12.5s exit@13.0s  session_based_access_control=done
+03:24:06 [97/306] michaelruocco_naughts-and-crosses-api: 2 job(s), CPG 1.3 MB
+03:24:19     L0: main@11.0s loaded@12.0s exit@12.5s  session_based_access_control=done, verifiable_token_based_authentication=done
+03:24:19 [98/306] hu55ain3laa_fastauth: 1 job(s), CPG 1.3 MB
+03:24:33     L0: main@12.5s loaded@13.5s exit@14.0s  authentication_pwd=done
+03:24:33 [99/306] aspuru-guzik-group_molar: 1 job(s), CPG 1.4 MB
+03:24:47     L0: main@12.0s loaded@13.0s exit@14.0s  authentication_pwd=done
+03:24:47 [100/306] xdev-software_spring-security-extras: 1 job(s), CPG 1.4 MB
+03:25:00     L0: main@11.0s loaded@12.0s exit@12.5s  authentication_pwd=done
+03:25:00 [101/306] XiaoMiSum_springboot-migoo-framework: 1 job(s), CPG 1.4 MB
+03:25:12     L0: main@11.0s loaded@12.0s exit@12.5s  verifiable_token_based_authentication=done
+03:25:12 [102/306] stubborn-sh_stubborn: 2 job(s), CPG 1.4 MB
+03:25:25     L0: main@11.0s loaded@12.0s exit@12.5s  authentication_pwd=done, limit_request_rate=done
+03:25:25 [103/306] Amanbig_runapi: 1 job(s), CPG 1.4 MB
+03:25:38     L0: main@12.0s loaded@13.0s exit@13.0s  limit_request_rate=done
+03:25:38 [104/306] codemation_easyauth: 2 job(s), CPG 1.5 MB
+03:25:51     L0: main@12.0s loaded@12.5s exit@13.5s  authentication_pwd=done, verifiable_token_based_authentication=done
+03:25:51 [105/306] inteliver_inteliver: 1 job(s), CPG 1.5 MB
+03:26:04     L0: main@12.0s loaded@12.5s exit@13.0s  verifiable_token_based_authentication=done
+03:26:04 [106/306] farhan0167_otto-m8: 1 job(s), CPG 1.5 MB
+03:26:18     L0: main@12.0s loaded@13.0s exit@13.5s  authentication_pwd=done
+03:26:18 [107/306] djpugh_fastapi_aad_auth: 1 job(s), CPG 1.6 MB
+03:26:32     L0: main@12.5s loaded@13.5s exit@14.5s  session_based_access_control=done
+03:26:32 [108/306] catch-money_java-impetus: 1 job(s), CPG 1.6 MB
+03:26:45     L0: main@11.5s loaded@12.5s exit@13.0s  session_based_access_control=done
+03:26:45 [109/306] VForWaTer_metacatalog-api: 1 job(s), CPG 1.6 MB
+03:26:59     L0: main@12.0s loaded@13.0s exit@13.5s  session_based_access_control=done
+03:26:59 [110/306] Aquiles-ai_Aquiles-RAG: 1 job(s), CPG 1.7 MB
+03:27:12     L0: main@11.5s loaded@12.5s exit@13.0s  authentication_pwd=done
+03:27:12 [111/306] admin4j_admin4j-framework: 1 job(s), CPG 1.7 MB
+03:27:24     L0: main@11.5s loaded@12.0s exit@12.5s  limit_request_rate=done
+03:27:24 [112/306] ikama-innovation_Bauta: 1 job(s), CPG 1.7 MB
+03:27:37     L0: main@11.0s loaded@12.0s exit@12.5s  session_based_access_control=done
+03:27:37 [113/306] LearningHouseService_learninghouse: 1 job(s), CPG 1.8 MB
+03:27:50     L0: main@12.0s loaded@12.5s exit@13.0s  obscure_token_based_access_control=done
+03:27:50 [114/306] swedenconnect_organizations-iam-app: 1 job(s), CPG 1.8 MB
+03:28:02     L0: main@10.5s loaded@11.5s exit@12.0s  session_based_access_control=done
+03:28:02 [115/306] tyvekzhang_fastlib: 1 job(s), CPG 1.8 MB
+03:28:15     L0: main@11.0s loaded@12.0s exit@12.5s  verifiable_token_based_authentication=done
+03:28:15 [116/306] AAFC-BICoE_dina-base-api: 1 job(s), CPG 1.8 MB
+03:28:27     L0: main@11.0s loaded@11.5s exit@12.0s  session_based_access_control=done
+03:28:27 [117/306] teiid_teiid-spring-boot: 1 job(s), CPG 1.9 MB
+03:28:39     L0: main@11.5s loaded@12.0s exit@12.5s  session_based_access_control=done
+03:28:39 [118/306] codeheadsystems_hofmann-elimination: 1 job(s), CPG 2.0 MB
+03:28:52     L0: main@11.5s loaded@12.5s exit@13.0s  limit_request_rate=done
+03:28:52 [119/306] JeanExtreme002_Dokku-API: 2 job(s), CPG 2.0 MB
+03:29:05     L0: main@11.5s loaded@12.5s exit@13.0s  obscure_token_based_access_control=done, session_based_access_control=done
+03:29:05 [120/306] loadcoder_loadcoder: 1 job(s), CPG 2.0 MB
+03:29:18     L0: main@11.0s loaded@12.0s exit@12.5s  limit_request_rate=done
+03:29:18 [121/306] CI-CMG_geosamples-ingest: 1 job(s), CPG 2.0 MB
+03:29:30     L0: main@10.5s loaded@11.5s exit@12.0s  session_based_access_control=done
+03:29:30 [122/306] smart-cloud_smart-cloud: 1 job(s), CPG 2.1 MB
+03:29:42     L0: main@10.5s loaded@11.5s exit@12.0s  limit_request_rate=done
+03:29:42 [123/306] theonlyamos_runit-server: 2 job(s), CPG 2.2 MB
+03:29:54     L0: main@11.0s loaded@12.0s exit@12.5s  authentication_pwd=done, session_based_access_control=done
+03:29:54 [124/306] songqingwei_icloud: 1 job(s), CPG 2.2 MB
+03:30:07     L0: main@11.0s loaded@12.0s exit@12.5s  authentication_pwd=done
+03:30:07 [125/306] fastapi-users_fastapi-users: 1 job(s), CPG 2.2 MB
+03:30:19     L0: main@11.0s loaded@12.0s exit@12.5s  verifiable_token_based_authentication=done
+03:30:19 [126/306] hoangtien2k3_reactify-core: 1 job(s), CPG 2.3 MB
+03:30:32     L0: main@11.0s loaded@12.0s exit@12.5s  verifiable_token_based_authentication=done
+03:30:32 [127/306] olaflaitinen_Promethium: 2 job(s), CPG 2.4 MB
+03:30:45     L0: main@11.5s loaded@12.5s exit@13.0s  authentication_pwd=done, verifiable_token_based_authentication=done
+03:30:45 [128/306] RenYiChun_app.template: 1 job(s), CPG 2.4 MB
+03:30:57     L0: main@11.0s loaded@12.0s exit@12.5s  session_based_access_control=done
+03:30:57 [129/306] SINTEF-9012_SINDIT20: 1 job(s), CPG 2.4 MB
+03:31:12     L0: main@12.5s loaded@13.5s exit@14.0s  verifiable_token_based_authentication=done
+03:31:12 [130/306] sixcrabs_slardar: 1 job(s), CPG 2.5 MB
+03:31:24     L0: main@11.0s loaded@12.0s exit@12.5s  verifiable_token_based_authentication=done
+03:31:24 [131/306] smjkzsl_IRAILS: 2 job(s), CPG 2.6 MB
+03:31:38     L0: main@12.0s loaded@13.0s exit@14.0s  session_based_access_control=done, verifiable_token_based_authentication=done
+03:31:38 [132/306] lWoHvYe_unicorn: 1 job(s), CPG 2.6 MB
+03:31:50     L0: main@11.0s loaded@11.5s exit@12.0s  authentication_pwd=done
+03:31:50 [133/306] hygieia_hygieia-core: 2 job(s), CPG 2.6 MB
+03:32:03     L0: main@11.0s loaded@12.0s exit@13.0s  authentication_pwd=done, obscure_token_based_access_control=done
+03:32:03 [134/306] codeheadsystems_pk-auth: 2 job(s), CPG 2.6 MB
+03:32:16     L0: main@11.5s loaded@12.5s exit@13.0s  limit_request_rate=done, session_based_access_control=done
+03:32:16 [135/306] eozoo_zoo: 1 job(s), CPG 2.7 MB
+03:32:28     L0: main@10.5s loaded@11.5s exit@12.0s  limit_request_rate=done
+03:32:28 [136/306] cemde_WhatsNext: 1 job(s), CPG 2.7 MB
+03:32:41     L0: main@12.0s loaded@12.5s exit@13.0s  limit_request_rate=done
+03:32:41 [137/306] mosip_esignet: 2 job(s), CPG 2.7 MB
+03:32:53     L0: main@10.5s loaded@11.5s exit@12.0s  obscure_token_based_access_control=done, verifiable_token_based_authentication=done
+03:32:53 [138/306] Lampx83_LakeFlow: 1 job(s), CPG 2.7 MB
+03:33:06     L0: main@11.5s loaded@12.5s exit@13.0s  verifiable_token_based_authentication=done
+03:33:06 [139/306] allen0099_FastAPI-CacheX: 1 job(s), CPG 2.8 MB
+03:33:20     L0: main@11.5s loaded@12.5s exit@13.5s  session_based_access_control=done
+03:33:20 [140/306] Aquiles-ai_Aquiles-Image: 1 job(s), CPG 2.8 MB
+03:33:33     L0: main@11.5s loaded@12.5s exit@13.0s  authentication_pwd=done
+03:33:33 [141/306] ndxt_centit-framework: 1 job(s), CPG 2.8 MB
+03:33:45     L0: main@11.0s loaded@12.0s exit@12.5s  authentication_pwd=done
+03:33:45 [142/306] extrawest_extrawest_ocpi: 1 job(s), CPG 2.8 MB
+03:33:58     L0: main@11.5s loaded@12.5s exit@13.0s  obscure_token_based_access_control=done
+03:33:58 [143/306] comixed_comixed: 2 job(s), CPG 2.9 MB
+03:34:11     L0: main@11.5s loaded@12.0s exit@12.5s  authentication_pwd=done, verifiable_token_based_authentication=done
+03:34:11 [144/306] Athroniaeth_keyshield: 1 job(s), CPG 3.0 MB
+03:34:25     L0: main@11.5s loaded@12.5s exit@13.5s  obscure_token_based_access_control=done
+03:34:25 [145/306] OpenLMIS_openlmis-fulfillment: 1 job(s), CPG 3.0 MB
+03:34:37     L0: main@10.5s loaded@11.5s exit@12.0s  obscure_token_based_access_control=done
+03:34:37 [146/306] Spring-Middleware_spring-base: 1 job(s), CPG 3.0 MB
+03:34:49     L0: main@11.0s loaded@12.0s exit@12.5s  verifiable_token_based_authentication=done
+03:34:49 [147/306] noimank_easyths: 1 job(s), CPG 3.1 MB
+03:35:02     L0: main@11.5s loaded@12.5s exit@13.0s  limit_request_rate=done
+03:35:02 [148/306] pfun-health_pfun-cma-model: 1 job(s), CPG 3.2 MB
+03:35:16     L0: main@12.0s loaded@13.0s exit@13.5s  session_based_access_control=done
+03:35:16 [149/306] lexy-ai_lexy: 1 job(s), CPG 3.3 MB
+03:35:29     L0: main@11.5s loaded@12.5s exit@13.0s  verifiable_token_based_authentication=done
+03:35:29 [150/306] wintermutant_bioinformatics-tools: 1 job(s), CPG 3.4 MB
+03:35:42     L0: main@12.0s loaded@12.5s exit@13.5s  verifiable_token_based_authentication=done
+03:35:42 [151/306] Quansight_ragna: 1 job(s), CPG 3.5 MB
+03:35:56     L0: main@12.0s loaded@12.5s exit@13.5s  session_based_access_control=done
+03:35:56 [152/306] kraftaa_transformdash: 1 job(s), CPG 3.5 MB
+03:36:09     L0: main@12.0s loaded@12.5s exit@13.0s  limit_request_rate=done
+03:36:09 [153/306] piccolo-orm_piccolo_api: 1 job(s), CPG 3.5 MB
+03:36:22     L0: main@12.0s loaded@13.0s exit@13.5s  obscure_token_based_access_control=done
+03:36:22 [154/306] hygieia_api: 2 job(s), CPG 3.5 MB
+03:36:34     L0: main@10.5s loaded@11.5s exit@12.0s  obscure_token_based_access_control=done, session_based_access_control=done
+03:36:34 [155/306] vanillabp_business-cockpit: 2 job(s), CPG 3.6 MB
+03:36:47     L0: main@11.0s loaded@11.5s exit@12.5s  session_based_access_control=done, verifiable_token_based_authentication=done
+03:36:47 [156/306] mosip_id-repository: 2 job(s), CPG 3.6 MB
+03:36:59     L0: main@11.0s loaded@12.0s exit@12.5s  session_based_access_control=done, verifiable_token_based_authentication=done
+03:36:59 [157/306] spraakbanken_karp-backend: 1 job(s), CPG 3.8 MB
+03:37:13     L0: main@12.0s loaded@13.0s exit@13.5s  obscure_token_based_access_control=done
+03:37:13 [158/306] liuhailove_gscheduler-core: 2 job(s), CPG 3.8 MB
+03:37:26     L0: main@11.0s loaded@12.0s exit@12.5s  obscure_token_based_access_control=done, session_based_access_control=done
+03:37:26 [159/306] mundobien2025_fastapi-basekit: 1 job(s), CPG 3.9 MB
+03:37:39     L0: main@11.5s loaded@12.5s exit@13.0s  verifiable_token_based_authentication=done
+03:37:39 [160/306] MTSWebServices_horizon: 1 job(s), CPG 3.9 MB
+03:37:53     L0: main@12.0s loaded@13.0s exit@14.0s  authentication_pwd=done
+03:37:53 [161/306] openfun_warren: 2 job(s), CPG 4.0 MB
+03:38:07     L0: main@12.5s loaded@13.5s exit@14.0s  session_based_access_control=done, verifiable_token_based_authentication=done
+03:38:07 [162/306] yizzuide_Milkomeda: 1 job(s), CPG 4.1 MB
+03:38:20     L0: main@11.5s loaded@12.5s exit@13.0s  session_based_access_control=done
+03:38:20 [163/306] ThreatFlux_YaraFlux: 2 job(s), CPG 4.1 MB
+03:38:33     L0: main@11.5s loaded@12.5s exit@13.5s  authentication_pwd=done, verifiable_token_based_authentication=done
+03:38:33 [164/306] valtimo-platform_valtimo-backend-libraries: 2 job(s), CPG 4.1 MB
+03:38:46     L0: main@11.0s loaded@12.0s exit@12.5s  authentication_pwd=done, verifiable_token_based_authentication=done
+03:38:46 [165/306] elisiariocouto_leggen: 1 job(s), CPG 4.1 MB
+03:38:59     L0: main@12.0s loaded@13.0s exit@13.5s  obscure_token_based_access_control=done
+03:38:59 [166/306] factcast_factcast: 1 job(s), CPG 4.1 MB
+03:39:12     L0: main@11.5s loaded@12.5s exit@13.0s  limit_request_rate=done
+03:39:12 [167/306] flowerfine_carp: 1 job(s), CPG 4.2 MB
+03:39:24     L0: main@11.0s loaded@11.5s exit@12.0s  session_based_access_control=done
+03:39:24 [168/306] ag2ai_fastagency: 1 job(s), CPG 4.3 MB
+03:39:37     L0: main@12.0s loaded@12.5s exit@13.0s  authentication_pwd=done
+03:39:37 [169/306] opendatalab_labelU: 1 job(s), CPG 4.4 MB
+03:39:51     L0: main@11.5s loaded@12.5s exit@13.5s  verifiable_token_based_authentication=done
+03:39:51 [170/306] ijazfx_graphenee: 1 job(s), CPG 4.4 MB
+03:40:03     L0: main@10.5s loaded@11.5s exit@12.0s  verifiable_token_based_authentication=done
+03:40:03 [171/306] Maxl94_yaai: 1 job(s), CPG 4.5 MB
+03:40:16     L0: main@11.5s loaded@12.5s exit@13.5s  session_based_access_control=done
+03:40:16 [172/306] pesitwizard_pesitwizard: 1 job(s), CPG 4.6 MB
+03:40:29     L0: main@11.0s loaded@11.5s exit@12.0s  limit_request_rate=done
+03:40:29 [173/306] mdfarhankc_fastapi-fullauth: 1 job(s), CPG 4.6 MB
+03:40:42     L0: main@12.0s loaded@12.5s exit@13.5s  limit_request_rate=done
+03:40:42 [174/306] khulnasoft_DockNet: 1 job(s), CPG 4.6 MB
+03:40:56     L0: main@11.5s loaded@12.5s exit@13.5s  verifiable_token_based_authentication=done
+03:40:56 [175/306] spring-cloud_spring-cloud-gateway: 1 job(s), CPG 4.6 MB
+03:41:08     L0: main@10.5s loaded@11.5s exit@12.0s  limit_request_rate=done
+03:41:08 [176/306] autonomi-ai_nos: 1 job(s), CPG 4.8 MB
+03:41:21     L0: main@12.0s loaded@13.0s exit@13.5s  obscure_token_based_access_control=done
+03:41:21 [177/306] DeepselSystems_deepsel-cms: 1 job(s), CPG 5.0 MB
+03:41:35     L0: main@12.0s loaded@13.0s exit@14.0s  session_based_access_control=done
+03:41:35 [178/306] Helevon-Technologies-LTD_fabiplus: 1 job(s), CPG 5.0 MB
+03:41:48     L0: main@11.5s loaded@12.5s exit@13.0s  limit_request_rate=done
+03:41:48 [179/306] dialob_dialob-parent: 1 job(s), CPG 5.1 MB
+03:42:00     L0: main@10.5s loaded@11.5s exit@12.0s  obscure_token_based_access_control=done
+03:42:00 [180/306] FastJango_FastJango: 1 job(s), CPG 5.1 MB
+03:42:14     L0: main@12.0s loaded@13.0s exit@13.5s  session_based_access_control=done
+03:42:14 [181/306] mvdbeek_pulsar-relay: 1 job(s), CPG 5.1 MB
+03:42:27     L0: main@11.5s loaded@12.5s exit@13.0s  authentication_pwd=done
+03:42:27 [182/306] chutney-testing_chutney: 1 job(s), CPG 5.5 MB
+03:42:39     L0: main@11.0s loaded@12.0s exit@12.5s  authentication_pwd=done
+03:42:39 [183/306] JBEI_dnada: 1 job(s), CPG 5.5 MB
+03:42:53     L0: main@12.0s loaded@13.0s exit@14.0s  authentication_pwd=done
+03:42:53 [184/306] squirrels-analytics_squirrels: 1 job(s), CPG 5.5 MB
+03:43:07     L0: main@12.0s loaded@13.0s exit@14.0s  session_based_access_control=done
+03:43:07 [185/306] Peppe37_p8s: 1 job(s), CPG 5.7 MB
+03:43:21     L0: main@12.0s loaded@13.0s exit@14.0s  session_based_access_control=done
+03:43:21 [186/306] ChinaLym_shoulder-framework: 2 job(s), CPG 6.2 MB
+03:43:34     L0: main@11.0s loaded@12.0s exit@12.5s  obscure_token_based_access_control=done, session_based_access_control=done
+03:43:34 [187/306] layinded_swx: 2 job(s), CPG 6.5 MB
+03:43:48     L0: main@11.5s loaded@12.5s exit@13.5s  limit_request_rate=done, session_based_access_control=done
+03:43:48 [188/306] netgrif_application-engine: 1 job(s), CPG 6.5 MB
+03:44:00     L0: main@11.0s loaded@12.0s exit@12.5s  authentication_pwd=done
+03:44:00 [189/306] amabito_veronica: 1 job(s), CPG 6.8 MB
+03:44:14     L0: main@12.0s loaded@13.0s exit@14.0s  obscure_token_based_access_control=done
+03:44:14 [190/306] ram07eng_airflow-watcher: 1 job(s), CPG 6.9 MB
+03:44:28     L0: main@11.5s loaded@13.0s exit@13.5s  limit_request_rate=done
+03:44:28 [191/306] AmberLee2427_nancy-brain: 1 job(s), CPG 7.1 MB
+03:44:41     L0: main@11.5s loaded@12.5s exit@13.5s  authentication_pwd=done
+03:44:41 [192/306] engine-agi_engine-core: 1 job(s), CPG 7.2 MB
+03:44:55     L0: main@12.0s loaded@13.0s exit@14.0s  limit_request_rate=done
+03:44:55 [193/306] dir-IQ_ldapportal-core: 2 job(s), CPG 7.2 MB
+03:45:08     L0: main@11.0s loaded@12.0s exit@12.5s  authentication_pwd=done, limit_request_rate=done
+03:45:08 [194/306] aegisql_conveyor: 1 job(s), CPG 7.4 MB
+03:45:20     L0: main@11.0s loaded@12.0s exit@12.5s  verifiable_token_based_authentication=done
+03:45:20 [195/306] jhoetter_hof-engine: 1 job(s), CPG 7.6 MB
+03:45:34     L0: main@12.0s loaded@13.0s exit@14.0s  authentication_pwd=done
+03:45:34 [196/306] mosip_registration: 1 job(s), CPG 7.8 MB
+03:45:46     L0: main@10.5s loaded@11.5s exit@12.0s  session_based_access_control=done
+03:45:46 [197/306] ncats_gsrs-spring-starter: 2 job(s), CPG 8.2 MB
+03:45:59     L0: main@11.0s loaded@12.0s exit@13.0s  authentication_pwd=done, session_based_access_control=done
+03:45:59 [198/306] luxman89_TradeArena: 1 job(s), CPG 8.3 MB
+03:46:13     L0: main@12.0s loaded@13.0s exit@13.5s  limit_request_rate=done
+03:46:13 [199/306] MTSWebServices_syncmaster: 1 job(s), CPG 8.5 MB
+03:46:26     L0: main@11.5s loaded@12.5s exit@13.5s  session_based_access_control=done
+03:46:26 [200/306] fief-dev_fief: 1 job(s), CPG 8.6 MB
+03:46:41     L0: main@12.0s loaded@13.0s exit@14.5s  session_based_access_control=done
+03:46:41 [201/306] edsonmartins_archbase-app-framework: 1 job(s), CPG 8.6 MB
+03:46:54     L0: main@11.0s loaded@12.0s exit@12.5s  verifiable_token_based_authentication=done
+03:46:54 [202/306] eclipse-basyx_basyx-java-server-sdk: 1 job(s), CPG 8.6 MB
+03:47:06     L0: main@11.0s loaded@11.5s exit@12.5s  verifiable_token_based_authentication=done
+03:47:06 [203/306] Chainlit_chainlit: 1 job(s), CPG 8.8 MB
+03:47:20     L0: main@12.0s loaded@13.0s exit@14.0s  verifiable_token_based_authentication=done
+03:47:20 [204/306] genropy_genro-mail-proxy: 1 job(s), CPG 8.9 MB
+03:47:34     L0: main@11.5s loaded@12.5s exit@13.5s  obscure_token_based_access_control=done
+03:47:34 [205/306] manulera_OpenCloning_backend: 1 job(s), CPG 8.9 MB
+03:47:47     L0: main@11.5s loaded@12.5s exit@13.5s  authentication_pwd=done
+03:47:47 [206/306] kuehne-trustable-de_ca3sCore: 2 job(s), CPG 9.2 MB
+03:48:00     L0: main@10.5s loaded@11.5s exit@12.5s  limit_request_rate=done, session_based_access_control=done
+03:48:00 [207/306] RS-PYTHON_rs-server: 2 job(s), CPG 9.7 MB
+03:48:14     L0: main@12.0s loaded@13.0s exit@14.0s  obscure_token_based_access_control=done, session_based_access_control=done
+03:48:14 [208/306] DiamondLightSource_python-murfey: 1 job(s), CPG 9.8 MB
+03:48:28     L0: main@11.5s loaded@13.0s exit@14.0s  authentication_pwd=done
+03:48:28 [209/306] uvicore_framework: 1 job(s), CPG 10.1 MB
+03:48:42     L0: main@11.5s loaded@13.0s exit@14.0s  session_based_access_control=done
+03:48:42 [210/306] syndesisio_syndesis: 1 job(s), CPG 10.1 MB
+03:48:54     L0: main@11.0s loaded@11.5s exit@12.0s  session_based_access_control=done
+03:48:54 [211/306] liuxiaotong_ai-dataset-radar: 1 job(s), CPG 10.4 MB
+03:49:07     L0: main@11.5s loaded@12.5s exit@13.5s  limit_request_rate=done
+03:49:07 [212/306] dchrnv_neurograph: 1 job(s), CPG 10.5 MB
+03:49:21     L0: main@12.0s loaded@13.0s exit@14.0s  limit_request_rate=done
+03:49:21 [213/306] mlco2_codecarbon: 1 job(s), CPG 10.5 MB
+03:49:35     L0: main@11.5s loaded@12.5s exit@13.5s  session_based_access_control=done
+03:49:35 [214/306] lbk-ones_easy4j: 1 job(s), CPG 10.9 MB
+03:49:48     L0: main@11.0s loaded@12.0s exit@13.0s  verifiable_token_based_authentication=done
+03:49:48 [215/306] DeepselSystems_deepsel: 1 job(s), CPG 11.2 MB
+03:50:02     L0: main@11.5s loaded@12.5s exit@13.5s  session_based_access_control=done
+03:50:02 [216/306] Point72_csp-gateway: 1 job(s), CPG 11.2 MB
+03:50:15     L0: main@11.5s loaded@12.5s exit@13.5s  obscure_token_based_access_control=done
+03:50:15 [217/306] webforj_webforj: 1 job(s), CPG 11.4 MB
+03:50:28     L0: main@11.0s loaded@12.0s exit@13.0s  session_based_access_control=done
+03:50:28 [218/306] descoped_authly: 1 job(s), CPG 11.4 MB
+03:50:42     L0: main@12.0s loaded@12.5s exit@14.0s  verifiable_token_based_authentication=done
+03:50:42 [219/306] cloudfoundry_uaa: 2 job(s), CPG 12.0 MB
+03:50:55     L0: main@10.5s loaded@11.5s exit@12.5s  limit_request_rate=done, session_based_access_control=done
+03:50:55 [220/306] Ap6pack_malwar: 1 job(s), CPG 12.4 MB
+03:51:09     L0: main@11.5s loaded@13.0s exit@14.0s  obscure_token_based_access_control=done
+03:51:09 [221/306] jdrumgoole_winebox: 1 job(s), CPG 12.5 MB
+03:51:22     L0: main@12.0s loaded@13.0s exit@13.5s  authentication_pwd=done
+03:51:22 [222/306] datastax_ragstack-ai-langflow: 1 job(s), CPG 12.5 MB
+03:51:36     L0: main@11.5s loaded@12.5s exit@14.0s  obscure_token_based_access_control=done
+03:51:36 [223/306] sustainability-software-lab_ca-biositing: 1 job(s), CPG 12.9 MB
+03:51:50     L0: main@11.5s loaded@13.0s exit@14.0s  verifiable_token_based_authentication=done
+03:51:50 [224/306] contextfs_contextfs: 1 job(s), CPG 13.9 MB
+03:52:04     L0: main@11.5s loaded@12.5s exit@13.5s  obscure_token_based_access_control=done
+03:52:04 [225/306] nijaru_zenith: 2 job(s), CPG 14.2 MB
+03:52:18     L0: main@11.5s loaded@13.0s exit@14.5s  limit_request_rate=done, session_based_access_control=done
+03:52:18 [226/306] romiluz13_Hybrid-Search-RAG: 1 job(s), CPG 14.3 MB
+03:52:32     L0: main@11.5s loaded@12.5s exit@14.0s  authentication_pwd=done
+03:52:32 [227/306] Mother-AI-OS_mother: 1 job(s), CPG 14.3 MB
+03:52:46     L0: main@11.5s loaded@12.5s exit@14.0s  obscure_token_based_access_control=done
+03:52:46 [228/306] kinde-oss_kinde-python-sdk: 1 job(s), CPG 14.5 MB
+03:53:01     L0: main@11.5s loaded@12.5s exit@14.0s  session_based_access_control=done
+03:53:01 [229/306] SorPuti_core-framework: 2 job(s), CPG 14.5 MB
+03:53:15     L0: main@11.5s loaded@12.5s exit@14.5s  limit_request_rate=done, session_based_access_control=done
+03:53:15 [230/306] Percolation-Labs_percolate: 1 job(s), CPG 15.1 MB
+03:53:29     L0: main@11.5s loaded@12.5s exit@13.5s  session_based_access_control=done
+03:53:29 [231/306] zloeber_SecretZero: 1 job(s), CPG 15.7 MB
+03:53:43     L0: main@11.5s loaded@12.5s exit@14.0s  obscure_token_based_access_control=done
+03:53:43 [232/306] namastexlabs_automagik-tools: 1 job(s), CPG 15.8 MB
+03:53:57     L0: main@11.5s loaded@12.5s exit@14.0s  session_based_access_control=done
+03:53:57 [233/306] apache_incubator-seata: 2 job(s), CPG 16.4 MB
+03:54:11     L0: main@11.0s loaded@12.0s exit@14.0s  limit_request_rate=done, verifiable_token_based_authentication=done
+03:54:11 [234/306] avinash-mall_CognitiveMemoryLayer: 1 job(s), CPG 17.2 MB
+03:54:25     L0: main@12.0s loaded@13.0s exit@14.1s  limit_request_rate=done
+03:54:25 [235/306] ParisNeo_lollms: 3 job(s), CPG 17.2 MB
+03:54:39     L0: main@11.5s loaded@12.5s exit@14.5s  authentication_pwd=done, session_based_access_control=done, verifiable_token_based_authentication=done
+03:54:39 [236/306] raym33_r: 1 job(s), CPG 17.2 MB
+03:54:53     L0: main@12.0s loaded@12.5s exit@14.0s  limit_request_rate=done
+03:54:53 [237/306] glawson6_jaiclaw: 2 job(s), CPG 17.2 MB
+03:55:06     L0: main@11.0s loaded@12.0s exit@13.0s  obscure_token_based_access_control=done, session_based_access_control=done
+03:55:06 [238/306] xinetzone_tao: 1 job(s), CPG 17.5 MB
+03:55:20     L0: main@11.5s loaded@12.5s exit@14.0s  authentication_pwd=done
+03:55:20 [239/306] tannousgeagea_perceptra-hub: 1 job(s), CPG 17.8 MB
+03:55:34     L0: main@12.0s loaded@13.0s exit@13.5s  session_based_access_control=done
+03:55:34 [240/306] alexk-dev_golemcore-bot: 2 job(s), CPG 17.9 MB
+03:55:47     L0: main@10.5s loaded@11.5s exit@12.5s  limit_request_rate=done, obscure_token_based_access_control=done
+03:55:47 [241/306] officefloor_OfficeFloor: 2 job(s), CPG 18.2 MB
+03:56:00     L0: main@11.0s loaded@11.5s exit@13.5s  limit_request_rate=done, session_based_access_control=done
+03:56:00 [242/306] Daylily-Informatics_bloom: 1 job(s), CPG 18.7 MB
+03:56:15     L0: main@12.0s loaded@13.0s exit@14.5s  limit_request_rate=done
+03:56:15 [243/306] lnbits_lnbits: 1 job(s), CPG 19.6 MB
+03:56:28     L0: main@11.5s loaded@12.5s exit@13.5s  session_based_access_control=done
+03:56:28 [244/306] herculesproject_sgi: 1 job(s), CPG 19.8 MB
+03:56:41     L0: main@11.0s loaded@12.0s exit@13.0s  session_based_access_control=done
+03:56:41 [245/306] alkimya_gathering: 1 job(s), CPG 20.0 MB
+03:56:55     L0: main@11.5s loaded@12.5s exit@13.5s  limit_request_rate=done
+03:56:55 [246/306] ashita-ai_tessera: 2 job(s), CPG 20.1 MB
+03:57:09     L0: main@11.5s loaded@12.5s exit@14.5s  obscure_token_based_access_control=done, session_based_access_control=done
+03:57:09 [247/306] bluesky_tiled: 2 job(s), CPG 20.4 MB
+03:57:24     L0: main@11.5s loaded@12.5s exit@14.5s  authentication_pwd=done, obscure_token_based_access_control=done
+03:57:24 [248/306] ruvnet_RuView: 1 job(s), CPG 21.0 MB
+03:57:37     L0: main@11.5s loaded@12.5s exit@13.5s  limit_request_rate=done
+03:57:37 [249/306] tumma72_mlx-manager: 2 job(s), CPG 21.2 MB
+03:57:52     L0: main@11.5s loaded@12.5s exit@14.5s  authentication_pwd=done, limit_request_rate=done
+03:57:52 [250/306] workfloworchestrator_orchestrator-core: 1 job(s), CPG 22.4 MB
+03:58:06     L0: main@11.5s loaded@12.5s exit@14.0s  session_based_access_control=done
+03:58:06 [251/306] DS4SD_deepsearch-toolkit: 1 job(s), CPG 22.6 MB
+03:58:20     L0: main@11.5s loaded@12.5s exit@14.5s  obscure_token_based_access_control=done
+03:58:20 [252/306] mlflow-oidc_mlflow-oidc-auth: 1 job(s), CPG 24.1 MB
+03:58:35     L0: main@12.0s loaded@12.5s exit@15.0s  session_based_access_control=done
+03:58:35 [253/306] digitranslab_kozmoai: 1 job(s), CPG 24.5 MB
+03:58:50     L0: main@11.5s loaded@13.0s exit@14.5s  authentication_pwd=done
+03:58:50 [254/306] Extralit_extralit: 1 job(s), CPG 25.2 MB
+03:59:05     L0: main@11.5s loaded@12.5s exit@15.0s  obscure_token_based_access_control=done
+03:59:05 [255/306] SolarNetwork_solarnetwork-central: 4 job(s), CPG 25.3 MB
+03:59:19     L0: main@10.5s loaded@11.5s exit@13.5s  limit_request_rate=done, obscure_token_based_access_control=done, session_based_access_control=done, verifiable_token_based_authentication=done
+03:59:19 [256/306] rileyseaburg_codetether: 1 job(s), CPG 25.8 MB
+03:59:33     L0: main@11.5s loaded@12.5s exit@14.5s  authentication_pwd=done
+03:59:33 [257/306] InferiaAI_InferiaLLM: 1 job(s), CPG 25.9 MB
+03:59:47     L0: main@11.5s loaded@12.5s exit@14.0s  obscure_token_based_access_control=done
+03:59:47 [258/306] TrueSelph_jvspatial: 1 job(s), CPG 26.7 MB
+04:00:03     L0: main@11.5s loaded@12.5s exit@15.5s  session_based_access_control=done
+04:00:03 [259/306] nfraxlab_svc-infra: 2 job(s), CPG 26.9 MB
+04:00:19     L0: main@11.5s loaded@12.5s exit@16.0s  limit_request_rate=done, session_based_access_control=done
+04:00:19 [260/306] XSailboat_XSailboat: 2 job(s), CPG 29.5 MB
+04:00:33     L0: main@11.0s loaded@12.0s exit@14.5s  limit_request_rate=done, session_based_access_control=done
+04:00:33 [261/306] gradio-app_gradio: 2 job(s), CPG 31.0 MB
+04:00:48     L0: main@11.5s loaded@12.5s exit@15.0s  authentication_pwd=done, session_based_access_control=done
+04:00:48 [262/306] argilla-io_argilla: 1 job(s), CPG 31.4 MB
+04:01:04     L0: main@11.5s loaded@13.0s exit@15.5s  obscure_token_based_access_control=done
+04:01:04 [263/306] spring-projects_spring-boot: 1 job(s), CPG 32.0 MB
+04:01:17     L0: main@11.0s loaded@12.0s exit@13.5s  verifiable_token_based_authentication=done
+04:01:17 [264/306] snowcell-cloud_Snowcode: 1 job(s), CPG 33.2 MB
+04:01:32     L0: main@12.0s loaded@13.0s exit@14.5s  limit_request_rate=done
+04:01:32 [265/306] calkit_calkit: 1 job(s), CPG 34.4 MB
+04:01:46     L0: main@11.5s loaded@12.5s exit@14.0s  verifiable_token_based_authentication=done
+04:01:46 [266/306] EximeeBPMS_eximeebpms: 1 job(s), CPG 34.5 MB
+04:04:58     L0: main@10.5s loaded@11.5s exit@192.4s  limit_request_rate=timeout
+04:04:58 [267/306] xiaojiou176-open_sourceharbor: 1 job(s), CPG 34.6 MB
+04:05:13     L0: main@11.5s loaded@12.5s exit@14.5s  obscure_token_based_access_control=done
+04:05:13 [268/306] freqtrade_freqtrade: 1 job(s), CPG 34.6 MB
+04:05:27     L0: main@11.5s loaded@12.5s exit@14.5s  verifiable_token_based_authentication=done
+04:05:27 [269/306] OrqueIO_OrqueIO: 1 job(s), CPG 34.8 MB
+04:08:40     L0: main@11.0s loaded@12.0s exit@192.9s  limit_request_rate=timeout
+04:08:40 [270/306] Saturn99X_Etherion: 2 job(s), CPG 35.5 MB
+04:08:56     L0: main@11.5s loaded@12.5s exit@16.0s  limit_request_rate=done, session_based_access_control=done
+04:08:56 [271/306] DSpace_DSpace: 1 job(s), CPG 35.7 MB
+04:09:10     L0: main@11.0s loaded@12.0s exit@14.0s  obscure_token_based_access_control=done
+04:09:10 [272/306] operaton_operaton: 1 job(s), CPG 36.7 MB
+04:12:23     L0: main@10.5s loaded@12.0s exit@192.4s  limit_request_rate=timeout
+04:12:23 [273/306] camunda_camunda-bpm-platform: 2 job(s), CPG 37.2 MB
+04:15:35     L0: main@10.5s loaded@11.5s exit@192.4s  limit_request_rate=timeout
+04:15:52     L1: main@10.5s loaded@12.0s exit@16.5s  session_based_access_control=done
+04:15:52 [274/306] cadenzaflow_cadenzaflow-bpm-platform: 1 job(s), CPG 37.2 MB
+04:19:05     L0: main@11.0s loaded@12.0s exit@192.9s  limit_request_rate=timeout
+04:19:05 [275/306] cibseven_cibseven: 1 job(s), CPG 38.3 MB
+04:22:17     L0: main@11.0s loaded@12.0s exit@192.9s  limit_request_rate=timeout
+04:22:17 [276/306] shangyankeji_super-dev: 1 job(s), CPG 42.0 MB
+04:22:32     L0: main@11.5s loaded@12.5s exit@14.0s  limit_request_rate=done
+04:22:32 [277/306] shuigedeng_taotao-cloud-project: 2 job(s), CPG 46.2 MB
+04:22:46     L0: main@10.5s loaded@11.5s exit@14.0s  authentication_pwd=done, limit_request_rate=done
+04:22:46 [278/306] rubelw_OSSS: 1 job(s), CPG 46.9 MB
+04:23:02     L0: main@11.5s loaded@12.5s exit@16.0s  session_based_access_control=done
+04:23:02 [279/306] trisongz_lazyops: 1 job(s), CPG 47.1 MB
+04:23:18     L0: main@12.0s loaded@13.0s exit@16.0s  session_based_access_control=done
+04:23:18 [280/306] li-boxuan_OpenDevin: 2 job(s), CPG 52.1 MB
+04:23:37     L0: main@11.5s loaded@13.0s exit@19.0s  obscure_token_based_access_control=done, session_based_access_control=done
+04:23:37 [281/306] randovania_randovania: 1 job(s), CPG 55.1 MB
+04:23:53     L0: main@11.5s loaded@13.0s exit@16.0s  session_based_access_control=done
+04:23:53 [282/306] ThalesGroup_fred: 1 job(s), CPG 60.0 MB
+04:24:14     L0: main@11.5s loaded@12.5s exit@21.5s  verifiable_token_based_authentication=done
+04:24:14 [283/306] infinispan_infinispan: 1 job(s), CPG 60.6 MB
+04:24:28     L0: main@10.5s loaded@11.5s exit@13.5s  limit_request_rate=done
+04:24:28 [284/306] odpi_egeria: 1 job(s), CPG 61.8 MB
+04:24:41     L0: main@10.5s loaded@11.5s exit@13.5s  authentication_pwd=done
+04:24:41 [285/306] stateset_stateset-agents: 1 job(s), CPG 61.8 MB
+04:24:58     L0: main@12.0s loaded@13.0s exit@17.0s  limit_request_rate=done
+04:24:58 [286/306] amphetamarina_litellm: 1 job(s), CPG 74.2 MB
+04:25:17     L0: main@12.0s loaded@13.0s exit@18.0s  verifiable_token_based_authentication=done
+04:25:17 [287/306] ctrl-gaurav_effGen: 1 job(s), CPG 80.2 MB
+04:25:34     L0: main@12.0s loaded@13.0s exit@17.5s  limit_request_rate=done
+04:25:34 [288/306] HKUDS_LightRAG: 2 job(s), CPG 80.7 MB
+04:25:53     L0: main@11.5s loaded@13.0s exit@19.0s  authentication_pwd=done, verifiable_token_based_authentication=done
+04:25:53 [289/306] ViperJuice_Code-Index-MCP: 1 job(s), CPG 82.8 MB
+04:26:10     L0: main@11.5s loaded@13.0s exit@16.5s  limit_request_rate=done
+04:26:10 [290/306] GRID-INTELLIGENCE_GRID: 2 job(s), CPG 89.4 MB
+04:26:29     L0: main@11.5s loaded@13.0s exit@19.5s  limit_request_rate=done, verifiable_token_based_authentication=done
+04:26:29 [291/306] topoteretes_cognee: 1 job(s), CPG 90.3 MB
+04:29:43     L0: main@11.5s loaded@13.0s exit@193.9s  obscure_token_based_access_control=timeout
+04:29:43 [292/306] camunda_camunda: 4 job(s), CPG 91.9 MB
+04:30:09     L0: main@11.0s loaded@12.0s exit@26.0s  authentication_pwd=done, limit_request_rate=done, obscure_token_based_access_control=done, session_based_access_control=done
+04:30:09 [293/306] MarkinHaus_ToolBoxV2: 1 job(s), CPG 124.1 MB
+04:30:29     L0: main@11.5s loaded@13.0s exit@20.0s  session_based_access_control=done
+04:30:29 [294/306] microsoft_agent-governance-toolkit: 1 job(s), CPG 124.2 MB
+04:30:48     L0: main@12.0s loaded@13.5s exit@18.5s  limit_request_rate=done
+04:30:48 [295/306] SHAdd0WTAka_Zen-Ai-Pentest: 1 job(s), CPG 157.2 MB
+04:31:11     L0: main@11.5s loaded@13.5s exit@23.0s  limit_request_rate=done
+04:31:11 [296/306] mattyopon_faultray: 2 job(s), CPG 170.3 MB
+04:31:36     L0: main@11.5s loaded@13.5s exit@25.0s  limit_request_rate=done, session_based_access_control=done
+04:31:36 [297/306] langflow-ai_langflow: 1 job(s), CPG 200.3 MB
+04:32:04     L0: main@11.5s loaded@14.5s exit@27.5s  obscure_token_based_access_control=done
+04:32:04 [298/306] dislovelhl_enhanced-agent-bus: 1 job(s), CPG 201.4 MB
+04:32:27     L0: main@11.5s loaded@13.5s exit@23.5s  obscure_token_based_access_control=done
+04:32:27 [299/306] agno-agi_agno: 1 job(s), CPG 242.2 MB
+04:33:00     L0: main@11.5s loaded@14.5s exit@33.1s  limit_request_rate=done
+04:33:00 [300/306] als-apg_osprey: 1 job(s), CPG 242.3 MB
+04:33:30     L0: main@11.5s loaded@14.5s exit@29.5s  session_based_access_control=done
+04:33:30 [301/306] CIRISAI_CIRISAgent: 2 job(s), CPG 289.0 MB
+04:36:47     L0: main@12.0s loaded@15.0s exit@196.9s  session_based_access_control=timeout
+04:37:17     L1: main@11.5s loaded@14.5s exit@30.1s  verifiable_token_based_authentication=done
+04:37:17 [302/306] BilgisayarKavramlari_cadelphi: 1 job(s), CPG 380.9 MB
+04:40:35     L0: main@11.5s loaded@16.0s exit@198.4s  authentication_pwd=timeout
+04:40:35 [303/306] endomorphosis_ipfs_kit_py: 1 job(s), CPG 443.3 MB
+04:41:04     L0: main@11.5s loaded@19.0s exit@28.5s  limit_request_rate=done
+04:41:04 [304/306] BerriAI_litellm: 1 job(s), CPG 489.7 MB
+04:43:30     L0: main@12.0s loaded@18.0s exit@146.3s  verifiable_token_based_authentication=error
+04:43:30 [305/306] terrene-foundation_kailash-py: 2 job(s), CPG 493.6 MB
+04:44:40     L0: main@12.0s loaded@19.1s exit@69.7s  limit_request_rate=done, obscure_token_based_access_control=done
+04:44:40 [306/306] devonmojito_ton-blockchain-mcp: 1 job(s), CPG 540.9 MB
+04:45:24     L0: main@11.5s loaded@19.0s exit@43.6s  obscure_token_based_access_control=done
+04:45:24 done

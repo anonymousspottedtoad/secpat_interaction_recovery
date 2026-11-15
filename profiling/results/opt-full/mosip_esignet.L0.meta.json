@@ -1,0 +1,23 @@
+{
+ "repo": "mosip_esignet",
+ "launch": 0,
+ "jobs": [
+  "java/obscure_token_based_access_control/mosip_esignet",
+  "java/verifiable_token_based_authentication/mosip_esignet"
+ ],
+ "marks": {
+  "main": 10.520676601678133,
+  "loaded": 11.522524118423462,
+  "start:java/obscure_token_based_access_control/mosip_esignet": 11.522529907524586,
+  "done:java/obscure_token_based_access_control/mosip_esignet": 11.522536870092154,
+  "start:java/verifiable_token_based_authentication/mosip_esignet": 11.522540554404259,
+  "done:java/verifiable_token_based_authentication/mosip_esignet": 11.522544253617525,
+  "end": 11.522547326982021,
+  "exit": 12.023523669689894
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

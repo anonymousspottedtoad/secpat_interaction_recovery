@@ -51,7 +51,7 @@ import logging
 from dataclasses import dataclass, field
 from pathlib import Path
 
-from . import config, joern_local, joern_service
+from . import config, joern_local, joern_service, rust_walk
 
 logger = logging.getLogger(__name__)
 
@@ -290,6 +290,9 @@ def detect(
                 f"the checkout of {repo} — and the caller passed no repo_path."
             )
         )
+    elif config.JOERN_ENGINE == "rust":
+        result = rust_walk.query(repo, language, repo_path, params)
+        where = "the native engine (secpat-walk)"
     else:
         result = joern_local.query(repo, language, script, repo_path, params=params)
         where = "local Joern"

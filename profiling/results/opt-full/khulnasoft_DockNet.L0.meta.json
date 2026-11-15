@@ -1,0 +1,20 @@
+{
+ "repo": "khulnasoft_DockNet",
+ "launch": 0,
+ "jobs": [
+  "python/verifiable_token_based_authentication/khulnasoft_DockNet"
+ ],
+ "marks": {
+  "main": 11.521386470645666,
+  "loaded": 12.523284703493118,
+  "start:python/verifiable_token_based_authentication/khulnasoft_DockNet": 12.523290529847145,
+  "done:python/verifiable_token_based_authentication/khulnasoft_DockNet": 13.024168450385332,
+  "end": 13.024174623191357,
+  "exit": 13.52518318220973
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

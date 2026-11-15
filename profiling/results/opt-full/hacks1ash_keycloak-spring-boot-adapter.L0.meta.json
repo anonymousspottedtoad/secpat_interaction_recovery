@@ -1,0 +1,20 @@
+{
+ "repo": "hacks1ash_keycloak-spring-boot-adapter",
+ "launch": 0,
+ "jobs": [
+  "java/session_based_access_control/hacks1ash_keycloak-spring-boot-adapter"
+ ],
+ "marks": {
+  "main": 11.520585417747498,
+  "loaded": 12.522496029734612,
+  "start:java/session_based_access_control/hacks1ash_keycloak-spring-boot-adapter": 12.522501923143864,
+  "done:java/session_based_access_control/hacks1ash_keycloak-spring-boot-adapter": 12.522508814930916,
+  "end": 12.522512253373861,
+  "exit": 12.52253670990467
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

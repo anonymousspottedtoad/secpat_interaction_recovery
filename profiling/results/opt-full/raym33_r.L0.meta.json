@@ -1,0 +1,20 @@
+{
+ "repo": "raym33_r",
+ "launch": 0,
+ "jobs": [
+  "python/limit_request_rate/raym33_r"
+ ],
+ "marks": {
+  "main": 12.019620675593615,
+  "loaded": 12.520271603018045,
+  "start:python/limit_request_rate/raym33_r": 12.520276267081499,
+  "done:python/limit_request_rate/raym33_r": 14.023114815354347,
+  "end": 14.023120548576117,
+  "exit": 14.023143712431192
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

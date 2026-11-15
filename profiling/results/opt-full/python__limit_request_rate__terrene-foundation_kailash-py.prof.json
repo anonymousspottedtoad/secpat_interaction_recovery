@@ -1,0 +1,100 @@
+{
+ "phases": {
+  "1-callgraph": 0.359857213,
+  "2a-declarations": 6.469450032,
+  "2b-locate": 1.932997383,
+  "2c-ownership": 0.005532761,
+  "3-entry": 5.624761629,
+  "4-walk": 25.729797416,
+  "5-render": 0.004361782
+ },
+ "counters": {
+  "targetsOf.calls": 73888,
+  "walkBody.calls": 1,
+  "walkBody.entered": 1,
+  "walkBody.maxDepth": 0,
+  "enteredBodies.maxSize": 1,
+  "memo.missNoKey": 1,
+  "memo.missInvalid": 0,
+  "memo.missFull": 0,
+  "memo.keys": 0,
+  "memo.computed": 1,
+  "walk.nodesVisited": 243,
+  "walk.deadSkips": 135,
+  "kmr.calls": 4,
+  "kmr.alternatives": 130,
+  "kmr.maxNesting": 1,
+  "graph.methods": 434980,
+  "graph.internalMethods": 236827,
+  "located": 4,
+  "edges.raw": 4,
+  "interactions": 4
+ },
+ "distinct": {
+  "targetsOf.sites": 73843,
+  "walkBody.methods": 1,
+  "walk.distinctNodes": 243
+ },
+ "inPhase": "",
+ "status": "done",
+ "elapsed": 40.151128779,
+ "loadS": 6.189873662,
+ "uptimeAtMainMs": 10644,
+ "heapAfterLoadMb": 6753,
+ "progress": [
+  {
+   "t": 3.047090011,
+   "counters": {},
+   "inPhase": "2a-declarations"
+  },
+  {
+   "t": 13.267579342,
+   "counters": {
+    "targetsOf.calls": 6
+   },
+   "inPhase": "3-entry"
+  },
+  {
+   "t": 23.365851106,
+   "counters": {
+    "targetsOf.calls": 218,
+    "walkBody.calls": 1,
+    "walkBody.entered": 1,
+    "walkBody.maxDepth": 0,
+    "enteredBodies.maxSize": 1,
+    "memo.missNoKey": 1,
+    "memo.missInvalid": 0,
+    "memo.missFull": 0,
+    "memo.keys": 0,
+    "memo.computed": 1,
+    "walk.nodesVisited": 41,
+    "walk.deadSkips": 17,
+    "kmr.calls": 2,
+    "kmr.alternatives": 117,
+    "kmr.maxNesting": 1
+   },
+   "inPhase": "4-walk"
+  },
+  {
+   "t": 33.395466963,
+   "counters": {
+    "targetsOf.calls": 69528,
+    "walkBody.calls": 1,
+    "walkBody.entered": 1,
+    "walkBody.maxDepth": 0,
+    "enteredBodies.maxSize": 1,
+    "memo.missNoKey": 1,
+    "memo.missInvalid": 0,
+    "memo.missFull": 0,
+    "memo.keys": 0,
+    "memo.computed": 1,
+    "walk.nodesVisited": 41,
+    "walk.deadSkips": 17,
+    "kmr.calls": 2,
+    "kmr.alternatives": 117,
+    "kmr.maxNesting": 1
+   },
+   "inPhase": "4-walk"
+  }
+ ]
+}

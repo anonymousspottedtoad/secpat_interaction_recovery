@@ -1,0 +1,20 @@
+{
+ "repo": "chutney-testing_chutney",
+ "launch": 0,
+ "jobs": [
+  "java/authentication_pwd/chutney-testing_chutney"
+ ],
+ "marks": {
+  "main": 11.017680879682302,
+  "loaded": 12.019392039626837,
+  "start:java/authentication_pwd/chutney-testing_chutney": 12.019395880401134,
+  "done:java/authentication_pwd/chutney-testing_chutney": 12.520230453461409,
+  "end": 12.520236380398273,
+  "exit": 12.520260229706764
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

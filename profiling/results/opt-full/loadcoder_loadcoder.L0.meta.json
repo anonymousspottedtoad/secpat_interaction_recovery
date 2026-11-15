@@ -1,0 +1,20 @@
+{
+ "repo": "loadcoder_loadcoder",
+ "launch": 0,
+ "jobs": [
+  "java/limit_request_rate/loadcoder_loadcoder"
+ ],
+ "marks": {
+  "main": 11.019501183182001,
+  "loaded": 12.021449953317642,
+  "start:java/limit_request_rate/loadcoder_loadcoder": 12.02145504578948,
+  "done:java/limit_request_rate/loadcoder_loadcoder": 12.021462395787239,
+  "end": 12.021465826779604,
+  "exit": 12.522423554211855
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

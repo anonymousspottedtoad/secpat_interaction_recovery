@@ -1,0 +1,23 @@
+{
+ "repo": "tumma72_mlx-manager",
+ "launch": 0,
+ "jobs": [
+  "python/authentication_pwd/tumma72_mlx-manager",
+  "python/limit_request_rate/tumma72_mlx-manager"
+ ],
+ "marks": {
+  "main": 11.520628679543734,
+  "loaded": 12.5221361592412,
+  "start:python/authentication_pwd/tumma72_mlx-manager": 12.52213965728879,
+  "done:python/authentication_pwd/tumma72_mlx-manager": 14.024398993700743,
+  "start:python/limit_request_rate/tumma72_mlx-manager": 14.024405471980572,
+  "done:python/limit_request_rate/tumma72_mlx-manager": 14.525411769747734,
+  "end": 14.525418248027563,
+  "exit": 14.52544255182147
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

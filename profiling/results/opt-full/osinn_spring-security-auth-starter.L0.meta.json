@@ -1,0 +1,20 @@
+{
+ "repo": "osinn_spring-security-auth-starter",
+ "launch": 0,
+ "jobs": [
+  "java/authentication_pwd/osinn_spring-security-auth-starter"
+ ],
+ "marks": {
+  "main": 11.021811306476593,
+  "loaded": 12.023604404181242,
+  "start:java/authentication_pwd/osinn_spring-security-auth-starter": 12.023609895259142,
+  "done:java/authentication_pwd/osinn_spring-security-auth-starter": 12.023616775870323,
+  "end": 12.02361997589469,
+  "exit": 12.524569798260927
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

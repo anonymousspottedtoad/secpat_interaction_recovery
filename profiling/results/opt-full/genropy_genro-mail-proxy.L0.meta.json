@@ -1,0 +1,20 @@
+{
+ "repo": "genropy_genro-mail-proxy",
+ "launch": 0,
+ "jobs": [
+  "python/obscure_token_based_access_control/genropy_genro-mail-proxy"
+ ],
+ "marks": {
+  "main": 11.521550480276346,
+  "loaded": 12.523627571761608,
+  "start:python/obscure_token_based_access_control/genropy_genro-mail-proxy": 12.523633040487766,
+  "done:python/obscure_token_based_access_control/genropy_genro-mail-proxy": 13.5254772529006,
+  "end": 13.525483138859272,
+  "exit": 13.525505676865578
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

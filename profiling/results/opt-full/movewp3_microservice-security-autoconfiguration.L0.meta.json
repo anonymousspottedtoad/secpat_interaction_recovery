@@ -1,0 +1,20 @@
+{
+ "repo": "movewp3_microservice-security-autoconfiguration",
+ "launch": 0,
+ "jobs": [
+  "java/verifiable_token_based_authentication/movewp3_microservice-security-autoconfiguration"
+ ],
+ "marks": {
+  "main": 10.520172268152237,
+  "loaded": 11.52202021703124,
+  "start:java/verifiable_token_based_authentication/movewp3_microservice-security-autoconfiguration": 11.522028237581253,
+  "done:java/verifiable_token_based_authentication/movewp3_microservice-security-autoconfiguration": 11.522035297006369,
+  "end": 11.522038824856281,
+  "exit": 11.522060919553041
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

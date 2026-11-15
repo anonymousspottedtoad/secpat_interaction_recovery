@@ -1,0 +1,20 @@
+{
+ "repo": "sixcrabs_slardar",
+ "launch": 0,
+ "jobs": [
+  "java/verifiable_token_based_authentication/sixcrabs_slardar"
+ ],
+ "marks": {
+  "main": 11.021419327706099,
+  "loaded": 12.023196376860142,
+  "start:java/verifiable_token_based_authentication/sixcrabs_slardar": 12.023202553391457,
+  "done:java/verifiable_token_based_authentication/sixcrabs_slardar": 12.524099998176098,
+  "end": 12.524106219410896,
+  "exit": 12.524129118770361
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

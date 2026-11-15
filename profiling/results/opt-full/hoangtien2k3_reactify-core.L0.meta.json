@@ -1,0 +1,20 @@
+{
+ "repo": "hoangtien2k3_reactify-core",
+ "launch": 0,
+ "jobs": [
+  "java/verifiable_token_based_authentication/hoangtien2k3_reactify-core"
+ ],
+ "marks": {
+  "main": 11.020196039229631,
+  "loaded": 12.021674308925867,
+  "start:java/verifiable_token_based_authentication/hoangtien2k3_reactify-core": 12.021678067743778,
+  "done:java/verifiable_token_based_authentication/hoangtien2k3_reactify-core": 12.021682631224394,
+  "end": 12.021684985607862,
+  "exit": 12.522492468357086
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

@@ -1,0 +1,20 @@
+{
+ "repo": "inteliver_inteliver",
+ "launch": 0,
+ "jobs": [
+  "python/verifiable_token_based_authentication/inteliver_inteliver"
+ ],
+ "marks": {
+  "main": 12.019425384700298,
+  "loaded": 12.520356122404337,
+  "start:python/verifiable_token_based_authentication/inteliver_inteliver": 12.52036191150546,
+  "done:python/verifiable_token_based_authentication/inteliver_inteliver": 13.021410916000605,
+  "end": 13.021417174488306,
+  "exit": 13.021439615637064
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

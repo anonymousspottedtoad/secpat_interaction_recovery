@@ -1,0 +1,20 @@
+{
+ "repo": "Peppe37_p8s",
+ "launch": 0,
+ "jobs": [
+  "python/session_based_access_control/Peppe37_p8s"
+ ],
+ "marks": {
+  "main": 12.037829667329788,
+  "loaded": 13.039709392935038,
+  "start:python/session_based_access_control/Peppe37_p8s": 13.039712488651276,
+  "done:python/session_based_access_control/Peppe37_p8s": 14.041139289736748,
+  "end": 14.041145648807287,
+  "exit": 14.041169751435518
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

@@ -1,0 +1,20 @@
+{
+ "repo": "Katoo2706_backend-common",
+ "launch": 0,
+ "jobs": [
+  "python/obscure_token_based_access_control/Katoo2706_backend-common"
+ ],
+ "marks": {
+  "main": 12.522847302258015,
+  "loaded": 13.524456080049276,
+  "start:python/obscure_token_based_access_control/Katoo2706_backend-common": 13.52446237206459,
+  "done:python/obscure_token_based_access_control/Katoo2706_backend-common": 13.52446973323822,
+  "end": 13.524473398923874,
+  "exit": 13.524496395140886
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

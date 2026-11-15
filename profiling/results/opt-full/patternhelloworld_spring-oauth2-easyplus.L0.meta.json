@@ -1,0 +1,23 @@
+{
+ "repo": "patternhelloworld_spring-oauth2-easyplus",
+ "launch": 0,
+ "jobs": [
+  "java/session_based_access_control/patternhelloworld_spring-oauth2-easyplus",
+  "java/verifiable_token_based_authentication/patternhelloworld_spring-oauth2-easyplus"
+ ],
+ "marks": {
+  "main": 12.021159671247005,
+  "loaded": 13.022781763225794,
+  "start:java/session_based_access_control/patternhelloworld_spring-oauth2-easyplus": 13.022787265479565,
+  "done:java/session_based_access_control/patternhelloworld_spring-oauth2-easyplus": 13.022794108837843,
+  "start:java/verifiable_token_based_authentication/patternhelloworld_spring-oauth2-easyplus": 13.022798098623753,
+  "done:java/verifiable_token_based_authentication/patternhelloworld_spring-oauth2-easyplus": 13.02280217781663,
+  "end": 13.022805489599705,
+  "exit": 13.523850046098232
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

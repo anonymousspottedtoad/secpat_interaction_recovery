@@ -1,0 +1,20 @@
+{
+ "repo": "microsoft_agent-governance-toolkit",
+ "launch": 0,
+ "jobs": [
+  "python/limit_request_rate/microsoft_agent-governance-toolkit"
+ ],
+ "marks": {
+  "main": 12.018861047923565,
+  "loaded": 13.5214354544878,
+  "start:python/limit_request_rate/microsoft_agent-governance-toolkit": 13.521440777927637,
+  "done:python/limit_request_rate/microsoft_agent-governance-toolkit": 18.029021568596363,
+  "end": 18.02902738004923,
+  "exit": 18.53002805635333
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

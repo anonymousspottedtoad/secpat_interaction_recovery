@@ -1,0 +1,23 @@
+{
+ "repo": "valtimo-platform_valtimo-backend-libraries",
+ "launch": 0,
+ "jobs": [
+  "java/authentication_pwd/valtimo-platform_valtimo-backend-libraries",
+  "java/verifiable_token_based_authentication/valtimo-platform_valtimo-backend-libraries"
+ ],
+ "marks": {
+  "main": 11.02150284871459,
+  "loaded": 12.022907502949238,
+  "start:java/authentication_pwd/valtimo-platform_valtimo-backend-libraries": 12.022913217544556,
+  "done:java/authentication_pwd/valtimo-platform_valtimo-backend-libraries": 12.523934911936522,
+  "start:java/verifiable_token_based_authentication/valtimo-platform_valtimo-backend-libraries": 12.523941412568092,
+  "done:java/verifiable_token_based_authentication/valtimo-platform_valtimo-backend-libraries": 12.52394687011838,
+  "end": 12.523950435221195,
+  "exit": 12.523976121097803
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

@@ -1,0 +1,23 @@
+{
+ "repo": "olaflaitinen_Promethium",
+ "launch": 0,
+ "jobs": [
+  "python/authentication_pwd/olaflaitinen_Promethium",
+  "python/verifiable_token_based_authentication/olaflaitinen_Promethium"
+ ],
+ "marks": {
+  "main": 11.52183198556304,
+  "loaded": 12.523635108023882,
+  "start:python/authentication_pwd/olaflaitinen_Promethium": 12.523640625178814,
+  "done:python/authentication_pwd/olaflaitinen_Promethium": 13.024650622159243,
+  "start:python/verifiable_token_based_authentication/olaflaitinen_Promethium": 13.024657245725393,
+  "done:python/verifiable_token_based_authentication/olaflaitinen_Promethium": 13.024661917239428,
+  "end": 13.024665355682373,
+  "exit": 13.024687703698874
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

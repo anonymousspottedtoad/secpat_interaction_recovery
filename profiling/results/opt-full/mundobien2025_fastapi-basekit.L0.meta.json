@@ -1,0 +1,20 @@
+{
+ "repo": "mundobien2025_fastapi-basekit",
+ "launch": 0,
+ "jobs": [
+  "python/verifiable_token_based_authentication/mundobien2025_fastapi-basekit"
+ ],
+ "marks": {
+  "main": 11.522000659257174,
+  "loaded": 12.523831233382225,
+  "start:python/verifiable_token_based_authentication/mundobien2025_fastapi-basekit": 12.52383691072464,
+  "done:python/verifiable_token_based_authentication/mundobien2025_fastapi-basekit": 13.024829544126987,
+  "end": 13.02483582496643,
+  "exit": 13.024859324097633
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

@@ -1,0 +1,20 @@
+{
+ "repo": "cemde_WhatsNext",
+ "launch": 0,
+ "jobs": [
+  "python/limit_request_rate/cemde_WhatsNext"
+ ],
+ "marks": {
+  "main": 12.021529238671064,
+  "loaded": 12.52230904251337,
+  "start:python/limit_request_rate/cemde_WhatsNext": 12.52231227979064,
+  "done:python/limit_request_rate/cemde_WhatsNext": 13.023109328001738,
+  "end": 13.023115813732147,
+  "exit": 13.023139651864767
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

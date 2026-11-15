@@ -1,0 +1,20 @@
+{
+ "repo": "cdswindell_PyTrainApi",
+ "launch": 0,
+ "jobs": [
+  "python/verifiable_token_based_authentication/cdswindell_PyTrainApi"
+ ],
+ "marks": {
+  "main": 12.021519836038351,
+  "loaded": 13.022798951715231,
+  "start:python/verifiable_token_based_authentication/cdswindell_PyTrainApi": 13.022804770618677,
+  "done:python/verifiable_token_based_authentication/cdswindell_PyTrainApi": 13.523809559643269,
+  "end": 13.523816481232643,
+  "exit": 13.523840185254812
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

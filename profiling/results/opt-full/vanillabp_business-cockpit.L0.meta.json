@@ -1,0 +1,23 @@
+{
+ "repo": "vanillabp_business-cockpit",
+ "launch": 0,
+ "jobs": [
+  "java/session_based_access_control/vanillabp_business-cockpit",
+  "java/verifiable_token_based_authentication/vanillabp_business-cockpit"
+ ],
+ "marks": {
+  "main": 11.021009400486946,
+  "loaded": 11.521939538419247,
+  "start:java/session_based_access_control/vanillabp_business-cockpit": 12.022796135395765,
+  "done:java/session_based_access_control/vanillabp_business-cockpit": 12.02280717343092,
+  "start:java/verifiable_token_based_authentication/vanillabp_business-cockpit": 12.02281117811799,
+  "done:java/verifiable_token_based_authentication/vanillabp_business-cockpit": 12.022815130650997,
+  "end": 12.02281853184104,
+  "exit": 12.52380906790495
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

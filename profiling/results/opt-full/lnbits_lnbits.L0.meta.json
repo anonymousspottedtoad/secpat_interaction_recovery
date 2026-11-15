@@ -1,0 +1,20 @@
+{
+ "repo": "lnbits_lnbits",
+ "launch": 0,
+ "jobs": [
+  "python/session_based_access_control/lnbits_lnbits"
+ ],
+ "marks": {
+  "main": 11.522257898002863,
+  "loaded": 12.524275235831738,
+  "start:python/session_based_access_control/lnbits_lnbits": 12.524281650781631,
+  "done:python/session_based_access_control/lnbits_lnbits": 13.526287022978067,
+  "end": 13.526296596974134,
+  "exit": 13.526331081986427
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

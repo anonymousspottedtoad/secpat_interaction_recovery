@@ -1,0 +1,26 @@
+{
+ "repo": "RicardoMorim_Auth-Provider",
+ "launch": 0,
+ "jobs": [
+  "java/authentication_pwd/RicardoMorim_Auth-Provider",
+  "java/limit_request_rate/RicardoMorim_Auth-Provider",
+  "java/verifiable_token_based_authentication/RicardoMorim_Auth-Provider"
+ ],
+ "marks": {
+  "main": 11.520827755331993,
+  "loaded": 12.021778676658869,
+  "start:java/authentication_pwd/RicardoMorim_Auth-Provider": 12.02178430184722,
+  "done:java/authentication_pwd/RicardoMorim_Auth-Provider": 12.52276998013258,
+  "start:java/limit_request_rate/RicardoMorim_Auth-Provider": 12.52277610450983,
+  "done:java/limit_request_rate/RicardoMorim_Auth-Provider": 12.522780138999224,
+  "start:java/verifiable_token_based_authentication/RicardoMorim_Auth-Provider": 12.522783566266298,
+  "done:java/verifiable_token_based_authentication/RicardoMorim_Auth-Provider": 12.52278707921505,
+  "end": 12.522789377719164,
+  "exit": 12.522813465446234
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

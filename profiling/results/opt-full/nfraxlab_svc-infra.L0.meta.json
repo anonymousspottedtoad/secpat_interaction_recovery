@@ -1,0 +1,23 @@
+{
+ "repo": "nfraxlab_svc-infra",
+ "launch": 0,
+ "jobs": [
+  "python/limit_request_rate/nfraxlab_svc-infra",
+  "python/session_based_access_control/nfraxlab_svc-infra"
+ ],
+ "marks": {
+  "main": 11.522346265614033,
+  "loaded": 12.524177365005016,
+  "start:python/limit_request_rate/nfraxlab_svc-infra": 12.524182923138142,
+  "done:python/limit_request_rate/nfraxlab_svc-infra": 15.028868742287159,
+  "start:python/session_based_access_control/nfraxlab_svc-infra": 15.02887538075447,
+  "done:python/session_based_access_control/nfraxlab_svc-infra": 15.529801595956087,
+  "end": 15.529808700084686,
+  "exit": 16.03089775145054
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

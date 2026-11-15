@@ -1,0 +1,20 @@
+{
+ "repo": "AmberLee2427_nancy-brain",
+ "launch": 0,
+ "jobs": [
+  "python/authentication_pwd/AmberLee2427_nancy-brain"
+ ],
+ "marks": {
+  "main": 11.518290158361197,
+  "loaded": 12.519996531307697,
+  "start:python/authentication_pwd/AmberLee2427_nancy-brain": 12.51999994367361,
+  "done:python/authentication_pwd/AmberLee2427_nancy-brain": 13.521622389554977,
+  "end": 13.521628003567457,
+  "exit": 13.521651796996593
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

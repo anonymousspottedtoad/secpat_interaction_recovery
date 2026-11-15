@@ -1,0 +1,20 @@
+{
+ "repo": "CI-CMG_geosamples-ingest",
+ "launch": 0,
+ "jobs": [
+  "java/session_based_access_control/CI-CMG_geosamples-ingest"
+ ],
+ "marks": {
+  "main": 10.520291958004236,
+  "loaded": 11.52200861275196,
+  "start:java/session_based_access_control/CI-CMG_geosamples-ingest": 11.522014454007149,
+  "done:java/session_based_access_control/CI-CMG_geosamples-ingest": 11.522021565586329,
+  "end": 11.522025004029274,
+  "exit": 12.023051429539919
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

@@ -1,0 +1,40 @@
+Picked up JAVA_TOOL_OPTIONS: -Xmx48g
+Picked up JAVA_TOOL_OPTIONS: -Xmx48g
+executing /tmp/claude-0/-workspace-replicate-secpat-interaction-recovery/2b3e719e-e09c-4879-891f-382be0d995cf/scratchpad/prof/warm-cmrml0j1/worker_python.sc with params=Map(fifo -> /tmp/claude-0/-workspace-replicate-secpat-interaction-recovery/2b3e719e-e09c-4879-891f-382be0d995cf/scratchpad/prof/warm-cmrml0j1/jobs_python.fifo)
+WORKER-READY uptime_ms=11298
+[INFO ] initialising from existing storage (/workspace/mining-sec-arcs-tactics/build/volumes/joern_cpg/sargsyanhayko_rsha_auth__PYTHONSRC.cpg)
+WORKER-LOADED python/verifiable_token_based_authentication/sargsyanhayko_rsha_auth 0.154
+derived 2 interaction(s) from 4 role(s), entry=Enforcer
+WORKER-DONE python/verifiable_token_based_authentication/sargsyanhayko_rsha_auth 0.2571
+[INFO ] initialising from existing storage (/workspace/mining-sec-arcs-tactics/build/volumes/joern_cpg/namastexlabs_murmurai__PYTHONSRC.cpg)
+WORKER-LOADED python/obscure_token_based_access_control/namastexlabs_murmurai 0.258
+derived 3 interaction(s) from 4 role(s), entry=Enforcer
+WORKER-DONE python/obscure_token_based_access_control/namastexlabs_murmurai 0.1523
+[INFO ] initialising from existing storage (/workspace/mining-sec-arcs-tactics/build/volumes/joern_cpg/farhan0167_otto-m8__PYTHONSRC.cpg)
+WORKER-LOADED python/authentication_pwd/farhan0167_otto-m8 0.051
+derived 4 interaction(s) from 7 role(s), entry=Enforcer
+WORKER-DONE python/authentication_pwd/farhan0167_otto-m8 0.1266
+[INFO ] initialising from existing storage (/workspace/mining-sec-arcs-tactics/build/volumes/joern_cpg/extrawest_extrawest_ocpi__PYTHONSRC.cpg)
+WORKER-LOADED python/obscure_token_based_access_control/extrawest_extrawest_ocpi 0.059
+derived 2 interaction(s) from 4 role(s), entry=Enforcer
+WORKER-DONE python/obscure_token_based_access_control/extrawest_extrawest_ocpi 0.2219
+[INFO ] initialising from existing storage (/workspace/mining-sec-arcs-tactics/build/volumes/joern_cpg/mvdbeek_pulsar-relay__PYTHONSRC.cpg)
+WORKER-LOADED python/authentication_pwd/mvdbeek_pulsar-relay 0.077
+derived 5 interaction(s) from 7 role(s), entry=Enforcer
+WORKER-DONE python/authentication_pwd/mvdbeek_pulsar-relay 0.3410
+[INFO ] initialising from existing storage (/workspace/mining-sec-arcs-tactics/build/volumes/joern_cpg/descoped_authly__PYTHONSRC.cpg)
+WORKER-LOADED python/verifiable_token_based_authentication/descoped_authly 0.095
+derived 2 interaction(s) from 4 role(s), entry=Enforcer
+WORKER-DONE python/verifiable_token_based_authentication/descoped_authly 0.4732
+[INFO ] initialising from existing storage (/workspace/mining-sec-arcs-tactics/build/volumes/joern_cpg/xinetzone_tao__PYTHONSRC.cpg)
+WORKER-LOADED python/authentication_pwd/xinetzone_tao 0.114
+derived 7 interaction(s) from 7 role(s), entry=Enforcer
+WORKER-DONE python/authentication_pwd/xinetzone_tao 0.9618
+[INFO ] initialising from existing storage (/workspace/mining-sec-arcs-tactics/build/volumes/joern_cpg/TrueSelph_jvspatial__PYTHONSRC.cpg)
+WORKER-LOADED python/session_based_access_control/TrueSelph_jvspatial 0.120
+derived 2 interaction(s) from 6 role(s), entry=Authorisation enforcer
+WORKER-DONE python/session_based_access_control/TrueSelph_jvspatial 1.9746
+[INFO ] initialising from existing storage (/workspace/mining-sec-arcs-tactics/build/volumes/joern_cpg/Saturn99X_Etherion__PYTHONSRC.cpg)
+WORKER-LOADED python/limit_request_rate/Saturn99X_Etherion 0.187
+derived 2 interaction(s) from 4 role(s), entry=Enforcer
+WORKER-DONE python/limit_request_rate/Saturn99X_Etherion 1.1280

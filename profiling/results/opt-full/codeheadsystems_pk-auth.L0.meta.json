@@ -1,0 +1,23 @@
+{
+ "repo": "codeheadsystems_pk-auth",
+ "launch": 0,
+ "jobs": [
+  "java/limit_request_rate/codeheadsystems_pk-auth",
+  "java/session_based_access_control/codeheadsystems_pk-auth"
+ ],
+ "marks": {
+  "main": 11.5187261775136,
+  "loaded": 12.520193096250296,
+  "start:java/limit_request_rate/codeheadsystems_pk-auth": 12.52019851654768,
+  "done:java/limit_request_rate/codeheadsystems_pk-auth": 12.52020537853241,
+  "start:java/session_based_access_control/codeheadsystems_pk-auth": 12.520208809524775,
+  "done:java/session_based_access_control/codeheadsystems_pk-auth": 12.520212762057781,
+  "end": 12.520215529948473,
+  "exit": 13.02119217067957
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

@@ -1,0 +1,20 @@
+{
+ "repo": "ErtanSidar_turkcell-common",
+ "launch": 0,
+ "jobs": [
+  "java/verifiable_token_based_authentication/ErtanSidar_turkcell-common"
+ ],
+ "marks": {
+  "main": 11.021454952657223,
+  "loaded": 12.023408740758896,
+  "start:java/verifiable_token_based_authentication/ErtanSidar_turkcell-common": 12.023414451628923,
+  "done:java/verifiable_token_based_authentication/ErtanSidar_turkcell-common": 12.023421481251717,
+  "end": 12.02342477813363,
+  "exit": 12.023447912186384
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

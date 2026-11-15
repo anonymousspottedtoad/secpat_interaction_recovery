@@ -1,0 +1,20 @@
+{
+ "repo": "opendatalab_labelU",
+ "launch": 0,
+ "jobs": [
+  "python/verifiable_token_based_authentication/opendatalab_labelU"
+ ],
+ "marks": {
+  "main": 11.521793976426125,
+  "loaded": 12.523645054548979,
+  "start:python/verifiable_token_based_authentication/opendatalab_labelU": 12.523650828748941,
+  "done:python/verifiable_token_based_authentication/opendatalab_labelU": 13.024636417627335,
+  "end": 13.024642016738653,
+  "exit": 13.525630839169025
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

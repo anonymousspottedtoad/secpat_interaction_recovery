@@ -1,0 +1,23 @@
+{
+ "repo": "stubborn-sh_stubborn",
+ "launch": 0,
+ "jobs": [
+  "java/authentication_pwd/stubborn-sh_stubborn",
+  "java/limit_request_rate/stubborn-sh_stubborn"
+ ],
+ "marks": {
+  "main": 11.01672350242734,
+  "loaded": 12.018594473600388,
+  "start:java/authentication_pwd/stubborn-sh_stubborn": 12.018600326031446,
+  "done:java/authentication_pwd/stubborn-sh_stubborn": 12.018607456237078,
+  "start:java/limit_request_rate/stubborn-sh_stubborn": 12.018611300736666,
+  "done:java/limit_request_rate/stubborn-sh_stubborn": 12.018615297973156,
+  "end": 12.018618062138557,
+  "exit": 12.519627176225185
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

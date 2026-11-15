@@ -1,0 +1,23 @@
+{
+ "repo": "bratkartoffel_security-jwt",
+ "launch": 0,
+ "jobs": [
+  "java/authentication_pwd/bratkartoffel_security-jwt",
+  "java/session_based_access_control/bratkartoffel_security-jwt"
+ ],
+ "marks": {
+  "main": 11.02028314396739,
+  "loaded": 11.52112852409482,
+  "start:java/authentication_pwd/bratkartoffel_security-jwt": 11.521133814007044,
+  "done:java/authentication_pwd/bratkartoffel_security-jwt": 12.022031858563423,
+  "start:java/session_based_access_control/bratkartoffel_security-jwt": 12.022040106356144,
+  "done:java/session_based_access_control/bratkartoffel_security-jwt": 12.022048614919186,
+  "end": 12.02205354347825,
+  "exit": 12.022082537412643
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

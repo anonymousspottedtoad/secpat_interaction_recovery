@@ -1,0 +1,20 @@
+{
+ "repo": "Nostalgia-Season-Train_DesksetBack",
+ "launch": 0,
+ "jobs": [
+  "python/authentication_pwd/Nostalgia-Season-Train_DesksetBack"
+ ],
+ "marks": {
+  "main": 12.022147253155708,
+  "loaded": 13.024189870804548,
+  "start:python/authentication_pwd/Nostalgia-Season-Train_DesksetBack": 13.024196181446314,
+  "done:python/authentication_pwd/Nostalgia-Season-Train_DesksetBack": 13.525082431733608,
+  "end": 13.525088422000408,
+  "exit": 13.525111354887486
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

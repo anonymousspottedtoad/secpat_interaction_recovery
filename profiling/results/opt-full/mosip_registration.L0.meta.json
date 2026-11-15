@@ -1,0 +1,20 @@
+{
+ "repo": "mosip_registration",
+ "launch": 0,
+ "jobs": [
+  "java/session_based_access_control/mosip_registration"
+ ],
+ "marks": {
+  "main": 10.520034663379192,
+  "loaded": 11.521544974297285,
+  "start:java/session_based_access_control/mosip_registration": 11.521549381315708,
+  "done:java/session_based_access_control/mosip_registration": 12.0225466825068,
+  "end": 12.02255230769515,
+  "exit": 12.022576585412025
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

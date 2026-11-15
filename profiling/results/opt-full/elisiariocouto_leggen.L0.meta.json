@@ -1,0 +1,20 @@
+{
+ "repo": "elisiariocouto_leggen",
+ "launch": 0,
+ "jobs": [
+  "python/obscure_token_based_access_control/elisiariocouto_leggen"
+ ],
+ "marks": {
+  "main": 12.031040821224451,
+  "loaded": 13.033222250640392,
+  "start:python/obscure_token_based_access_control/elisiariocouto_leggen": 13.033228006213903,
+  "done:python/obscure_token_based_access_control/elisiariocouto_leggen": 13.534234143793583,
+  "end": 13.534240245819092,
+  "exit": 13.534264504909515
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

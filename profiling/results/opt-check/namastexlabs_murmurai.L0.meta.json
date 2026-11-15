@@ -1,0 +1,20 @@
+{
+ "repo": "namastexlabs_murmurai",
+ "launch": 0,
+ "jobs": [
+  "python/obscure_token_based_access_control/namastexlabs_murmurai"
+ ],
+ "marks": {
+  "main": 11.522749654948711,
+  "loaded": 12.524643562734127,
+  "start:python/obscure_token_based_access_control/namastexlabs_murmurai": 12.524649873375893,
+  "done:python/obscure_token_based_access_control/namastexlabs_murmurai": 12.524657536298037,
+  "end": 12.52466119453311,
+  "exit": 13.025725234299898
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 300.0
+}

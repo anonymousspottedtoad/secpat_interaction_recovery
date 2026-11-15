@@ -1,0 +1,4 @@
+id,status,elapsed,ph.1-callgraph,ph.2a-declarations,ph.2b-locate,ph.2c-ownership,ph.3-entry,ph.4-walk,ph.5-render,graph.methods,graph.internalMethods,located,edges.raw,interactions,inPhase
+java/limit_request_rate/raphw_jenesis-repository,done,0.055,0.012,0.003,0.015,0.006,0.002,0.0,0.009,0,0,4,0,0,
+java/obscure_token_based_access_control/raphw_jenesis-repository,done,0.002,0.0,0.0,0.001,0.0,0.0,0.0,0.0,0,0,4,0,0,
+java/verifiable_token_based_authentication/raphw_jenesis-repository,done,0.001,0.0,0.0,0.001,0.0,0.0,0.0,0.0,0,0,4,0,0,

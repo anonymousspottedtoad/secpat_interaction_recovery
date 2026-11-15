@@ -1,0 +1,20 @@
+{
+ "repo": "odpi_egeria",
+ "launch": 0,
+ "jobs": [
+  "java/authentication_pwd/odpi_egeria"
+ ],
+ "marks": {
+  "main": 10.517836604267359,
+  "loaded": 11.519641678780317,
+  "start:java/authentication_pwd/odpi_egeria": 11.519646815955639,
+  "done:java/authentication_pwd/odpi_egeria": 13.022030547261238,
+  "end": 13.022036172449589,
+  "exit": 13.52302286401391
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

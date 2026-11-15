@@ -1,0 +1,20 @@
+{
+ "repo": "RazorNd_telegram-login",
+ "launch": 0,
+ "jobs": [
+  "java/session_based_access_control/RazorNd_telegram-login"
+ ],
+ "marks": {
+  "main": 10.51638388261199,
+  "loaded": 11.518098507076502,
+  "start:java/session_based_access_control/RazorNd_telegram-login": 11.518102992326021,
+  "done:java/session_based_access_control/RazorNd_telegram-login": 11.518108502030373,
+  "end": 11.518111009150743,
+  "exit": 12.019015815109015
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

@@ -1,0 +1,23 @@
+{
+ "repo": "apache_incubator-seata",
+ "launch": 0,
+ "jobs": [
+  "java/limit_request_rate/apache_incubator-seata",
+  "java/verifiable_token_based_authentication/apache_incubator-seata"
+ ],
+ "marks": {
+  "main": 11.019063603132963,
+  "loaded": 12.020749676972628,
+  "start:java/limit_request_rate/apache_incubator-seata": 12.020755022764206,
+  "done:java/limit_request_rate/apache_incubator-seata": 13.523404363542795,
+  "start:java/verifiable_token_based_authentication/apache_incubator-seata": 13.523410513997078,
+  "done:java/verifiable_token_based_authentication/apache_incubator-seata": 14.024346355348825,
+  "end": 14.024353064596653,
+  "exit": 14.02437574788928
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

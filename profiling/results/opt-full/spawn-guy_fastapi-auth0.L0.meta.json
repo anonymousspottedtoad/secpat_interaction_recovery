@@ -1,0 +1,20 @@
+{
+ "repo": "spawn-guy_fastapi-auth0",
+ "launch": 0,
+ "jobs": [
+  "python/verifiable_token_based_authentication/spawn-guy_fastapi-auth0"
+ ],
+ "marks": {
+  "main": 11.522519700229168,
+  "loaded": 12.524281539022923,
+  "start:python/verifiable_token_based_authentication/spawn-guy_fastapi-auth0": 12.524287436157465,
+  "done:python/verifiable_token_based_authentication/spawn-guy_fastapi-auth0": 13.02528989687562,
+  "end": 13.025296337902546,
+  "exit": 13.025320511311293
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

@@ -1,0 +1,38 @@
+04:45:31 19 job(s) over 18 repo(s) -> /workspace/replicate/secpat_interaction_recovery/profiling/results/opt3-timeouts
+04:45:31 [1/18] factcast_factcast: 1 job(s), CPG 4.1 MB
+04:45:44     L0: main@11.0s loaded@12.0s exit@12.5s  limit_request_rate=done
+04:45:44 [2/18] TrueSelph_jvspatial: 1 job(s), CPG 26.7 MB
+04:46:00     L0: main@11.5s loaded@12.5s exit@15.5s  session_based_access_control=done
+04:46:00 [3/18] EximeeBPMS_eximeebpms: 1 job(s), CPG 34.5 MB
+04:46:20     L0: main@11.0s loaded@12.0s exit@20.0s  limit_request_rate=done
+04:46:20 [4/18] OrqueIO_OrqueIO: 1 job(s), CPG 34.8 MB
+04:46:40     L0: main@11.0s loaded@12.5s exit@20.0s  limit_request_rate=done
+04:46:40 [5/18] DSpace_DSpace: 1 job(s), CPG 35.7 MB
+04:46:53     L0: main@10.5s loaded@12.0s exit@13.5s  obscure_token_based_access_control=done
+04:46:53 [6/18] operaton_operaton: 1 job(s), CPG 36.7 MB
+04:47:14     L0: main@10.5s loaded@12.0s exit@21.0s  limit_request_rate=done
+04:47:14 [7/18] camunda_camunda-bpm-platform: 1 job(s), CPG 37.2 MB
+04:47:35     L0: main@11.0s loaded@12.0s exit@20.5s  limit_request_rate=done
+04:47:35 [8/18] cadenzaflow_cadenzaflow-bpm-platform: 1 job(s), CPG 37.2 MB
+04:47:56     L0: main@11.0s loaded@12.0s exit@21.0s  limit_request_rate=done
+04:47:56 [9/18] cibseven_cibseven: 1 job(s), CPG 38.3 MB
+04:48:16     L0: main@10.5s loaded@12.0s exit@20.5s  limit_request_rate=done
+04:48:16 [10/18] ThalesGroup_fred: 1 job(s), CPG 60.0 MB
+04:48:34     L0: main@11.5s loaded@12.5s exit@17.5s  verifiable_token_based_authentication=done
+04:48:34 [11/18] topoteretes_cognee: 1 job(s), CPG 90.3 MB
+04:49:00     L0: main@11.5s loaded@13.0s exit@26.0s  obscure_token_based_access_control=done
+04:49:00 [12/18] camunda_camunda: 1 job(s), CPG 91.9 MB
+04:49:19     L0: main@11.5s loaded@12.5s exit@18.5s  limit_request_rate=done
+04:49:19 [13/18] langflow-ai_langflow: 1 job(s), CPG 200.3 MB
+04:49:49     L0: main@12.0s loaded@14.5s exit@30.6s  obscure_token_based_access_control=done
+04:49:49 [14/18] agno-agi_agno: 1 job(s), CPG 242.2 MB
+04:50:23     L0: main@12.0s loaded@15.0s exit@33.6s  limit_request_rate=done
+04:50:23 [15/18] CIRISAI_CIRISAgent: 1 job(s), CPG 289.0 MB
+04:55:39     L0: main@11.5s loaded@14.5s exit@316.6s  session_based_access_control=timeout
+04:55:39 [16/18] BilgisayarKavramlari_cadelphi: 1 job(s), CPG 380.9 MB
+05:00:34     L0: main@11.5s loaded@15.5s exit@294.5s  authentication_pwd=done
+05:00:34 [17/18] BerriAI_litellm: 1 job(s), CPG 489.7 MB
+05:04:07     L0: main@12.0s loaded@18.0s exit@212.9s  verifiable_token_based_authentication=error
+05:04:07 [18/18] terrene-foundation_kailash-py: 2 job(s), CPG 493.6 MB
+05:05:23     L0: main@12.0s loaded@19.1s exit@76.2s  limit_request_rate=done, obscure_token_based_access_control=done
+05:05:23 done

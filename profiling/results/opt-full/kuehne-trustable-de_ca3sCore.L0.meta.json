@@ -1,0 +1,23 @@
+{
+ "repo": "kuehne-trustable-de_ca3sCore",
+ "launch": 0,
+ "jobs": [
+  "java/limit_request_rate/kuehne-trustable-de_ca3sCore",
+  "java/session_based_access_control/kuehne-trustable-de_ca3sCore"
+ ],
+ "marks": {
+  "main": 10.521428920328617,
+  "loaded": 11.523136481642723,
+  "start:java/limit_request_rate/kuehne-trustable-de_ca3sCore": 11.523140214383602,
+  "done:java/limit_request_rate/kuehne-trustable-de_ca3sCore": 12.023719668388367,
+  "start:java/session_based_access_control/kuehne-trustable-de_ca3sCore": 12.023723099380732,
+  "done:java/session_based_access_control/kuehne-trustable-de_ca3sCore": 12.023725539445877,
+  "end": 12.02372718974948,
+  "exit": 12.524494506418705
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

@@ -1,0 +1,20 @@
+{
+ "repo": "codebarista-de_shopware-app-server",
+ "launch": 0,
+ "jobs": [
+  "java/obscure_token_based_access_control/codebarista-de_shopware-app-server"
+ ],
+ "marks": {
+  "main": 11.019795522093773,
+  "loaded": 11.520719066262245,
+  "start:java/obscure_token_based_access_control/codebarista-de_shopware-app-server": 11.520724546164274,
+  "done:java/obscure_token_based_access_control/codebarista-de_shopware-app-server": 12.021720740944147,
+  "end": 12.021726667881012,
+  "exit": 12.021749660372734
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

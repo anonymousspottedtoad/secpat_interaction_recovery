@@ -1,0 +1,26 @@
+{
+ "phases": {
+  "1-callgraph": 0.015415807,
+  "2a-declarations": 0.070878488,
+  "2b-locate": 0.057032791,
+  "2c-ownership": 0.013620169,
+  "3-entry": 0.002784405,
+  "4-walk": 1.50061E-4,
+  "5-render": 0.010121898
+ },
+ "counters": {
+  "graph.methods": 1531,
+  "graph.internalMethods": 838,
+  "located": 4,
+  "edges.raw": 0,
+  "interactions": 0
+ },
+ "distinct": {},
+ "inPhase": "",
+ "status": "done",
+ "elapsed": 0.178792281,
+ "loadS": 0.333391614,
+ "uptimeAtMainMs": 9755,
+ "heapAfterLoadMb": 154,
+ "progress": []
+}

@@ -1,0 +1,20 @@
+{
+ "repo": "CIRISAI_CIRISAgent",
+ "launch": 1,
+ "jobs": [
+  "python/verifiable_token_based_authentication/CIRISAI_CIRISAgent"
+ ],
+ "marks": {
+  "main": 11.519311394542456,
+  "loaded": 14.523969646543264,
+  "start:python/verifiable_token_based_authentication/CIRISAI_CIRISAgent": 14.523974947631359,
+  "done:python/verifiable_token_based_authentication/CIRISAI_CIRISAgent": 29.049698781222105,
+  "end": 29.04970394819975,
+  "exit": 30.051633805036545
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

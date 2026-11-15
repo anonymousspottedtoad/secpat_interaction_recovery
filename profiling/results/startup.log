@@ -1,0 +1,15 @@
+01:43:13 hello                                   main=5.80 uptime_main=4.72 exit=5.90 rc=0
+01:43:19 hello                                   main=5.96 uptime_main=4.84 exit=6.06 rc=0
+01:43:25 hello                                   main=5.67 uptime_main=4.58 exit=5.78 rc=0
+01:43:36 empty  raphw_jenesis-repository         main=10.34 uptime_main=9.25 loaded=10.93 load_s=0.16 heap_mb=138 end=10.94 exit=11.09 rc=0 cpg_mb=0.01
+01:43:47 empty  raphw_jenesis-repository         main=10.04 uptime_main=8.97 loaded=10.65 load_s=0.14 heap_mb=139 end=10.66 exit=10.81 rc=0 cpg_mb=0.01
+01:43:58 load   factcast_factcast                main=10.34 uptime_main=9.22 loaded=11.23 load_s=0.34 heap_mb=176 end=11.24 exit=11.39 rc=0 cpg_mb=4.12
+01:44:10 load   factcast_factcast                main=10.55 uptime_main=9.47 loaded=11.47 load_s=0.41 heap_mb=176 end=11.47 exit=11.62 rc=0 cpg_mb=4.12
+01:44:21 load   camunda_camunda-bpm-platform     main=9.88 uptime_main=8.79 loaded=10.98 load_s=0.62 heap_mb=535 end=10.99 exit=11.17 rc=0 cpg_mb=37.17
+01:44:32 load   camunda_camunda-bpm-platform     main=10.19 uptime_main=9.08 loaded=11.35 load_s=0.71 heap_mb=540 end=11.35 exit=11.53 rc=0 cpg_mb=37.17
+01:44:45 load   camunda_camunda                  main=10.58 uptime_main=9.49 loaded=12.08 load_s=1.18 heap_mb=1099 end=12.08 exit=12.32 rc=0 cpg_mb=91.94
+01:44:57 load   camunda_camunda                  main=10.26 uptime_main=9.16 loaded=11.65 load_s=1.06 heap_mb=1098 end=11.66 exit=11.89 rc=0 cpg_mb=91.94
+01:45:11 load   langflow-ai_langflow             main=11.48 uptime_main=10.40 loaded=13.94 load_s=1.98 heap_mb=2661 end=13.96 exit=14.30 rc=0 cpg_mb=200.30
+01:45:25 load   langflow-ai_langflow             main=11.03 uptime_main=9.91 loaded=13.88 load_s=2.40 heap_mb=2659 end=13.89 exit=14.24 rc=0 cpg_mb=200.30
+01:45:43 load   BerriAI_litellm                  main=11.38 uptime_main=10.30 loaded=17.16 load_s=4.75 heap_mb=6576 end=17.21 exit=17.98 rc=0 cpg_mb=489.67
+01:46:01 load   BerriAI_litellm                  main=11.07 uptime_main=9.97 loaded=16.77 load_s=4.78 heap_mb=6580 end=16.84 exit=17.52 rc=0 cpg_mb=489.67

@@ -1,0 +1,20 @@
+{
+ "repo": "swedenconnect_organizations-iam-app",
+ "launch": 0,
+ "jobs": [
+  "java/session_based_access_control/swedenconnect_organizations-iam-app"
+ ],
+ "marks": {
+  "main": 10.518760863691568,
+  "loaded": 11.52052727714181,
+  "start:java/session_based_access_control/swedenconnect_organizations-iam-app": 11.520532865077257,
+  "done:java/session_based_access_control/swedenconnect_organizations-iam-app": 12.021538991481066,
+  "end": 12.021545015275478,
+  "exit": 12.021569225937128
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

@@ -1,0 +1,20 @@
+{
+ "repo": "Aquiles-ai_Aquiles-Image",
+ "launch": 0,
+ "jobs": [
+  "python/authentication_pwd/Aquiles-ai_Aquiles-Image"
+ ],
+ "marks": {
+  "main": 11.522155337035656,
+  "loaded": 12.524003773927689,
+  "start:python/authentication_pwd/Aquiles-ai_Aquiles-Image": 12.524009432643652,
+  "done:python/authentication_pwd/Aquiles-ai_Aquiles-Image": 13.025046732276678,
+  "end": 13.025052905082703,
+  "exit": 13.02507520839572
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

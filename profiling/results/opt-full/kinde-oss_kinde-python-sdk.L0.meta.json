@@ -1,0 +1,20 @@
+{
+ "repo": "kinde-oss_kinde-python-sdk",
+ "launch": 0,
+ "jobs": [
+  "python/session_based_access_control/kinde-oss_kinde-python-sdk"
+ ],
+ "marks": {
+  "main": 11.522682502865791,
+  "loaded": 12.524783294647932,
+  "start:python/session_based_access_control/kinde-oss_kinde-python-sdk": 12.524788789451122,
+  "done:python/session_based_access_control/kinde-oss_kinde-python-sdk": 13.52628705650568,
+  "end": 13.526293199509382,
+  "exit": 14.027308523654938
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

@@ -1,0 +1,20 @@
+{
+ "repo": "ddphin_ddphin-security",
+ "launch": 0,
+ "jobs": [
+  "java/verifiable_token_based_authentication/ddphin_ddphin-security"
+ ],
+ "marks": {
+  "main": 11.522050458937883,
+  "loaded": 12.523844543844461,
+  "start:java/verifiable_token_based_authentication/ddphin_ddphin-security": 12.523850724101067,
+  "done:java/verifiable_token_based_authentication/ddphin_ddphin-security": 12.523860946297646,
+  "end": 12.523865927010775,
+  "exit": 13.024977836757898
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

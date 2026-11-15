@@ -1,0 +1,23 @@
+{
+ "repo": "terrene-foundation_kailash-py",
+ "launch": 0,
+ "jobs": [
+  "python/limit_request_rate/terrene-foundation_kailash-py",
+  "python/obscure_token_based_access_control/terrene-foundation_kailash-py"
+ ],
+ "marks": {
+  "main": 12.022014532238245,
+  "loaded": 19.070581443607807,
+  "start:python/limit_request_rate/terrene-foundation_kailash-py": 19.07058672606945,
+  "done:python/limit_request_rate/terrene-foundation_kailash-py": 59.141974076628685,
+  "start:python/obscure_token_based_access_control/terrene-foundation_kailash-py": 59.141980182379484,
+  "done:python/obscure_token_based_access_control/terrene-foundation_kailash-py": 68.1587847918272,
+  "end": 68.15879227221012,
+  "exit": 69.66163223981857
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

@@ -1,0 +1,172 @@
+[
+ {
+  "event": "worker-start",
+  "language": "java",
+  "ready_s": 10.71
+ },
+ {
+  "id": "java/verifiable_token_based_authentication/wjs1995_sb-jwt-auth-starter",
+  "status": "done",
+  "load_s": 0.149,
+  "walk_s": 0.1877,
+  "wall_s": 0.377,
+  "cpg_mb": 0.16
+ },
+ {
+  "id": "java/authentication_pwd/icexmoon_spring-easy",
+  "status": "done",
+  "load_s": 0.182,
+  "walk_s": 0.0768,
+  "wall_s": 0.26,
+  "cpg_mb": 0.31
+ },
+ {
+  "id": "java/verifiable_token_based_authentication/m4rc310RCP_core-api",
+  "status": "done",
+  "load_s": 0.057,
+  "walk_s": 0.0754,
+  "wall_s": 0.133,
+  "cpg_mb": 0.61
+ },
+ {
+  "id": "java/authentication_pwd/hprxkbrddd_grind",
+  "status": "done",
+  "load_s": 0.065,
+  "walk_s": 0.0449,
+  "wall_s": 0.111,
+  "cpg_mb": 1.06
+ },
+ {
+  "id": "java/session_based_access_control/catch-money_java-impetus",
+  "status": "done",
+  "load_s": 0.08,
+  "walk_s": 0.0419,
+  "wall_s": 0.122,
+  "cpg_mb": 1.57
+ },
+ {
+  "id": "java/verifiable_token_based_authentication/mosip_esignet",
+  "status": "done",
+  "load_s": 0.077,
+  "walk_s": 0.0639,
+  "wall_s": 0.142,
+  "cpg_mb": 2.69
+ },
+ {
+  "id": "java/limit_request_rate/factcast_factcast",
+  "status": "done",
+  "load_s": 0.101,
+  "walk_s": 0.1704,
+  "wall_s": 0.272,
+  "cpg_mb": 4.12
+ },
+ {
+  "id": "java/obscure_token_based_access_control/dialob_dialob-parent",
+  "status": "done",
+  "load_s": 0.088,
+  "walk_s": 0.0693,
+  "wall_s": 0.158,
+  "cpg_mb": 5.08
+ },
+ {
+  "id": "java/verifiable_token_based_authentication/lbk-ones_easy4j",
+  "status": "done",
+  "load_s": 0.081,
+  "walk_s": 0.3855,
+  "wall_s": 0.467,
+  "cpg_mb": 10.85
+ },
+ {
+  "id": "java/limit_request_rate/EximeeBPMS_eximeebpms",
+  "status": "done",
+  "load_s": 0.199,
+  "walk_s": 7.3443,
+  "wall_s": 7.545,
+  "cpg_mb": 34.49
+ },
+ {
+  "id": "java/obscure_token_based_access_control/DSpace_DSpace",
+  "status": "done",
+  "load_s": 0.154,
+  "walk_s": 0.7123,
+  "wall_s": 0.867,
+  "cpg_mb": 35.74
+ },
+ {
+  "event": "worker-start",
+  "language": "python",
+  "ready_s": 12.39
+ },
+ {
+  "id": "python/verifiable_token_based_authentication/sargsyanhayko_rsha_auth",
+  "status": "done",
+  "load_s": 0.154,
+  "walk_s": 0.2571,
+  "wall_s": 0.445,
+  "cpg_mb": 0.19
+ },
+ {
+  "id": "python/obscure_token_based_access_control/namastexlabs_murmurai",
+  "status": "done",
+  "load_s": 0.258,
+  "walk_s": 0.1523,
+  "wall_s": 0.411,
+  "cpg_mb": 0.9
+ },
+ {
+  "id": "python/authentication_pwd/farhan0167_otto-m8",
+  "status": "done",
+  "load_s": 0.051,
+  "walk_s": 0.1266,
+  "wall_s": 0.179,
+  "cpg_mb": 1.54
+ },
+ {
+  "id": "python/obscure_token_based_access_control/extrawest_extrawest_ocpi",
+  "status": "done",
+  "load_s": 0.059,
+  "walk_s": 0.2219,
+  "wall_s": 0.282,
+  "cpg_mb": 2.85
+ },
+ {
+  "id": "python/authentication_pwd/mvdbeek_pulsar-relay",
+  "status": "done",
+  "load_s": 0.077,
+  "walk_s": 0.341,
+  "wall_s": 0.419,
+  "cpg_mb": 5.14
+ },
+ {
+  "id": "python/verifiable_token_based_authentication/descoped_authly",
+  "status": "done",
+  "load_s": 0.095,
+  "walk_s": 0.4732,
+  "wall_s": 0.569,
+  "cpg_mb": 11.42
+ },
+ {
+  "id": "python/authentication_pwd/xinetzone_tao",
+  "status": "done",
+  "load_s": 0.114,
+  "walk_s": 0.9618,
+  "wall_s": 1.077,
+  "cpg_mb": 17.49
+ },
+ {
+  "id": "python/session_based_access_control/TrueSelph_jvspatial",
+  "status": "done",
+  "load_s": 0.12,
+  "walk_s": 1.9746,
+  "wall_s": 2.096,
+  "cpg_mb": 26.69
+ },
+ {
+  "id": "python/limit_request_rate/Saturn99X_Etherion",
+  "status": "done",
+  "load_s": 0.187,
+  "walk_s": 1.128,
+  "wall_s": 1.316,
+  "cpg_mb": 35.47
+ }
+]

@@ -1,0 +1,20 @@
+{
+ "repo": "lexy-ai_lexy",
+ "launch": 0,
+ "jobs": [
+  "python/verifiable_token_based_authentication/lexy-ai_lexy"
+ ],
+ "marks": {
+  "main": 11.520906705409288,
+  "loaded": 12.522519208490849,
+  "start:python/verifiable_token_based_authentication/lexy-ai_lexy": 12.522525079548359,
+  "done:python/verifiable_token_based_authentication/lexy-ai_lexy": 13.02353335171938,
+  "end": 13.023539621382952,
+  "exit": 13.023563042283058
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

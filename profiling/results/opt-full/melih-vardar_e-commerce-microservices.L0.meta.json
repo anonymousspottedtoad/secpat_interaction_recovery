@@ -1,0 +1,23 @@
+{
+ "repo": "melih-vardar_e-commerce-microservices",
+ "launch": 0,
+ "jobs": [
+  "java/session_based_access_control/melih-vardar_e-commerce-microservices",
+  "java/verifiable_token_based_authentication/melih-vardar_e-commerce-microservices"
+ ],
+ "marks": {
+  "main": 11.02178654447198,
+  "loaded": 12.023645348846912,
+  "start:java/session_based_access_control/melih-vardar_e-commerce-microservices": 12.023651152849197,
+  "done:java/session_based_access_control/melih-vardar_e-commerce-microservices": 12.023658327758312,
+  "start:java/verifiable_token_based_authentication/melih-vardar_e-commerce-microservices": 12.023662336170673,
+  "done:java/verifiable_token_based_authentication/melih-vardar_e-commerce-microservices": 12.02366654574871,
+  "end": 12.02367004007101,
+  "exit": 12.52468029409647
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

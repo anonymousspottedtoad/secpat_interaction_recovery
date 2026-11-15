@@ -1,0 +1,20 @@
+{
+ "repo": "uvicore_framework",
+ "launch": 0,
+ "jobs": [
+  "python/session_based_access_control/uvicore_framework"
+ ],
+ "marks": {
+  "main": 11.521075379103422,
+  "loaded": 13.02365531027317,
+  "start:python/session_based_access_control/uvicore_framework": 13.023658204823732,
+  "done:python/session_based_access_control/uvicore_framework": 14.02532409504056,
+  "end": 14.025330301374197,
+  "exit": 14.025355078279972
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

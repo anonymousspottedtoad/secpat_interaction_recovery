@@ -1,0 +1,20 @@
+{
+ "repo": "MarkinHaus_ToolBoxV2",
+ "launch": 0,
+ "jobs": [
+  "python/session_based_access_control/MarkinHaus_ToolBoxV2"
+ ],
+ "marks": {
+  "main": 11.518916077911854,
+  "loaded": 13.020862627774477,
+  "start:python/session_based_access_control/MarkinHaus_ToolBoxV2": 13.020868014544249,
+  "done:python/session_based_access_control/MarkinHaus_ToolBoxV2": 19.532355301082134,
+  "end": 19.53236138448119,
+  "exit": 20.033448696136475
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

@@ -1,0 +1,20 @@
+{
+ "repo": "MTSWebServices_syncmaster",
+ "launch": 0,
+ "jobs": [
+  "python/session_based_access_control/MTSWebServices_syncmaster"
+ ],
+ "marks": {
+  "main": 11.518315076828003,
+  "loaded": 12.519831962883472,
+  "start:python/session_based_access_control/MTSWebServices_syncmaster": 12.519834477454424,
+  "done:python/session_based_access_control/MTSWebServices_syncmaster": 13.52113876119256,
+  "end": 13.521144296973944,
+  "exit": 13.52116820588708
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

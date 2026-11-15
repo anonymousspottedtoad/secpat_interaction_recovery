@@ -1,0 +1,20 @@
+{
+ "repo": "hprxkbrddd_grind",
+ "launch": 0,
+ "jobs": [
+  "java/authentication_pwd/hprxkbrddd_grind"
+ ],
+ "marks": {
+  "main": 10.521571803838015,
+  "loaded": 11.523644473403692,
+  "start:java/authentication_pwd/hprxkbrddd_grind": 11.523652244359255,
+  "done:java/authentication_pwd/hprxkbrddd_grind": 12.024685811251402,
+  "end": 12.02469164505601,
+  "exit": 12.024716444313526
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 300.0
+}

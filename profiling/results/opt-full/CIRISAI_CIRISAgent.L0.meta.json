@@ -1,0 +1,20 @@
+{
+ "repo": "CIRISAI_CIRISAgent",
+ "launch": 0,
+ "jobs": [
+  "python/session_based_access_control/CIRISAI_CIRISAgent",
+  "python/verifiable_token_based_authentication/CIRISAI_CIRISAgent"
+ ],
+ "marks": {
+  "main": 12.021382004022598,
+  "loaded": 15.026548646390438,
+  "start:python/session_based_access_control/CIRISAI_CIRISAgent": 15.026554014533758,
+  "done:python/session_based_access_control/CIRISAI_CIRISAgent": 195.36053370684385,
+  "exit": 196.86344812065363
+ },
+ "returncode": 1,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

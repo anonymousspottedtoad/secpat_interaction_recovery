@@ -1,0 +1,20 @@
+{
+ "repo": "wintermutant_bioinformatics-tools",
+ "launch": 0,
+ "jobs": [
+  "python/verifiable_token_based_authentication/wintermutant_bioinformatics-tools"
+ ],
+ "marks": {
+  "main": 12.022771187126637,
+  "loaded": 12.523371573537588,
+  "start:python/verifiable_token_based_authentication/wintermutant_bioinformatics-tools": 13.024192906916142,
+  "done:python/verifiable_token_based_authentication/wintermutant_bioinformatics-tools": 13.525226194411516,
+  "end": 13.525232445448637,
+  "exit": 13.52525570243597
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

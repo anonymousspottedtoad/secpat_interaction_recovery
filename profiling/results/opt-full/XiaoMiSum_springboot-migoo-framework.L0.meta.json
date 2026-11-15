@@ -1,0 +1,20 @@
+{
+ "repo": "XiaoMiSum_springboot-migoo-framework",
+ "launch": 0,
+ "jobs": [
+  "java/verifiable_token_based_authentication/XiaoMiSum_springboot-migoo-framework"
+ ],
+ "marks": {
+  "main": 11.020679123699665,
+  "loaded": 12.02250948920846,
+  "start:java/verifiable_token_based_authentication/XiaoMiSum_springboot-migoo-framework": 12.02251523733139,
+  "done:java/verifiable_token_based_authentication/XiaoMiSum_springboot-migoo-framework": 12.523467682301998,
+  "end": 12.523473586887121,
+  "exit": 12.523496933281422
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

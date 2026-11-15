@@ -1,0 +1,20 @@
+{
+ "repo": "lockss_lockss-spring-bundle",
+ "launch": 0,
+ "jobs": [
+  "java/authentication_pwd/lockss_lockss-spring-bundle"
+ ],
+ "marks": {
+  "main": 10.518896695226431,
+  "loaded": 11.520806685090065,
+  "start:java/authentication_pwd/lockss_lockss-spring-bundle": 11.520812019705772,
+  "done:java/authentication_pwd/lockss_lockss-spring-bundle": 11.520818900316954,
+  "end": 11.520822141319513,
+  "exit": 11.52084432169795
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

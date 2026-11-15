@@ -1,0 +1,19 @@
+{
+ "repo": "cibseven_cibseven",
+ "launch": 0,
+ "jobs": [
+  "java/limit_request_rate/cibseven_cibseven"
+ ],
+ "marks": {
+  "main": 12.02301474660635,
+  "loaded": 13.024801775813103,
+  "start:java/limit_request_rate/cibseven_cibseven": 13.024807091802359,
+  "done:java/limit_request_rate/cibseven_cibseven": 133.24109867587686,
+  "exit": 133.74214946851134
+ },
+ "returncode": 1,
+ "killed": "",
+ "jfr": true,
+ "xmx": "48g",
+ "budget": 120.0
+}

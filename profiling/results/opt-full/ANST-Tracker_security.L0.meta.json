@@ -1,0 +1,20 @@
+{
+ "repo": "ANST-Tracker_security",
+ "launch": 0,
+ "jobs": [
+  "java/session_based_access_control/ANST-Tracker_security"
+ ],
+ "marks": {
+  "main": 11.02225936576724,
+  "loaded": 12.02415269613266,
+  "start:java/session_based_access_control/ANST-Tracker_security": 12.024157758802176,
+  "done:java/session_based_access_control/ANST-Tracker_security": 12.02416467294097,
+  "end": 12.024167474359274,
+  "exit": 12.024191405624151
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

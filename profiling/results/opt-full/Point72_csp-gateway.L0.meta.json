@@ -1,0 +1,20 @@
+{
+ "repo": "Point72_csp-gateway",
+ "launch": 0,
+ "jobs": [
+  "python/obscure_token_based_access_control/Point72_csp-gateway"
+ ],
+ "marks": {
+  "main": 11.521205112338066,
+  "loaded": 12.523080307990313,
+  "start:python/obscure_token_based_access_control/Point72_csp-gateway": 12.5230862647295,
+  "done:python/obscure_token_based_access_control/Point72_csp-gateway": 13.525009144097567,
+  "end": 13.525015227496624,
+  "exit": 13.525039300322533
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

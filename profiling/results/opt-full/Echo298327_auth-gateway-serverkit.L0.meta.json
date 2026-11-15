@@ -1,0 +1,20 @@
+{
+ "repo": "Echo298327_auth-gateway-serverkit",
+ "launch": 0,
+ "jobs": [
+  "python/verifiable_token_based_authentication/Echo298327_auth-gateway-serverkit"
+ ],
+ "marks": {
+  "main": 12.02256379276514,
+  "loaded": 13.02394076436758,
+  "start:python/verifiable_token_based_authentication/Echo298327_auth-gateway-serverkit": 13.02394449338317,
+  "done:python/verifiable_token_based_authentication/Echo298327_auth-gateway-serverkit": 13.524794265627861,
+  "end": 13.524800889194012,
+  "exit": 13.524824984371662
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

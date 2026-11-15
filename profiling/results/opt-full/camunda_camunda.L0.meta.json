@@ -1,0 +1,29 @@
+{
+ "repo": "camunda_camunda",
+ "launch": 0,
+ "jobs": [
+  "java/authentication_pwd/camunda_camunda",
+  "java/limit_request_rate/camunda_camunda",
+  "java/obscure_token_based_access_control/camunda_camunda",
+  "java/session_based_access_control/camunda_camunda"
+ ],
+ "marks": {
+  "main": 11.017907351255417,
+  "loaded": 12.019340731203556,
+  "start:java/authentication_pwd/camunda_camunda": 12.019343756139278,
+  "done:java/authentication_pwd/camunda_camunda": 14.022442046552896,
+  "start:java/limit_request_rate/camunda_camunda": 14.022445995360613,
+  "done:java/limit_request_rate/camunda_camunda": 19.03115761652589,
+  "start:java/obscure_token_based_access_control/camunda_camunda": 19.031164832413197,
+  "done:java/obscure_token_based_access_control/camunda_camunda": 22.537557315081358,
+  "start:java/session_based_access_control/camunda_camunda": 22.53756345808506,
+  "done:java/session_based_access_control/camunda_camunda": 26.044131226837635,
+  "end": 26.04413726553321,
+  "exit": 26.044162843376398
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

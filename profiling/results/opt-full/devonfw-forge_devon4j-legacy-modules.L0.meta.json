@@ -1,0 +1,20 @@
+{
+ "repo": "devonfw-forge_devon4j-legacy-modules",
+ "launch": 0,
+ "jobs": [
+  "java/authentication_pwd/devonfw-forge_devon4j-legacy-modules"
+ ],
+ "marks": {
+  "main": 10.539602603763342,
+  "loaded": 11.541519895195961,
+  "start:java/authentication_pwd/devonfw-forge_devon4j-legacy-modules": 11.541525837033987,
+  "done:java/authentication_pwd/devonfw-forge_devon4j-legacy-modules": 11.541532434523106,
+  "end": 11.541535824537277,
+  "exit": 11.541559644043446
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

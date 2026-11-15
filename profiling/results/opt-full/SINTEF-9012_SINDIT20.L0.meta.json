@@ -1,0 +1,20 @@
+{
+ "repo": "SINTEF-9012_SINDIT20",
+ "launch": 0,
+ "jobs": [
+  "python/verifiable_token_based_authentication/SINTEF-9012_SINDIT20"
+ ],
+ "marks": {
+  "main": 12.521142713725567,
+  "loaded": 13.522884041070938,
+  "start:python/verifiable_token_based_authentication/SINTEF-9012_SINDIT20": 13.522889662533998,
+  "done:python/verifiable_token_based_authentication/SINTEF-9012_SINDIT20": 14.023914724588394,
+  "end": 14.023920968174934,
+  "exit": 14.023945577442646
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

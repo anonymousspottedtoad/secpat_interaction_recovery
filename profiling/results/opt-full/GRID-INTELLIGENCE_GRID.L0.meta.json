@@ -1,0 +1,23 @@
+{
+ "repo": "GRID-INTELLIGENCE_GRID",
+ "launch": 0,
+ "jobs": [
+  "python/limit_request_rate/GRID-INTELLIGENCE_GRID",
+  "python/verifiable_token_based_authentication/GRID-INTELLIGENCE_GRID"
+ ],
+ "marks": {
+  "main": 11.521099474281073,
+  "loaded": 13.023270819336176,
+  "start:python/limit_request_rate/GRID-INTELLIGENCE_GRID": 13.023276459425688,
+  "done:python/limit_request_rate/GRID-INTELLIGENCE_GRID": 17.53149513527751,
+  "start:python/verifiable_token_based_authentication/GRID-INTELLIGENCE_GRID": 17.531501423567533,
+  "done:python/verifiable_token_based_authentication/GRID-INTELLIGENCE_GRID": 19.034221295267344,
+  "end": 19.0342252664268,
+  "exit": 19.534988306462765
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

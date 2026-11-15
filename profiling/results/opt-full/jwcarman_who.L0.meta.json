@@ -1,0 +1,20 @@
+{
+ "repo": "jwcarman_who",
+ "launch": 0,
+ "jobs": [
+  "java/obscure_token_based_access_control/jwcarman_who"
+ ],
+ "marks": {
+  "main": 11.020979970693588,
+  "loaded": 11.521946106106043,
+  "start:java/obscure_token_based_access_control/jwcarman_who": 11.521951217204332,
+  "done:java/obscure_token_based_access_control/jwcarman_who": 12.022941924631596,
+  "end": 12.0229482203722,
+  "exit": 12.022971585392952
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

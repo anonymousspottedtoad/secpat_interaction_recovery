@@ -1,0 +1,20 @@
+{
+ "repo": "Extralit_extralit",
+ "launch": 0,
+ "jobs": [
+  "python/obscure_token_based_access_control/Extralit_extralit"
+ ],
+ "marks": {
+  "main": 11.521861083805561,
+  "loaded": 12.523699924349785,
+  "start:python/obscure_token_based_access_control/Extralit_extralit": 12.523706004023552,
+  "done:python/obscure_token_based_access_control/Extralit_extralit": 14.52727035433054,
+  "end": 14.5272760912776,
+  "exit": 15.028215792030096
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

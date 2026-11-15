@@ -1,0 +1,20 @@
+{
+ "repo": "mlflow-oidc_mlflow-oidc-auth",
+ "launch": 0,
+ "jobs": [
+  "python/session_based_access_control/mlflow-oidc_mlflow-oidc-auth"
+ ],
+ "marks": {
+  "main": 12.022162146866322,
+  "loaded": 12.523260526359081,
+  "start:python/session_based_access_control/mlflow-oidc_mlflow-oidc-auth": 12.523265898227692,
+  "done:python/session_based_access_control/mlflow-oidc_mlflow-oidc-auth": 14.52685160189867,
+  "end": 14.526857268065214,
+  "exit": 15.02786885201931
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

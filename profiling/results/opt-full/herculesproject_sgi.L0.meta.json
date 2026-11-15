@@ -1,0 +1,20 @@
+{
+ "repo": "herculesproject_sgi",
+ "launch": 0,
+ "jobs": [
+  "java/session_based_access_control/herculesproject_sgi"
+ ],
+ "marks": {
+  "main": 11.016943849623203,
+  "loaded": 12.018698010593653,
+  "start:java/session_based_access_control/herculesproject_sgi": 12.01870333403349,
+  "done:java/session_based_access_control/herculesproject_sgi": 13.02060554549098,
+  "end": 13.020611252635717,
+  "exit": 13.0206338763237
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

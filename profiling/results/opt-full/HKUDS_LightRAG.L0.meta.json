@@ -1,0 +1,23 @@
+{
+ "repo": "HKUDS_LightRAG",
+ "launch": 0,
+ "jobs": [
+  "python/authentication_pwd/HKUDS_LightRAG",
+  "python/verifiable_token_based_authentication/HKUDS_LightRAG"
+ ],
+ "marks": {
+  "main": 11.520927216857672,
+  "loaded": 13.023121502250433,
+  "start:python/authentication_pwd/HKUDS_LightRAG": 13.023127067834139,
+  "done:python/authentication_pwd/HKUDS_LightRAG": 17.030371382832527,
+  "start:python/verifiable_token_based_authentication/HKUDS_LightRAG": 17.030377980321646,
+  "done:python/verifiable_token_based_authentication/HKUDS_LightRAG": 18.53307880833745,
+  "end": 18.533085957169533,
+  "exit": 19.03404564410448
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

@@ -1,0 +1,20 @@
+{
+ "repo": "xdev-software_spring-security-extras",
+ "launch": 0,
+ "jobs": [
+  "java/authentication_pwd/xdev-software_spring-security-extras"
+ ],
+ "marks": {
+  "main": 11.016945131123066,
+  "loaded": 12.018740929663181,
+  "start:java/authentication_pwd/xdev-software_spring-security-extras": 12.018745839595795,
+  "done:java/authentication_pwd/xdev-software_spring-security-extras": 12.519731160253286,
+  "end": 12.519737385213375,
+  "exit": 12.519761562347412
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

@@ -1,0 +1,20 @@
+{
+ "repo": "TrueSelph_jvspatial",
+ "launch": 0,
+ "jobs": [
+  "python/session_based_access_control/TrueSelph_jvspatial"
+ ],
+ "marks": {
+  "main": 11.523177452385426,
+  "loaded": 12.525090739130974,
+  "start:python/session_based_access_control/TrueSelph_jvspatial": 12.525096602737904,
+  "done:python/session_based_access_control/TrueSelph_jvspatial": 16.532605078071356,
+  "end": 16.53261135146022,
+  "exit": 17.033628296107054
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 300.0
+}

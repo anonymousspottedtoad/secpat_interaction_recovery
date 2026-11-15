@@ -1,0 +1,19 @@
+{
+ "repo": "agno-agi_agno",
+ "launch": 0,
+ "jobs": [
+  "python/limit_request_rate/agno-agi_agno"
+ ],
+ "marks": {
+  "main": 12.523680668324232,
+  "loaded": 15.528410501778126,
+  "start:python/limit_request_rate/agno-agi_agno": 15.528416365385056,
+  "done:python/limit_request_rate/agno-agi_agno": 135.7385000512004,
+  "exit": 137.24049961939454
+ },
+ "returncode": 1,
+ "killed": "",
+ "jfr": true,
+ "xmx": "48g",
+ "budget": 120.0
+}

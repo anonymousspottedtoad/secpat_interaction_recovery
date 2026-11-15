@@ -1,0 +1,19 @@
+{
+ "repo": "DSpace_DSpace",
+ "launch": 0,
+ "jobs": [
+  "java/obscure_token_based_access_control/DSpace_DSpace"
+ ],
+ "marks": {
+  "main": 11.52147789299488,
+  "loaded": 13.023846574127674,
+  "start:java/obscure_token_based_access_control/DSpace_DSpace": 13.023850947618484,
+  "done:java/obscure_token_based_access_control/DSpace_DSpace": 132.72420888021588,
+  "exit": 133.7261991277337
+ },
+ "returncode": 1,
+ "killed": "",
+ "jfr": true,
+ "xmx": "48g",
+ "budget": 120.0
+}

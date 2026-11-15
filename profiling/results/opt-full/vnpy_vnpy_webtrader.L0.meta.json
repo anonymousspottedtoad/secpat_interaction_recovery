@@ -1,0 +1,20 @@
+{
+ "repo": "vnpy_vnpy_webtrader",
+ "launch": 0,
+ "jobs": [
+  "python/authentication_pwd/vnpy_vnpy_webtrader"
+ ],
+ "marks": {
+  "main": 12.020744662731886,
+  "loaded": 13.022538170218468,
+  "start:python/authentication_pwd/vnpy_vnpy_webtrader": 13.02254369109869,
+  "done:python/authentication_pwd/vnpy_vnpy_webtrader": 13.523578960448503,
+  "end": 13.523584976792336,
+  "exit": 13.523610599339008
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

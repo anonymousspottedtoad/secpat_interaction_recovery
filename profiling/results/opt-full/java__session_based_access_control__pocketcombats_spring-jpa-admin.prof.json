@@ -1,0 +1,30 @@
+{
+ "phases": {
+  "1-callgraph": 0.016483227,
+  "2a-declarations": 0.077138895,
+  "2b-locate": 0.091795611,
+  "2c-ownership": 0.006176918,
+  "3-entry": 0.022804363,
+  "4-walk": 0.016435963,
+  "5-render": 0.01199781
+ },
+ "counters": {
+  "targetsOf.calls": 63,
+  "walk.deadSkips": 1,
+  "graph.methods": 1565,
+  "graph.internalMethods": 936,
+  "located": 6,
+  "edges.raw": 0,
+  "interactions": 0
+ },
+ "distinct": {
+  "targetsOf.sites": 54
+ },
+ "inPhase": "",
+ "status": "done",
+ "elapsed": 0.252855839,
+ "loadS": 0.326647665,
+ "uptimeAtMainMs": 10274,
+ "heapAfterLoadMb": 153,
+ "progress": []
+}

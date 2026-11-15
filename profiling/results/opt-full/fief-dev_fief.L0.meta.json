@@ -1,0 +1,20 @@
+{
+ "repo": "fief-dev_fief",
+ "launch": 0,
+ "jobs": [
+  "python/session_based_access_control/fief-dev_fief"
+ ],
+ "marks": {
+  "main": 12.019509214907885,
+  "loaded": 13.021097242832184,
+  "start:python/session_based_access_control/fief-dev_fief": 13.02110293880105,
+  "done:python/session_based_access_control/fief-dev_fief": 14.022897556424141,
+  "end": 14.022903244942427,
+  "exit": 14.523877464234829
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

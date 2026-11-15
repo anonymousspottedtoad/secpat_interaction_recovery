@@ -1,0 +1,20 @@
+{
+ "repo": "InferiaAI_InferiaLLM",
+ "launch": 0,
+ "jobs": [
+  "python/obscure_token_based_access_control/InferiaAI_InferiaLLM"
+ ],
+ "marks": {
+  "main": 11.519900098443031,
+  "loaded": 12.52180640399456,
+  "start:python/obscure_token_based_access_control/InferiaAI_InferiaLLM": 12.521809689700603,
+  "done:python/obscure_token_based_access_control/InferiaAI_InferiaLLM": 14.023741036653519,
+  "end": 14.023746609687805,
+  "exit": 14.023770809173584
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

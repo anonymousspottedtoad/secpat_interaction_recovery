@@ -1,0 +1,23 @@
+{
+ "repo": "alexk-dev_golemcore-bot",
+ "launch": 0,
+ "jobs": [
+  "java/limit_request_rate/alexk-dev_golemcore-bot",
+  "java/obscure_token_based_access_control/alexk-dev_golemcore-bot"
+ ],
+ "marks": {
+  "main": 10.51799775287509,
+  "loaded": 11.519494466483593,
+  "start:java/limit_request_rate/alexk-dev_golemcore-bot": 11.51949967443943,
+  "done:java/limit_request_rate/alexk-dev_golemcore-bot": 12.521075513213873,
+  "start:java/obscure_token_based_access_control/alexk-dev_golemcore-bot": 12.521082203835249,
+  "done:java/obscure_token_based_access_control/alexk-dev_golemcore-bot": 12.521086886525154,
+  "end": 12.521089937537909,
+  "exit": 12.521114006638527
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

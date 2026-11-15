@@ -1,0 +1,20 @@
+{
+ "repo": "songqingwei_icloud",
+ "launch": 0,
+ "jobs": [
+  "java/authentication_pwd/songqingwei_icloud"
+ ],
+ "marks": {
+  "main": 11.019586324691772,
+  "loaded": 12.020828645676374,
+  "start:java/authentication_pwd/songqingwei_icloud": 12.02083184570074,
+  "done:java/authentication_pwd/songqingwei_icloud": 12.52156675234437,
+  "end": 12.521572846919298,
+  "exit": 12.521595358848572
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

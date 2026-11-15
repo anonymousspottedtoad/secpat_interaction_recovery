@@ -1,0 +1,23 @@
+{
+ "repo": "contentmunch_contentmunch-parent",
+ "launch": 0,
+ "jobs": [
+  "java/authentication_pwd/contentmunch_contentmunch-parent",
+  "java/verifiable_token_based_authentication/contentmunch_contentmunch-parent"
+ ],
+ "marks": {
+  "main": 11.020568743348122,
+  "loaded": 12.022404033690691,
+  "start:java/authentication_pwd/contentmunch_contentmunch-parent": 12.0224096365273,
+  "done:java/authentication_pwd/contentmunch_contentmunch-parent": 12.022416554391384,
+  "start:java/verifiable_token_based_authentication/contentmunch_contentmunch-parent": 12.022420208901167,
+  "done:java/verifiable_token_based_authentication/contentmunch_contentmunch-parent": 12.02242399379611,
+  "end": 12.022427301853895,
+  "exit": 12.022449873387814
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

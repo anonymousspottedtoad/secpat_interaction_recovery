@@ -1,0 +1,20 @@
+{
+ "repo": "sustainability-software-lab_ca-biositing",
+ "launch": 0,
+ "jobs": [
+  "python/verifiable_token_based_authentication/sustainability-software-lab_ca-biositing"
+ ],
+ "marks": {
+  "main": 11.52305917814374,
+  "loaded": 13.025753781199455,
+  "start:python/verifiable_token_based_authentication/sustainability-software-lab_ca-biositing": 13.025757998228073,
+  "done:python/verifiable_token_based_authentication/sustainability-software-lab_ca-biositing": 14.027656964957714,
+  "end": 14.027663070708513,
+  "exit": 14.027686927467585
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

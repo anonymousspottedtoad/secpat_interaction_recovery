@@ -1,0 +1,20 @@
+{
+ "repo": "marcosbarbero_spring-cloud-zuul-ratelimit",
+ "launch": 0,
+ "jobs": [
+  "java/limit_request_rate/marcosbarbero_spring-cloud-zuul-ratelimit"
+ ],
+ "marks": {
+  "main": 11.01923343911767,
+  "loaded": 11.52014210447669,
+  "start:java/limit_request_rate/marcosbarbero_spring-cloud-zuul-ratelimit": 11.520149417221546,
+  "done:java/limit_request_rate/marcosbarbero_spring-cloud-zuul-ratelimit": 12.021332073956728,
+  "end": 12.02133783698082,
+  "exit": 12.021362129598856
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

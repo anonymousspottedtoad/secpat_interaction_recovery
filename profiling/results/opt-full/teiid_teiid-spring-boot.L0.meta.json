@@ -1,0 +1,20 @@
+{
+ "repo": "teiid_teiid-spring-boot",
+ "launch": 0,
+ "jobs": [
+  "java/session_based_access_control/teiid_teiid-spring-boot"
+ ],
+ "marks": {
+  "main": 11.520253960043192,
+  "loaded": 12.020813781768084,
+  "start:java/session_based_access_control/teiid_teiid-spring-boot": 12.020817790180445,
+  "done:java/session_based_access_control/teiid_teiid-spring-boot": 12.521719623357058,
+  "end": 12.521725691854954,
+  "exit": 12.52174949273467
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

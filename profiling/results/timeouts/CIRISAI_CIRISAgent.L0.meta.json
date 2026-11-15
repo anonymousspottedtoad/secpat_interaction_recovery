@@ -1,0 +1,19 @@
+{
+ "repo": "CIRISAI_CIRISAgent",
+ "launch": 0,
+ "jobs": [
+  "python/session_based_access_control/CIRISAI_CIRISAgent"
+ ],
+ "marks": {
+  "main": 13.525809939950705,
+  "loaded": 17.030939485877752,
+  "start:python/session_based_access_control/CIRISAI_CIRISAgent": 17.030944976955652,
+  "done:python/session_based_access_control/CIRISAI_CIRISAgent": 137.25342597439885,
+  "exit": 138.75633420422673
+ },
+ "returncode": 1,
+ "killed": "",
+ "jfr": true,
+ "xmx": "48g",
+ "budget": 120.0
+}

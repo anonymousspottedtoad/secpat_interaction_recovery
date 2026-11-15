@@ -1,0 +1,20 @@
+{
+ "repo": "eclipse-basyx_basyx-java-server-sdk",
+ "launch": 0,
+ "jobs": [
+  "java/verifiable_token_based_authentication/eclipse-basyx_basyx-java-server-sdk"
+ ],
+ "marks": {
+  "main": 11.020212952047586,
+  "loaded": 11.520937636494637,
+  "start:java/verifiable_token_based_authentication/eclipse-basyx_basyx-java-server-sdk": 11.520942777395248,
+  "done:java/verifiable_token_based_authentication/eclipse-basyx_basyx-java-server-sdk": 12.021811958402395,
+  "end": 12.021817803382874,
+  "exit": 12.522811565548182
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

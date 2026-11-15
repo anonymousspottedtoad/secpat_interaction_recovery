@@ -1,0 +1,26 @@
+{
+ "repo": "HesandaLiyanage_theVaultOfficial",
+ "launch": 0,
+ "jobs": [
+  "java/obscure_token_based_access_control/HesandaLiyanage_theVaultOfficial",
+  "java/session_based_access_control/HesandaLiyanage_theVaultOfficial",
+  "java/verifiable_token_based_authentication/HesandaLiyanage_theVaultOfficial"
+ ],
+ "marks": {
+  "main": 11.020568910986185,
+  "loaded": 12.022283963859081,
+  "start:java/obscure_token_based_access_control/HesandaLiyanage_theVaultOfficial": 12.022289384156466,
+  "done:java/obscure_token_based_access_control/HesandaLiyanage_theVaultOfficial": 12.022296894341707,
+  "start:java/session_based_access_control/HesandaLiyanage_theVaultOfficial": 12.022301565855742,
+  "done:java/session_based_access_control/HesandaLiyanage_theVaultOfficial": 12.52338096499443,
+  "start:java/verifiable_token_based_authentication/HesandaLiyanage_theVaultOfficial": 12.523388803005219,
+  "done:java/verifiable_token_based_authentication/HesandaLiyanage_theVaultOfficial": 12.523393835872412,
+  "end": 12.523396365344524,
+  "exit": 12.523420076817274
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

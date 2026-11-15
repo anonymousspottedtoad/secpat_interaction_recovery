@@ -1,0 +1,20 @@
+{
+ "repo": "tannousgeagea_perceptra-hub",
+ "launch": 0,
+ "jobs": [
+  "python/session_based_access_control/tannousgeagea_perceptra-hub"
+ ],
+ "marks": {
+  "main": 12.033145908266306,
+  "loaded": 13.034616485238075,
+  "start:python/session_based_access_control/tannousgeagea_perceptra-hub": 13.034620694816113,
+  "done:python/session_based_access_control/tannousgeagea_perceptra-hub": 13.535545036196709,
+  "end": 13.53555053845048,
+  "exit": 13.535573869943619
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

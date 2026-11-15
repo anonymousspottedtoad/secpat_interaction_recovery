@@ -1,0 +1,20 @@
+{
+ "repo": "VForWaTer_metacatalog-api",
+ "launch": 0,
+ "jobs": [
+  "python/session_based_access_control/VForWaTer_metacatalog-api"
+ ],
+ "marks": {
+  "main": 12.022506162524223,
+  "loaded": 13.024328146129847,
+  "start:python/session_based_access_control/VForWaTer_metacatalog-api": 13.024333853274584,
+  "done:python/session_based_access_control/VForWaTer_metacatalog-api": 13.525331072509289,
+  "end": 13.525337167084217,
+  "exit": 13.525359708815813
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

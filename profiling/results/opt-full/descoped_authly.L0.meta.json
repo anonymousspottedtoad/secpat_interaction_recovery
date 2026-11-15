@@ -1,0 +1,20 @@
+{
+ "repo": "descoped_authly",
+ "launch": 0,
+ "jobs": [
+  "python/verifiable_token_based_authentication/descoped_authly"
+ ],
+ "marks": {
+  "main": 12.021050799638033,
+  "loaded": 12.521726612001657,
+  "start:python/verifiable_token_based_authentication/descoped_authly": 12.521732274442911,
+  "done:python/verifiable_token_based_authentication/descoped_authly": 13.523463662713766,
+  "end": 13.523469179868698,
+  "exit": 14.024455603212118
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

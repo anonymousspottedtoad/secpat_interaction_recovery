@@ -1,0 +1,20 @@
+{
+ "repo": "ZhongYingHao_msAuth",
+ "launch": 0,
+ "jobs": [
+  "java/session_based_access_control/ZhongYingHao_msAuth"
+ ],
+ "marks": {
+  "main": 11.518829427659512,
+  "loaded": 12.019704081118107,
+  "start:java/session_based_access_control/ZhongYingHao_msAuth": 12.019709184765816,
+  "done:java/session_based_access_control/ZhongYingHao_msAuth": 12.52074421569705,
+  "end": 12.520750418305397,
+  "exit": 12.5207738019526
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

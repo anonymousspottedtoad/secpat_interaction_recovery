@@ -1,0 +1,20 @@
+{
+ "repo": "dislovelhl_enhanced-agent-bus",
+ "launch": 0,
+ "jobs": [
+  "python/obscure_token_based_access_control/dislovelhl_enhanced-agent-bus"
+ ],
+ "marks": {
+  "main": 11.521273162215948,
+  "loaded": 13.524685621261597,
+  "start:python/obscure_token_based_access_control/dislovelhl_enhanced-agent-bus": 13.524691704660654,
+  "done:python/obscure_token_based_access_control/dislovelhl_enhanced-agent-bus": 23.04178473725915,
+  "end": 23.041790515184402,
+  "exit": 23.54274895042181
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

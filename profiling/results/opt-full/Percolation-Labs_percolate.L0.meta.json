@@ -1,0 +1,20 @@
+{
+ "repo": "Percolation-Labs_percolate",
+ "launch": 0,
+ "jobs": [
+  "python/session_based_access_control/Percolation-Labs_percolate"
+ ],
+ "marks": {
+  "main": 11.521572530269623,
+  "loaded": 12.523498237133026,
+  "start:python/session_based_access_control/Percolation-Labs_percolate": 12.523503713309765,
+  "done:python/session_based_access_control/Percolation-Labs_percolate": 13.02442830055952,
+  "end": 13.02443404123187,
+  "exit": 13.525391805917025
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

@@ -1,0 +1,20 @@
+{
+ "repo": "spraakbanken_karp-backend",
+ "launch": 0,
+ "jobs": [
+  "python/obscure_token_based_access_control/spraakbanken_karp-backend"
+ ],
+ "marks": {
+  "main": 12.023493815213442,
+  "loaded": 13.025239080190659,
+  "start:python/obscure_token_based_access_control/spraakbanken_karp-backend": 13.025244545191526,
+  "done:python/obscure_token_based_access_control/spraakbanken_karp-backend": 13.5262815579772,
+  "end": 13.5262879319489,
+  "exit": 13.526312034577131
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

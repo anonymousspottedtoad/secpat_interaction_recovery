@@ -1,0 +1,20 @@
+{
+ "repo": "piccolo-orm_piccolo_api",
+ "launch": 0,
+ "jobs": [
+  "python/obscure_token_based_access_control/piccolo-orm_piccolo_api"
+ ],
+ "marks": {
+  "main": 12.022400744259357,
+  "loaded": 13.024211890995502,
+  "start:python/obscure_token_based_access_control/piccolo-orm_piccolo_api": 13.024217449128628,
+  "done:python/obscure_token_based_access_control/piccolo-orm_piccolo_api": 13.525200065225363,
+  "end": 13.525206297636032,
+  "exit": 13.525229409337044
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

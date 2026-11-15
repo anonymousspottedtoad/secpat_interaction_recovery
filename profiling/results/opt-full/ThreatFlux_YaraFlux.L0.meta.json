@@ -1,0 +1,23 @@
+{
+ "repo": "ThreatFlux_YaraFlux",
+ "launch": 0,
+ "jobs": [
+  "python/authentication_pwd/ThreatFlux_YaraFlux",
+  "python/verifiable_token_based_authentication/ThreatFlux_YaraFlux"
+ ],
+ "marks": {
+  "main": 11.521174892783165,
+  "loaded": 12.522718656808138,
+  "start:python/authentication_pwd/ThreatFlux_YaraFlux": 12.522723946720362,
+  "done:python/authentication_pwd/ThreatFlux_YaraFlux": 13.023579098284245,
+  "start:python/verifiable_token_based_authentication/ThreatFlux_YaraFlux": 13.023584976792336,
+  "done:python/verifiable_token_based_authentication/ThreatFlux_YaraFlux": 13.52461314201355,
+  "end": 13.524620600044727,
+  "exit": 13.524645641446114
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

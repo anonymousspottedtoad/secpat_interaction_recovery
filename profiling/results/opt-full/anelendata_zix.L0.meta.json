@@ -1,0 +1,23 @@
+{
+ "repo": "anelendata_zix",
+ "launch": 0,
+ "jobs": [
+  "python/session_based_access_control/anelendata_zix",
+  "python/verifiable_token_based_authentication/anelendata_zix"
+ ],
+ "marks": {
+  "main": 12.02368725463748,
+  "loaded": 13.025249671190977,
+  "start:python/session_based_access_control/anelendata_zix": 13.025255158543587,
+  "done:python/session_based_access_control/anelendata_zix": 13.526272911578417,
+  "start:python/verifiable_token_based_authentication/anelendata_zix": 13.526279792189598,
+  "done:python/verifiable_token_based_authentication/anelendata_zix": 13.52628529816866,
+  "end": 13.526288527995348,
+  "exit": 13.526313029229641
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

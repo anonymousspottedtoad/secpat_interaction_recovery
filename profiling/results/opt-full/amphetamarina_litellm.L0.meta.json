@@ -1,0 +1,20 @@
+{
+ "repo": "amphetamarina_litellm",
+ "launch": 0,
+ "jobs": [
+  "python/verifiable_token_based_authentication/amphetamarina_litellm"
+ ],
+ "marks": {
+  "main": 12.021936766803265,
+  "loaded": 13.023093715310097,
+  "start:python/verifiable_token_based_authentication/amphetamarina_litellm": 13.02309988066554,
+  "done:python/verifiable_token_based_authentication/amphetamarina_litellm": 17.529990904033184,
+  "end": 17.52999532595277,
+  "exit": 18.03078416734934
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

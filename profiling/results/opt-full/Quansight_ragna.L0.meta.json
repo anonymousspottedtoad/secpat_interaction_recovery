@@ -1,0 +1,20 @@
+{
+ "repo": "Quansight_ragna",
+ "launch": 0,
+ "jobs": [
+  "python/session_based_access_control/Quansight_ragna"
+ ],
+ "marks": {
+  "main": 12.023370020091534,
+  "loaded": 12.524288650602102,
+  "start:python/session_based_access_control/Quansight_ragna": 12.524294178932905,
+  "done:python/session_based_access_control/Quansight_ragna": 13.526208218187094,
+  "end": 13.526214275509119,
+  "exit": 13.526239942759275
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

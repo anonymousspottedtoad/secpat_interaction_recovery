@@ -1,0 +1,19 @@
+{
+ "repo": "EximeeBPMS_eximeebpms",
+ "launch": 0,
+ "jobs": [
+  "java/limit_request_rate/EximeeBPMS_eximeebpms"
+ ],
+ "marks": {
+  "main": 10.51805841550231,
+  "loaded": 11.519911043345928,
+  "start:java/limit_request_rate/EximeeBPMS_eximeebpms": 11.519916366785765,
+  "done:java/limit_request_rate/EximeeBPMS_eximeebpms": 191.85704163461924,
+  "exit": 192.35815161466599
+ },
+ "returncode": 1,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

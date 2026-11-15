@@ -1,0 +1,20 @@
+{
+ "repo": "BilgisayarKavramlari_cadelphi",
+ "launch": 0,
+ "jobs": [
+  "python/authentication_pwd/BilgisayarKavramlari_cadelphi"
+ ],
+ "marks": {
+  "main": 11.519570674747229,
+  "loaded": 15.526637218892574,
+  "start:python/authentication_pwd/BilgisayarKavramlari_cadelphi": 15.526642873883247,
+  "done:python/authentication_pwd/BilgisayarKavramlari_cadelphi": 293.02758690714836,
+  "end": 293.0275926925242,
+  "exit": 294.5302009396255
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 300.0
+}

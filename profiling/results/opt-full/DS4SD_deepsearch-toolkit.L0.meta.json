@@ -1,0 +1,20 @@
+{
+ "repo": "DS4SD_deepsearch-toolkit",
+ "launch": 0,
+ "jobs": [
+  "python/obscure_token_based_access_control/DS4SD_deepsearch-toolkit"
+ ],
+ "marks": {
+  "main": 11.523208383470774,
+  "loaded": 12.524759337306023,
+  "start:python/obscure_token_based_access_control/DS4SD_deepsearch-toolkit": 12.524764776229858,
+  "done:python/obscure_token_based_access_control/DS4SD_deepsearch-toolkit": 14.528285454958677,
+  "end": 14.528291832655668,
+  "exit": 14.528315264731646
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

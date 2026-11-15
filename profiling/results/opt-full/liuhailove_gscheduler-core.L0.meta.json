@@ -1,0 +1,23 @@
+{
+ "repo": "liuhailove_gscheduler-core",
+ "launch": 0,
+ "jobs": [
+  "java/obscure_token_based_access_control/liuhailove_gscheduler-core",
+  "java/session_based_access_control/liuhailove_gscheduler-core"
+ ],
+ "marks": {
+  "main": 11.021478090435266,
+  "loaded": 12.023280069231987,
+  "start:java/obscure_token_based_access_control/liuhailove_gscheduler-core": 12.0232860930264,
+  "done:java/obscure_token_based_access_control/liuhailove_gscheduler-core": 12.023293625563383,
+  "start:java/session_based_access_control/liuhailove_gscheduler-core": 12.023297544568777,
+  "done:java/session_based_access_control/liuhailove_gscheduler-core": 12.524280682206154,
+  "end": 12.524288110435009,
+  "exit": 12.52431096881628
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

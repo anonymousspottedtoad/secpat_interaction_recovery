@@ -1,0 +1,20 @@
+{
+ "repo": "fastapi-users_fastapi-users",
+ "launch": 0,
+ "jobs": [
+  "python/verifiable_token_based_authentication/fastapi-users_fastapi-users"
+ ],
+ "marks": {
+  "main": 11.02136293798685,
+  "loaded": 12.023188345134258,
+  "start:python/verifiable_token_based_authentication/fastapi-users_fastapi-users": 12.023193683475256,
+  "done:python/verifiable_token_based_authentication/fastapi-users_fastapi-users": 12.524017799645662,
+  "end": 12.524022478610277,
+  "exit": 12.52403910458088
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

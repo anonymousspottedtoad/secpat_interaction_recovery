@@ -1,0 +1,20 @@
+{
+ "repo": "adrian-lorenz_privacy-guard",
+ "launch": 0,
+ "jobs": [
+  "python/obscure_token_based_access_control/adrian-lorenz_privacy-guard"
+ ],
+ "marks": {
+  "main": 12.022981490939856,
+  "loaded": 13.024503111839294,
+  "start:python/obscure_token_based_access_control/adrian-lorenz_privacy-guard": 13.024509094655514,
+  "done:python/obscure_token_based_access_control/adrian-lorenz_privacy-guard": 13.525488872081041,
+  "end": 13.525495491921902,
+  "exit": 13.525517586618662
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

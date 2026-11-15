@@ -1,0 +1,20 @@
+{
+ "repo": "MTSWebServices_horizon",
+ "launch": 0,
+ "jobs": [
+  "python/authentication_pwd/MTSWebServices_horizon"
+ ],
+ "marks": {
+  "main": 12.021326325833797,
+  "loaded": 13.023275908082724,
+  "start:python/authentication_pwd/MTSWebServices_horizon": 13.02328135818243,
+  "done:python/authentication_pwd/MTSWebServices_horizon": 14.02518318593502,
+  "end": 14.025189135223627,
+  "exit": 14.025213576853275
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

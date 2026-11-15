@@ -1,0 +1,20 @@
+{
+ "repo": "Jenson058_JTool",
+ "launch": 0,
+ "jobs": [
+  "java/verifiable_token_based_authentication/Jenson058_JTool"
+ ],
+ "marks": {
+  "main": 11.021607264876366,
+  "loaded": 12.02313631400466,
+  "start:java/verifiable_token_based_authentication/Jenson058_JTool": 12.02314168959856,
+  "done:java/verifiable_token_based_authentication/Jenson058_JTool": 12.023148354142904,
+  "end": 12.0231520421803,
+  "exit": 12.524140931665897
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

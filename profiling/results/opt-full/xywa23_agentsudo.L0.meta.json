@@ -1,0 +1,20 @@
+{
+ "repo": "xywa23_agentsudo",
+ "launch": 0,
+ "jobs": [
+  "python/obscure_token_based_access_control/xywa23_agentsudo"
+ ],
+ "marks": {
+  "main": 12.023415319621563,
+  "loaded": 12.524357050657272,
+  "start:python/obscure_token_based_access_control/xywa23_agentsudo": 12.52436326444149,
+  "done:python/obscure_token_based_access_control/xywa23_agentsudo": 13.02535641938448,
+  "end": 13.025362856686115,
+  "exit": 13.02538600936532
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

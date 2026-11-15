@@ -1,0 +1,20 @@
+{
+ "repo": "Spring-Middleware_spring-base",
+ "launch": 0,
+ "jobs": [
+  "java/verifiable_token_based_authentication/Spring-Middleware_spring-base"
+ ],
+ "marks": {
+  "main": 11.021315712481737,
+  "loaded": 12.023137707263231,
+  "start:java/verifiable_token_based_authentication/Spring-Middleware_spring-base": 12.02314281463623,
+  "done:java/verifiable_token_based_authentication/Spring-Middleware_spring-base": 12.023149527609348,
+  "end": 12.023152727633715,
+  "exit": 12.524155870079994
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

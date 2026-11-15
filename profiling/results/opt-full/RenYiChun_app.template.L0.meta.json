@@ -1,0 +1,20 @@
+{
+ "repo": "RenYiChun_app.template",
+ "launch": 0,
+ "jobs": [
+  "java/session_based_access_control/RenYiChun_app.template"
+ ],
+ "marks": {
+  "main": 11.020641103386879,
+  "loaded": 12.022451639175415,
+  "start:java/session_based_access_control/RenYiChun_app.template": 12.022457346320152,
+  "done:java/session_based_access_control/RenYiChun_app.template": 12.022464293986559,
+  "end": 12.022467989474535,
+  "exit": 12.523397896438837
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

@@ -1,0 +1,20 @@
+{
+ "repo": "codeheadsystems_hofmann-elimination",
+ "launch": 0,
+ "jobs": [
+  "java/limit_request_rate/codeheadsystems_hofmann-elimination"
+ ],
+ "marks": {
+  "main": 11.521096084266901,
+  "loaded": 12.52265140414238,
+  "start:java/limit_request_rate/codeheadsystems_hofmann-elimination": 12.52265676856041,
+  "done:java/limit_request_rate/codeheadsystems_hofmann-elimination": 13.023706015199423,
+  "end": 13.023713309317827,
+  "exit": 13.023741729557514
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

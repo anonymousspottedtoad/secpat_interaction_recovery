@@ -1,0 +1,20 @@
+{
+ "repo": "opentmf_openid-rbac-security",
+ "launch": 0,
+ "jobs": [
+  "java/session_based_access_control/opentmf_openid-rbac-security"
+ ],
+ "marks": {
+  "main": 11.017375193536282,
+  "loaded": 11.51786620542407,
+  "start:java/session_based_access_control/opentmf_openid-rbac-security": 11.517870031297207,
+  "done:java/session_based_access_control/opentmf_openid-rbac-security": 12.018616359680891,
+  "end": 12.01862233877182,
+  "exit": 12.01864643767476
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

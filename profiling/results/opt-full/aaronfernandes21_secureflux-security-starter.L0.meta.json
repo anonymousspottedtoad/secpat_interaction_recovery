@@ -1,0 +1,20 @@
+{
+ "repo": "aaronfernandes21_secureflux-security-starter",
+ "launch": 0,
+ "jobs": [
+  "java/verifiable_token_based_authentication/aaronfernandes21_secureflux-security-starter"
+ ],
+ "marks": {
+  "main": 11.01841276139021,
+  "loaded": 12.020347353070974,
+  "start:java/verifiable_token_based_authentication/aaronfernandes21_secureflux-security-starter": 12.020353104919195,
+  "done:java/verifiable_token_based_authentication/aaronfernandes21_secureflux-security-starter": 12.020360223948956,
+  "end": 12.020363342016935,
+  "exit": 12.020387545228004
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

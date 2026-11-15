@@ -1,0 +1,23 @@
+{
+ "repo": "ncats_gsrs-spring-starter",
+ "launch": 0,
+ "jobs": [
+  "java/authentication_pwd/ncats_gsrs-spring-starter",
+  "java/session_based_access_control/ncats_gsrs-spring-starter"
+ ],
+ "marks": {
+  "main": 11.021295238286257,
+  "loaded": 12.023363254964352,
+  "start:java/authentication_pwd/ncats_gsrs-spring-starter": 12.023370776325464,
+  "done:java/authentication_pwd/ncats_gsrs-spring-starter": 12.52451191097498,
+  "start:java/session_based_access_control/ncats_gsrs-spring-starter": 12.524518389254808,
+  "done:java/session_based_access_control/ncats_gsrs-spring-starter": 12.524523112922907,
+  "end": 12.524526607245207,
+  "exit": 13.025563385337591
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

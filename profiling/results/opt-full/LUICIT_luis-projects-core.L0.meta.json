@@ -1,0 +1,20 @@
+{
+ "repo": "LUICIT_luis-projects-core",
+ "launch": 0,
+ "jobs": [
+  "java/limit_request_rate/LUICIT_luis-projects-core"
+ ],
+ "marks": {
+  "main": 11.020505342632532,
+  "loaded": 12.022316470742226,
+  "start:java/limit_request_rate/LUICIT_luis-projects-core": 12.022321213036776,
+  "done:java/limit_request_rate/LUICIT_luis-projects-core": 12.523292012512684,
+  "end": 12.523298162966967,
+  "exit": 12.523322138935328
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

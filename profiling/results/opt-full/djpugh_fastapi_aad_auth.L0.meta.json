@@ -1,0 +1,20 @@
+{
+ "repo": "djpugh_fastapi_aad_auth",
+ "launch": 0,
+ "jobs": [
+  "python/session_based_access_control/djpugh_fastapi_aad_auth"
+ ],
+ "marks": {
+  "main": 12.521879833191633,
+  "loaded": 13.523740109056234,
+  "start:python/session_based_access_control/djpugh_fastapi_aad_auth": 13.523745905607939,
+  "done:python/session_based_access_control/djpugh_fastapi_aad_auth": 14.024609543383121,
+  "end": 14.024615202099085,
+  "exit": 14.525614388287067
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

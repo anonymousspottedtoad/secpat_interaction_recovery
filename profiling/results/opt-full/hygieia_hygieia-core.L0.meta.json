@@ -1,0 +1,23 @@
+{
+ "repo": "hygieia_hygieia-core",
+ "launch": 0,
+ "jobs": [
+  "java/authentication_pwd/hygieia_hygieia-core",
+  "java/obscure_token_based_access_control/hygieia_hygieia-core"
+ ],
+ "marks": {
+  "main": 11.01880818232894,
+  "loaded": 12.020486284047365,
+  "start:java/authentication_pwd/hygieia_hygieia-core": 12.020492125302553,
+  "done:java/authentication_pwd/hygieia_hygieia-core": 12.521427862346172,
+  "start:java/obscure_token_based_access_control/hygieia_hygieia-core": 12.52143470197916,
+  "done:java/obscure_token_based_access_control/hygieia_hygieia-core": 12.521439671516418,
+  "end": 12.521443240344524,
+  "exit": 13.022451627999544
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

@@ -1,0 +1,20 @@
+{
+ "repo": "endomorphosis_ipfs_kit_py",
+ "launch": 0,
+ "jobs": [
+  "python/limit_request_rate/endomorphosis_ipfs_kit_py"
+ ],
+ "marks": {
+  "main": 11.520191755145788,
+  "loaded": 19.031938698142767,
+  "start:python/limit_request_rate/endomorphosis_ipfs_kit_py": 19.031943704932928,
+  "done:python/limit_request_rate/endomorphosis_ipfs_kit_py": 27.54757757857442,
+  "end": 27.547582909464836,
+  "exit": 28.549530867487192
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

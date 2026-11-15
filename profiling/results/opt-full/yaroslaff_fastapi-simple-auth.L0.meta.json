@@ -1,0 +1,20 @@
+{
+ "repo": "yaroslaff_fastapi-simple-auth",
+ "launch": 0,
+ "jobs": [
+  "python/verifiable_token_based_authentication/yaroslaff_fastapi-simple-auth"
+ ],
+ "marks": {
+  "main": 12.523330058902502,
+  "loaded": 13.024266548454762,
+  "start:python/verifiable_token_based_authentication/yaroslaff_fastapi-simple-auth": 13.024272207170725,
+  "done:python/verifiable_token_based_authentication/yaroslaff_fastapi-simple-auth": 13.525258865207434,
+  "end": 13.525264840573072,
+  "exit": 13.52528952434659
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

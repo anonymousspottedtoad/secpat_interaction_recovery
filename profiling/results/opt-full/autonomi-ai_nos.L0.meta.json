@@ -1,0 +1,20 @@
+{
+ "repo": "autonomi-ai_nos",
+ "launch": 0,
+ "jobs": [
+  "python/obscure_token_based_access_control/autonomi-ai_nos"
+ ],
+ "marks": {
+  "main": 12.021791145205498,
+  "loaded": 13.02351700887084,
+  "start:python/obscure_token_based_access_control/autonomi-ai_nos": 13.0235206335783,
+  "done:python/obscure_token_based_access_control/autonomi-ai_nos": 13.524420943111181,
+  "end": 13.524426471441984,
+  "exit": 13.524450656026602
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

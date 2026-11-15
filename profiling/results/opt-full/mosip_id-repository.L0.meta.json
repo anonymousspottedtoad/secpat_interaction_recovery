@@ -1,0 +1,23 @@
+{
+ "repo": "mosip_id-repository",
+ "launch": 0,
+ "jobs": [
+  "java/session_based_access_control/mosip_id-repository",
+  "java/verifiable_token_based_authentication/mosip_id-repository"
+ ],
+ "marks": {
+  "main": 11.02143158763647,
+  "loaded": 12.023207172751427,
+  "start:java/session_based_access_control/mosip_id-repository": 12.023215293884277,
+  "done:java/session_based_access_control/mosip_id-repository": 12.023224387317896,
+  "start:java/verifiable_token_based_authentication/mosip_id-repository": 12.02322943508625,
+  "done:java/verifiable_token_based_authentication/mosip_id-repository": 12.02323454618454,
+  "end": 12.023238986730576,
+  "exit": 12.52436637505889
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

@@ -1,0 +1,20 @@
+{
+ "repo": "trisongz_lazyops",
+ "launch": 0,
+ "jobs": [
+  "python/session_based_access_control/trisongz_lazyops"
+ ],
+ "marks": {
+  "main": 12.021909896284342,
+  "loaded": 13.023433178663254,
+  "start:python/session_based_access_control/trisongz_lazyops": 13.023438233882189,
+  "done:python/session_based_access_control/trisongz_lazyops": 16.029054451733828,
+  "end": 16.029060009866953,
+  "exit": 16.029083974659443
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

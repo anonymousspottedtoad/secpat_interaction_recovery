@@ -1,0 +1,20 @@
+{
+ "repo": "AtlasServer-Core_AtlasServer-Core",
+ "launch": 0,
+ "jobs": [
+  "python/session_based_access_control/AtlasServer-Core_AtlasServer-Core"
+ ],
+ "marks": {
+  "main": 12.022964905947447,
+  "loaded": 12.523879915475845,
+  "start:python/session_based_access_control/AtlasServer-Core_AtlasServer-Core": 12.52388572320342,
+  "done:python/session_based_access_control/AtlasServer-Core_AtlasServer-Core": 13.024872090667486,
+  "end": 13.02487863600254,
+  "exit": 13.024901609867811
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

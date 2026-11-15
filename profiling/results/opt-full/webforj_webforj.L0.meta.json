@@ -1,0 +1,20 @@
+{
+ "repo": "webforj_webforj",
+ "launch": 0,
+ "jobs": [
+  "java/session_based_access_control/webforj_webforj"
+ ],
+ "marks": {
+  "main": 11.017791397869587,
+  "loaded": 12.019552994519472,
+  "start:java/session_based_access_control/webforj_webforj": 12.01955845579505,
+  "done:java/session_based_access_control/webforj_webforj": 12.520460959523916,
+  "end": 12.520466681569815,
+  "exit": 13.021452959626913
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

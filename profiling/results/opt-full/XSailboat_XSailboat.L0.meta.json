@@ -1,0 +1,23 @@
+{
+ "repo": "XSailboat_XSailboat",
+ "launch": 0,
+ "jobs": [
+  "java/limit_request_rate/XSailboat_XSailboat",
+  "java/session_based_access_control/XSailboat_XSailboat"
+ ],
+ "marks": {
+  "main": 11.019597616046667,
+  "loaded": 12.021447520703077,
+  "start:java/limit_request_rate/XSailboat_XSailboat": 12.021452847868204,
+  "done:java/limit_request_rate/XSailboat_XSailboat": 13.022766724228859,
+  "start:java/session_based_access_control/XSailboat_XSailboat": 13.022770576179028,
+  "done:java/session_based_access_control/XSailboat_XSailboat": 14.52455972880125,
+  "end": 14.524566113948822,
+  "exit": 14.52459030970931
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

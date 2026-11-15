@@ -1,0 +1,20 @@
+{
+ "repo": "avinash-mall_CognitiveMemoryLayer",
+ "launch": 0,
+ "jobs": [
+  "python/limit_request_rate/avinash-mall_CognitiveMemoryLayer"
+ ],
+ "marks": {
+  "main": 12.046284928917885,
+  "loaded": 13.048114132136106,
+  "start:python/limit_request_rate/avinash-mall_CognitiveMemoryLayer": 13.04811941087246,
+  "done:python/limit_request_rate/avinash-mall_CognitiveMemoryLayer": 14.049981120973825,
+  "end": 14.04998653754592,
+  "exit": 14.050009239464998
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

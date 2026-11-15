@@ -1,0 +1,23 @@
+{
+ "repo": "structure-projects_structure-security",
+ "launch": 0,
+ "jobs": [
+  "java/session_based_access_control/structure-projects_structure-security",
+  "java/verifiable_token_based_authentication/structure-projects_structure-security"
+ ],
+ "marks": {
+  "main": 11.020721770823002,
+  "loaded": 11.521550502628088,
+  "start:java/session_based_access_control/structure-projects_structure-security": 12.022676356136799,
+  "done:java/session_based_access_control/structure-projects_structure-security": 12.022686917334795,
+  "start:java/verifiable_token_based_authentication/structure-projects_structure-security": 12.022690802812576,
+  "done:java/verifiable_token_based_authentication/structure-projects_structure-security": 12.022694382816553,
+  "end": 12.022697776556015,
+  "exit": 12.02272056415677
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

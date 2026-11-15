@@ -1,0 +1,20 @@
+{
+ "repo": "Nanguage_executor-http",
+ "launch": 0,
+ "jobs": [
+  "python/authentication_pwd/Nanguage_executor-http"
+ ],
+ "marks": {
+  "main": 12.523650847375393,
+  "loaded": 13.525442089885473,
+  "start:python/authentication_pwd/Nanguage_executor-http": 13.525447525084019,
+  "done:python/authentication_pwd/Nanguage_executor-http": 14.026458941400051,
+  "end": 14.026465110480785,
+  "exit": 14.026490081101656
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

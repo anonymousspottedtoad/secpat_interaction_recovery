@@ -1,0 +1,20 @@
+{
+ "repo": "fastapi-keycloak_fastapi-keycloak",
+ "launch": 0,
+ "jobs": [
+  "python/verifiable_token_based_authentication/fastapi-keycloak_fastapi-keycloak"
+ ],
+ "marks": {
+  "main": 12.02139663696289,
+  "loaded": 13.023111280053854,
+  "start:python/verifiable_token_based_authentication/fastapi-keycloak_fastapi-keycloak": 13.02311671152711,
+  "done:python/verifiable_token_based_authentication/fastapi-keycloak_fastapi-keycloak": 13.023123793303967,
+  "end": 13.023127514868975,
+  "exit": 13.52411063760519
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

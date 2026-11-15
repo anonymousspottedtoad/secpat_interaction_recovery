@@ -1,0 +1,23 @@
+{
+ "repo": "42signal_anyforce",
+ "launch": 0,
+ "jobs": [
+  "python/session_based_access_control/42signal_anyforce",
+  "python/verifiable_token_based_authentication/42signal_anyforce"
+ ],
+ "marks": {
+  "main": 12.550168182700872,
+  "loaded": 13.553579598665237,
+  "start:python/session_based_access_control/42signal_anyforce": 13.553585324436426,
+  "done:python/session_based_access_control/42signal_anyforce": 13.553592268377542,
+  "start:python/verifiable_token_based_authentication/42signal_anyforce": 13.553596030920744,
+  "done:python/verifiable_token_based_authentication/42signal_anyforce": 13.553599651902914,
+  "end": 13.553602613508701,
+  "exit": 14.054629899561405
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

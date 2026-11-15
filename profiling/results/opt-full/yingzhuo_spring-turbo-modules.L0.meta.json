@@ -1,0 +1,20 @@
+{
+ "repo": "yingzhuo_spring-turbo-modules",
+ "launch": 0,
+ "jobs": [
+  "java/verifiable_token_based_authentication/yingzhuo_spring-turbo-modules"
+ ],
+ "marks": {
+  "main": 11.017489228397608,
+  "loaded": 12.01928874105215,
+  "start:java/verifiable_token_based_authentication/yingzhuo_spring-turbo-modules": 12.019294735044241,
+  "done:java/verifiable_token_based_authentication/yingzhuo_spring-turbo-modules": 12.019301857799292,
+  "end": 12.019305169582367,
+  "exit": 12.52042244002223
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

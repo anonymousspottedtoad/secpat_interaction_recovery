@@ -1,0 +1,20 @@
+{
+ "repo": "cn-luyang_luyang-framework",
+ "launch": 0,
+ "jobs": [
+  "java/session_based_access_control/cn-luyang_luyang-framework"
+ ],
+ "marks": {
+  "main": 11.022125899791718,
+  "loaded": 12.023902222514153,
+  "start:java/session_based_access_control/cn-luyang_luyang-framework": 12.023907285183668,
+  "done:java/session_based_access_control/cn-luyang_luyang-framework": 12.023914072662592,
+  "end": 12.023917585611343,
+  "exit": 12.023940794169903
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

@@ -1,0 +1,19 @@
+{
+ "repo": "topoteretes_cognee",
+ "launch": 0,
+ "jobs": [
+  "python/obscure_token_based_access_control/topoteretes_cognee"
+ ],
+ "marks": {
+  "main": 11.519460782408714,
+  "loaded": 13.022107042372227,
+  "start:python/obscure_token_based_access_control/topoteretes_cognee": 13.022112790495157,
+  "done:python/obscure_token_based_access_control/topoteretes_cognee": 192.85754812508821,
+  "exit": 193.8595755174756
+ },
+ "returncode": 1,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

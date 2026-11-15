@@ -1,0 +1,20 @@
+{
+ "repo": "amabito_veronica",
+ "launch": 0,
+ "jobs": [
+  "python/obscure_token_based_access_control/amabito_veronica"
+ ],
+ "marks": {
+  "main": 12.022610064595938,
+  "loaded": 13.023937031626701,
+  "start:python/obscure_token_based_access_control/amabito_veronica": 13.023941528052092,
+  "done:python/obscure_token_based_access_control/amabito_veronica": 14.025381822139025,
+  "end": 14.025387313216925,
+  "exit": 14.025411050766706
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

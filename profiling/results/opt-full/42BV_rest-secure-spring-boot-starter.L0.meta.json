@@ -1,0 +1,20 @@
+{
+ "repo": "42BV_rest-secure-spring-boot-starter",
+ "launch": 0,
+ "jobs": [
+  "java/authentication_pwd/42BV_rest-secure-spring-boot-starter"
+ ],
+ "marks": {
+  "main": 11.021958600729704,
+  "loaded": 12.023891102522612,
+  "start:java/authentication_pwd/42BV_rest-secure-spring-boot-starter": 12.023896548897028,
+  "done:java/authentication_pwd/42BV_rest-secure-spring-boot-starter": 12.023903384804726,
+  "end": 12.023906644433737,
+  "exit": 12.023929454386234
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}

@@ -1,0 +1,20 @@
+{
+ "repo": "randovania_randovania",
+ "launch": 0,
+ "jobs": [
+  "python/session_based_access_control/randovania_randovania"
+ ],
+ "marks": {
+  "main": 11.52223552018404,
+  "loaded": 13.024715039879084,
+  "start:python/session_based_access_control/randovania_randovania": 13.024719417095184,
+  "done:python/session_based_access_control/randovania_randovania": 16.030130092054605,
+  "end": 16.03013589605689,
+  "exit": 16.030159898102283
+ },
+ "returncode": 0,
+ "killed": "",
+ "jfr": false,
+ "xmx": "48g",
+ "budget": 180.0
+}
