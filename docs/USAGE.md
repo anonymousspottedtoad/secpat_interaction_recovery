@@ -1,9 +1,9 @@
 # Using secpat-interaction-order: the details
 
-The [README](../README.md) shows how to run the traversal on one case and on the whole dataset.
-This page has the rest: how the output maps to the paper, what each module does, where Joern
-runs and its settings, the native engine and the faster builds, the progress display, the Python
-API, the script's parameters and the profiling runners.
+The [README](../README.md) shows the command `secpat-interaction-order`, on one case and on the
+whole dataset. This page has the rest: how the output maps to the paper, what each module does,
+where Joern runs and its settings, the native engine and the faster builds, the progress display,
+the Python API, the Joern script on its own and the profiling runners.
 
 ## The output and the paper
 
@@ -42,6 +42,7 @@ Two rules of the traversal are not described in Appendix C:
 
 | Module | Does |
 | ------ | ---- |
+| `cli.py` | the command `secpat-interaction-order` (`run`, `dataset`); also `python -m secpat_interaction_order` |
 | `detector.py` | `detect()` -> `DetectionResult`; sends the mapping, reads the order back |
 | `joern_service.py` | the HTTP client — POSTs `walk.sc` + a profile to a query service |
 | `joern_local.py` | the local runner — `joern-parse` / `joern --script` on this machine |
@@ -129,10 +130,10 @@ over their drafts with `[i/N]`, the current repository and an ETA.
 
 ## The Python API and the script, by hand
 
-The package has no command of its own. `detect()` is the entry point, and `joern/walk.sc` is a
-plain Joern script. The commands below run from a checkout of this repository: `PYTHONPATH=src`
-stands in for an install (the package has no dependencies). They use the record of the README's
-[Check one case](../README.md#check-one-case) and the paper's dataset:
+The command in the README calls `detect()`, the package's entry point. `joern/walk.sc` is a plain
+Joern script, which also runs without Python. The commands below run from a checkout of this
+repository: `PYTHONPATH=src` stands in for an install (the package has no dependencies). They use
+the record of the README's [Check one case](../README.md#check-one-case) and the paper's dataset:
 
 ```bash
 DATASET=/path/to/dataset                          # the paper's dataset, see the README
@@ -224,11 +225,57 @@ print(result.reason or "\n".join(result.tokens))
 EOF
 ```
 
-### The script's parameters
+### The Joern script alone
 
-The README's [Check one case](../README.md#check-one-case) runs `walk.sc` directly: `walk.sc` and
-the language's profile joined into one script (as `detector._script` joins them), then
-`joern --script` with the query as `--param`s. That is what `joern_local.py` runs for one query.
+Without Python, `walk.sc` runs on Joern directly: `walk.sc` and the language's profile joined into
+one script (as `detector._script` joins them), then `joern --script` with the query as `--param`s.
+That is what `joern_local.py` runs for one query.
+
+```bash
+D=/path/to/dataset                                              # the paper's dataset
+J=/path/to/secpat_interaction_recovery/src/secpat_interaction_order/joern   # a clone of this repository
+# or, where the package is installed (secpatrec installs it):
+# J=$(python3 -c 'import secpat_interaction_order as s; print(s.__path__[0])')/joern
+
+cd "$(mktemp -d)"                       # Joern leaves a workspace/ folder here
+cat $J/walk.sc $J/java.sc > query.sc    # python.sc for a Python repository
+joern --script query.sc \
+  --param cpgPath=$D/codebase/cpg/ErtanSidar_turkcell-common__JAVASRC.cpg \
+  --param inputPath=$D/codebase/repos/java/ErtanSidar_turkcell-common \
+  --param language=JAVASRC \
+  --param 'roles=[
+    {"role": "Enforcer",      "entity": "doFilterInternal",  "file": "src/main/java/io/github/ertansidar/security/filter/BaseJwtAuthFilter.java", "lines": "27"},
+    {"role": "Verifier",      "entity": "validateToken",     "file": "src/main/java/io/github/ertansidar/security/jwt/BaseJwtService.java",    "lines": "41"},
+    {"role": "Key manager",   "entity": "getSignKey",        "file": "src/main/java/io/github/ertansidar/security/jwt/BaseJwtService.java",    "lines": "71"},
+    {"role": "Cryptographer", "entity": "parseSignedClaims", "file": "src/main/java/io/github/ertansidar/security/jwt/BaseJwtService.java",    "lines": "46"}]' \
+  --param 'behaviour=[
+    {"step": "2", "from": "Enforcer", "to": "Verifier"},
+    {"step": "3", "from": "Verifier", "to": "Key manager"},
+    {"step": "4", "from": "Verifier", "to": "Cryptographer"}]' \
+  --param entry=Enforcer \
+  --param outputPath=$PWD/result.json
+```
+
+It takes about 11 s. Among Joern's own messages it prints:
+
+```text
+derived 4 interaction(s) from 4 role(s), entry=Enforcer
+```
+
+`result.json` holds the interactions in order, the same four as `interaction_order` in the
+ground-truth file:
+
+```bash
+grep -o '"interaction":"[^"]*"' result.json
+```
+
+```text
+"interaction":"Enforcer → Key manager"
+"interaction":"Enforcer → Verifier"
+"interaction":"Verifier → Key manager"
+"interaction":"Verifier → Cryptographer"
+```
+
 The parameters are `exec`'s, at the top of `walk.sc`:
 
 | `--param` | |
@@ -323,6 +370,7 @@ on `jobs.jsonl` (see the joern-rust README) and compare its folder the same way.
 
 ## Tests
 
-`tests/` covers the progress display (`pip install -e ".[dev]"`, then `pytest`). The checks
-against the paper's numbers are in the [README](../README.md): one record, and the whole dataset
-through secpatrec's `secpat interaction`.
+`tests/` covers the command and the progress display, without Joern (`pip install -e ".[dev]"`,
+then `pytest`). The checks against the paper's dataset are in the [README](../README.md):
+`secpat-interaction-order dataset` on one record and on all 100, and secpatrec's
+`secpat interaction` for the scores.

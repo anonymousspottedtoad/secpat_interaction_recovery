@@ -11,9 +11,25 @@ orders" are that run's outputs. 19 drafts timed out in it and have no order.
 ## [Unreleased] (branch progress)
 
 A progress display: while `detect()` runs, it shows which repository and draft it is on and how
-much work the traversal has done. The traversal's output is unchanged (see Output).
+much work the traversal has done. A command, `secpat-interaction-order`, so the package runs on
+its own. The traversal's output is unchanged (see Output).
 
 ### Added
+
+- The command `secpat-interaction-order` (`cli.py`; also `python -m secpat_interaction_order`),
+  standard library only. `run` derives the order of one role mapping given on the command line
+  (`--codebase`, `--language`, `--roles`, optional `--behaviour`, `--entry`, `--cpg-dir`,
+  `--output`). `dataset --dataset DIR [--repo R] [--pattern P]` derives the order of each record's
+  ground-truth role mapping and compares `entryRole`, `entryRule`, `interactions` and
+  `anchoredRoles` with the record's stored `interaction_order`; it exits with 1 if any differs.
+  Before the traversal it drops the roles the pattern marks `required: false` and the steps that
+  involve them, as secpat-scoring's `scored_mappings` does, and it skips the traversal when fewer
+  than two roles are found in code, as secpatrec's `detect_action_sequence` does. Both take
+  `--engine joern|rust`. On the paper's dataset: 100 of 100 records give the stored order, every
+  field of the written files equal to the stored ones (18 s on `secpat-walk`, 23 min on
+  Joern).
+- `tests/test_cli.py`: the role rule, the comparison and exit status, and `run`'s arguments and
+  output, with `detect` stubbed.
 
 - `SECPAT_PROGRESS` and `progress.py`. `auto` (the default) shows one line, redrawn in place,
   when stderr is a terminal: repository / draft, elapsed time, engine and phase, the CPG's size
@@ -50,14 +66,16 @@ much work the traversal has done. The traversal's output is unchanged (see Outpu
 - `profiling/prof_walk.py` patches either `exec` (with or without the progress calls), so it
   still profiles older traversals; its counter patches apply to the new `walk.sc` exactly as to
   `walk_opt3.sc`.
-- README rewritten for reviewers: what is needed, how to check one case (one dataset record with
-  `joern --script`, or any record with secpatrec's `secpat interaction --repo --pattern`), how to
-  reproduce the whole dataset, and the native engine. Every command in it was run on the paper's
-  dataset, and its outputs are shown next to it.
+- README rewritten for reviewers: what is needed, how to check one case
+  (`secpat-interaction-order dataset --repo --pattern`, and `run` with a role mapping written out),
+  how to reproduce the whole dataset (`secpat-interaction-order dataset`, and secpatrec's
+  `secpat interaction` for the scores), and the native engine. Every command in it was run on the
+  paper's dataset, and its outputs are shown next to it.
 - The rest of the former README moved to the new `docs/USAGE.md`: how the output maps to the
   paper, the modules, where Joern runs and its settings, the faster engines and builds, the
-  progress display, `detect()` from a shell (now on a dataset record), the script's `--param`s and
-  the batch runners in `profiling/`. JOERN.md: a note on `Progress`.
+  progress display, `detect()` from a shell (now on a dataset record), the Joern script on its own
+  (`joern --script`) with its `--param`s, and the batch runners in `profiling/`. JOERN.md: a note on
+  `Progress`.
 
 ### Output
 
