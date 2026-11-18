@@ -74,6 +74,19 @@ SECPAT_WALK_SERVE = os.getenv("SECPAT_WALK_SERVE", "").strip().lower() in ("1", 
 # (the engine's own SECPAT_PROGRESS lines, passed through to stderr), or "off".
 SECPAT_PROGRESS = os.getenv("SECPAT_PROGRESS", "auto").strip().lower() or "auto"
 
+# ── traversal view ───────────────────────────────────────────────────────────
+
+# "nodes": every query on the native engine saves its traversal's trace (the methods it enters,
+# the role nodes it reaches, the interactions it records) for the traversal view (`view.py`), and
+# a viewer is started on SECPAT_VIEW_PORT if none is running. "off" (the default) saves nothing.
+SECPAT_VIEW = os.getenv("SECPAT_VIEW", "off").strip().lower() or "off"
+
+# Where the traces go, one file per query.
+SECPAT_VIEW_DIR = Path(os.getenv("SECPAT_VIEW_DIR", "") or Path.home() / ".cache" / "secpat" / "view")
+
+# The viewer's port, on 127.0.0.1.
+SECPAT_VIEW_PORT = int(os.getenv("SECPAT_VIEW_PORT", "8765") or "8765")
+
 # ── CPG builds (local joern-parse) ────────────────────────────────────────────
 
 # Delombok mode for JAVASRC builds. "types-only" is what the query service used; "no-delombok"

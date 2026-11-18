@@ -51,7 +51,7 @@ import logging
 from dataclasses import dataclass, field
 from pathlib import Path
 
-from . import config, joern_local, joern_service, progress, rust_walk
+from . import config, joern_local, joern_service, progress, rust_walk, view
 
 logger = logging.getLogger(__name__)
 
@@ -298,13 +298,22 @@ def detect(
     else:
         engine, where = "joern", "local Joern"
     draft = label or f"{params['entry'] or 'no entry role'}, {len(roles)} roles"
+    # SECPAT_VIEW=nodes: the traversal view replays the native engine's trace (view.py).
+    trace = None
+    if config.SECPAT_VIEW == "nodes":
+        if engine == "rust":
+            trace = view.new_trace(repo, draft)
+        else:
+            view.warn_engine(where)
     with progress.Display(repo, draft, engine) as display:
         if engine == "service":
             result = joern_service.query(repo, language, script, params=params, display=display)
         elif engine == "rust":
-            result = rust_walk.query(repo, language, repo_path, params, display=display)
+            result = rust_walk.query(repo, language, repo_path, params, display=display, trace=trace)
         else:
             result = joern_local.query(repo, language, script, repo_path, params=params, display=display)
+    if trace is not None:
+        view.finish(trace, result, draft)
     if result is None:
         return DetectionResult(
             reason=(

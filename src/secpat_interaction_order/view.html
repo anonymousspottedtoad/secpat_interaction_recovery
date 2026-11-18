@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Traversal view</title>
+<style>
+  :root {
+    --bg: #0e1116; --panel: #151a22; --line: #252c38; --text: #d7dde8; --dim: #8a93a6;
+    --faint: #5b6476; --accent: #ffd166; --ok: #80ed99; --warn: #ff9f1c; --bad: #f25f5c;
+    --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; background: var(--bg); color: var(--text);
+    font: 13px/1.4 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  body { display: grid; grid-template-rows: auto 1fr auto; height: 100vh; overflow: hidden; }
+  header { display: flex; align-items: center; gap: 14px; padding: 8px 14px; border-bottom: 1px solid var(--line);
+    background: var(--panel); min-width: 0; }
+  header h1 { font-size: 14px; margin: 0; font-weight: 600; white-space: nowrap; }
+  #meta { color: var(--dim); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; flex: 1; }
+  #meta b { color: var(--text); font-weight: 600; }
+  .pill { padding: 2px 8px; border-radius: 999px; font-size: 11px; border: 1px solid var(--line); white-space: nowrap; }
+  .pill.live { color: var(--accent); border-color: #6b5a2a; }
+  .pill.done { color: var(--ok); border-color: #2f5b3c; }
+  .pill.cut { color: var(--warn); border-color: #6b4a1f; }
+  main { display: grid; grid-template-columns: 1fr 340px; min-height: 0; }
+  #stage { position: relative; min-width: 0; min-height: 0; overflow: hidden; }
+  canvas { display: block; width: 100%; height: 100%; cursor: grab; }
+  canvas.drag { cursor: grabbing; }
+  #empty { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+    color: var(--dim); text-align: center; padding: 40px; pointer-events: none; }
+  #empty code { color: var(--text); font-family: var(--mono); }
+  #tip { position: absolute; pointer-events: none; display: none; max-width: 520px; padding: 8px 10px;
+    background: #1c2230ee; border: 1px solid #334055; border-radius: 6px; font-size: 12px; }
+  #tip .fn { font-family: var(--mono); word-break: break-all; color: var(--text); }
+  #tip .row { color: var(--dim); }
+  #legend { position: absolute; left: 10px; bottom: 10px; display: flex; gap: 12px; flex-wrap: wrap;
+    color: var(--dim); font-size: 11px; background: #0e1116cc; padding: 5px 8px; border-radius: 6px; }
+  #legend span { display: inline-flex; align-items: center; gap: 5px; }
+  #legend i { display: inline-block; width: 10px; height: 10px; border-radius: 50%; }
+  aside { border-left: 1px solid var(--line); background: var(--panel); overflow-y: auto; padding: 4px 0 16px; }
+  aside h2 { font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: var(--dim);
+    margin: 14px 14px 6px; font-weight: 600; }
+  .kv { display: grid; grid-template-columns: auto 1fr; gap: 2px 10px; padding: 0 14px; font-size: 12px; }
+  .kv dt { color: var(--dim); } .kv dd { margin: 0; overflow-wrap: anywhere; }
+  .role { display: grid; grid-template-columns: 12px 1fr auto; gap: 2px 8px; padding: 5px 14px; align-items: start; }
+  .role .dot { width: 10px; height: 10px; border-radius: 50%; margin-top: 4px; }
+  .role .name { font-weight: 600; }
+  .role .where { grid-column: 2 / 4; color: var(--dim); font-family: var(--mono); font-size: 11px; overflow-wrap: anywhere; }
+  .role .state { font-size: 11px; color: var(--faint); }
+  .role .state.on { color: var(--ok); }
+  ol.list { list-style: none; margin: 0; padding: 0 8px; }
+  ol.list li { padding: 5px 6px; border-radius: 5px; display: grid; grid-template-columns: 22px 1fr; gap: 0 6px; }
+  ol.list li .n { color: var(--faint); font-variant-numeric: tabular-nums; text-align: right; }
+  ol.list li .what { font-weight: 600; }
+  ol.list li .sub { grid-column: 2; color: var(--dim); font-family: var(--mono); font-size: 11px; overflow-wrap: anywhere; }
+  ol.list li.fresh { background: #2a2a1c; }
+  ol.list li.rolled { opacity: .5; } ol.list li.rolled .what { text-decoration: line-through; }
+  .muted { color: var(--faint); padding: 0 14px; font-size: 12px; }
+  .counters { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; padding: 0 14px; }
+  .counters div { background: #10141b; border: 1px solid var(--line); border-radius: 6px; padding: 6px 8px; }
+  .counters b { display: block; font-size: 16px; font-variant-numeric: tabular-nums; }
+  .counters span { color: var(--dim); font-size: 11px; }
+  footer { display: flex; align-items: center; gap: 8px; padding: 8px 14px; border-top: 1px solid var(--line);
+    background: var(--panel); flex-wrap: wrap; }
+  button, select { background: #1c2230; color: var(--text); border: 1px solid #2d3647; border-radius: 6px;
+    padding: 4px 9px; font: inherit; cursor: pointer; }
+  button:hover, select:hover { border-color: #46536b; }
+  button.icon { width: 34px; padding: 4px 0; }
+  #play { width: 64px; }
+  #scrub { flex: 1; min-width: 160px; accent-color: var(--accent); }
+  #tick { color: var(--dim); font-variant-numeric: tabular-nums; min-width: 120px; text-align: right; }
+  label.chk { color: var(--dim); display: inline-flex; gap: 5px; align-items: center; }
+  a.btn { color: var(--text); text-decoration: none; background: #1c2230; border: 1px solid #2d3647;
+    border-radius: 6px; padding: 4px 9px; }
+  .sep { width: 1px; height: 22px; background: var(--line); }
+  #traces { max-width: 340px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Traversal view</h1>
+  <div id="meta">waiting for a trace…</div>
+  <span id="status" class="pill">no trace</span>
+</header>
+<main>
+  <section id="stage">
+    <canvas id="cv"></canvas>
+    <div id="empty">No trace yet.<br><br>Run a query with <code>SECPAT_VIEW=nodes JOERN_ENGINE=rust</code>,<br>
+      or open a saved trace with <code>secpat-interaction-order view TRACE</code>.</div>
+    <div id="tip"></div>
+    <div id="legend"></div>
+  </section>
+  <aside id="side">
+    <h2>Query</h2><dl class="kv" id="query"></dl>
+    <h2>Roles</h2><div id="roles"></div>
+    <h2>Interactions, as recorded</h2><ol class="list" id="emits"></ol>
+    <div class="muted" id="rolledNote"></div>
+    <h2>Interaction order (the result)</h2><ol class="list" id="final"></ol>
+    <h2>Counters</h2><div class="counters" id="counters"></div>
+  </aside>
+</main>
+<footer>
+  <button class="icon" id="restart" title="Back to the start (Home)">⏮</button>
+  <button class="icon" id="back" title="One step back (←)">◀</button>
+  <button id="play" title="Play / pause (space)">▶ Play</button>
+  <button class="icon" id="fwd" title="One step forward (→)">▶|</button>
+  <button class="icon" id="end" title="To the end (End)">⏭</button>
+  <input type="range" id="scrub" min="0" max="0" value="0">
+  <span id="tick">0 / 0</span>
+  <select id="speed" title="Speed">
+    <option value="0.25">¼×</option><option value="0.5">½×</option><option value="1" selected>1×</option>
+    <option value="2">2×</option><option value="4">4×</option><option value="10">10×</option><option value="50">50×</option>
+  </select>
+  <span class="sep"></span>
+  <select id="layout" title="Layout">
+    <option value="auto" selected>layout: auto</option><option value="tree">layout: tree</option>
+    <option value="radial">layout: radial</option>
+  </select>
+  <button id="fit" title="Fit to the window (double-click the canvas)">Fit</button>
+  <span class="sep server-only"></span>
+  <select id="traces" class="server-only" title="Saved traces, newest first"></select>
+  <label class="chk server-only" title="Switch to each new trace when the current one has played"><input type="checkbox" id="follow" checked> follow new traces</label>
+  <a class="btn server-only" id="export" href="#" download>Export HTML</a>
+</footer>
+<!--TRACE-DATA-->
+<script>
+"use strict";
+// ---------------------------------------------------------------------------------------------
+// Data: one trace = the events of `secpat-walk --trace` (minus `step`, see view.py), plus the
+// `result` line detect() appends. The structure (nodes, parents, layout) is read once per event;
+// what the traversal has done by a given step is replayed from the start whenever needed.
+// ---------------------------------------------------------------------------------------------
+const PALETTE = ["#ff9f1c", "#2ec4b6", "#ff5d8f", "#9b8cff", "#80ed99", "#4cc9f0", "#f9c74f",
+  "#f25f5c", "#c77dff", "#90be6d"];
+const TICK_EVENTS = new Set(["enter", "exit", "skip", "replay", "hit", "emit", "alt_rollback", "result"]);
+const embeddedTag = document.getElementById("trace-data");
+const EMBEDDED = embeddedTag ? JSON.parse(embeddedTag.textContent) : null;
+
+const $ = (id) => document.getElementById(id);
+const cv = $("cv"), ctx = cv.getContext("2d");
+
+let T = null;           // the trace being shown
+let D = null;           // what the traversal has done up to `pos`
+let pos = 0;            // ticks applied
+let playing = false, acc = 0, lastFrame = 0;
+let view = { s: 1, x: 0, y: 0 }, userMoved = false;
+let hover = null, layoutMode = "auto", dirtyLayout = false, lastLayout = 0;
+let loadToken = 0, newestSeen = null, needsDraw = true, showRolled = false;
+
+function emptyTrace(name) {
+  return { name, events: [], ticks: [], nodes: new Map(), order: [], names: new Map(),
+    sstack: [], header: null, start: null, result: null, end: null, dropped: {}, offset: 0, roleNode: new Map(),
+    done: false, roleColor: new Map(), roles: [], leaves: 0, mode: "tree" };
+}
+
+function shortName(full) {
+  if (!full) return "";
+  const head = String(full).split(":")[0].replace(/^<unresolvedNamespace>\./, "").replace(/^<operator>\./, "");
+  const parts = head.split(".");
+  return parts.length >= 2 ? parts.slice(-2).join(".") : head;
+}
+
+function roleColor(role) {
+  if (!T.roleColor.has(role)) T.roleColor.set(role, PALETTE[T.roleColor.size % PALETTE.length]);
+  return T.roleColor.get(role);
+}
+
+function node(id, init) {
+  let n = T.nodes.get(id);
+  if (!n) {
+    n = { id, kind: "reached", fullName: "", file: "", line: null, parent: null, depth: 0,
+      first: T.ticks.length, owners: new Set(), runsAs: new Set(), x: 0, y: 0, children: [] };
+    T.nodes.set(id, n);
+    T.order.push(id);
+    dirtyLayout = true;
+  }
+  if (init) {
+    for (const k of ["fullName", "file", "line"]) if (init[k] && !n[k]) n[k] = init[k];
+    const rank = { reached: 0, external: 1, skipped: 2, method: 3 };
+    if (init.kind && rank[init.kind] > rank[n.kind]) n.kind = init.kind;
+  }
+  return n;
+}
+
+function attach(n, depth) {
+  // A node's parent is the body that first reached it: the one at depth - 1 on the stack.
+  if (n.placed) return;
+  n.placed = true;
+  const parent = depth > 0 ? T.sstack[depth - 1] : null;
+  n.depth = depth;
+  if (parent != null && parent !== n.id && T.nodes.has(parent)) {
+    n.parent = parent;
+    T.nodes.get(parent).children.push(n.id);
+  }
+}
+
+function ingest(ev) {
+  const idx = T.events.length;
+  T.events.push(ev);
+  switch (ev.ev) {
+    case "header":
+      T.header = ev;
+      T.roles = (ev.roles || []).map((r) => r.role);
+      T.roles.forEach(roleColor);
+      break;
+    case "start":
+      T.start = ev;
+      break;
+    case "enter": {
+      const n = node(ev.method, { kind: "method", fullName: ev.fullName, file: ev.file, line: ev.line });
+      attach(n, ev.depth);
+      (ev.roles || []).forEach((r) => n.runsAs.add(r));
+      T.sstack[ev.depth] = ev.method;
+      T.sstack.length = ev.depth + 1;
+      break;
+    }
+    case "exit":
+      T.sstack.length = Math.max(0, ev.depth);
+      break;
+    case "skip":
+    case "replay": {
+      const n = node(ev.method, { kind: ev.ev === "skip" ? "skipped" : "method", fullName: ev.fullName, file: ev.file });
+      attach(n, ev.depth);
+      break;
+    }
+    case "resolve":
+      for (const t of ev.targets || []) {
+        if (t.id == null || !t.fullName) continue;
+        T.names.set(t.id, t.fullName);
+        const known = T.nodes.get(t.id);
+        if (known && !known.fullName) known.fullName = t.fullName;
+      }
+      if (ev.site != null && ev.name) T.names.set("site:" + ev.site, ev.name);
+      break;
+    case "hit": {
+      const id = ev.node != null ? ev.node : "site:" + ev.site;
+      const n = node(id, { fullName: T.names.get(id) || "" });
+      if (n.siteLine == null) n.siteLine = ev.line;
+      attach(n, T.sstack.length);
+      (ev.roles || []).forEach((r) => { n.owners.add(r); roleColor(r); if (!T.roleNode.has(r)) T.roleNode.set(r, id); });
+      break;
+    }
+    case "emit": {
+      roleColor(ev.from); roleColor(ev.to);
+      // A replayed body re-emits its interactions with no node and no site: its target is the
+      // role's own node, which is already known.
+      if (ev.node == null && ev.site == null) break;
+      const id = ev.node != null ? ev.node : "site:" + ev.site;
+      const n = node(id, { fullName: T.names.get(id) || "" });
+      if (n.siteLine == null) n.siteLine = ev.line;
+      attach(n, T.sstack.length);
+      n.owners.add(ev.to);
+      if (!T.roleNode.has(ev.to)) T.roleNode.set(ev.to, id);
+      break;
+    }
+    case "result":
+      T.result = ev;
+      break;
+    case "end":
+      T.end = ev;
+      T.done = true;
+      break;
+  }
+  if (TICK_EVENTS.has(ev.ev)) T.ticks.push(idx);
+}
+
+function finishStructure() {
+  // A role the engine located on a library call (start.roles[].external) owns a node with no
+  // body in the repository; any role located on a node the trace knows owns it.
+  for (const r of (T.start && T.start.roles) || []) {
+    for (const id of r.nodes || []) {
+      const n = T.nodes.get(id);
+      if (!n) continue;
+      n.owners.add(r.role);
+      if (r.external && n.kind === "reached") n.kind = "external";
+    }
+  }
+  for (const n of T.nodes.values()) {
+    // A call target with no body the traversal entered or skipped is a library method; a role on
+    // a field or a parameter stays "reached" (it is not a call target).
+    if (n.kind === "reached" && (String(n.id).startsWith("site:") || (T.names.has(n.id) && !n.file))) n.kind = "external";
+    if (!n.fullName && T.names.has(n.id)) n.fullName = T.names.get(n.id);
+  }
+}
+
+// ---------------------------------------------------------------------------------------------
+// Layout: a tidy tree of first reachings. x = depth, y = leaf order (parents centred on their
+// children); drawn as a tree, or wrapped round a circle when there are many leaves.
+// ---------------------------------------------------------------------------------------------
+function layout() {
+  finishStructure();
+  const roots = T.order.map((id) => T.nodes.get(id)).filter((n) => n.parent == null);
+  let leaf = 0;
+  const visit = (start) => {
+    const stack = [[start, 0]];
+    while (stack.length) {
+      const top = stack[stack.length - 1];
+      const [n, i] = top;
+      if (i < n.children.length) {
+        top[1]++;
+        stack.push([T.nodes.get(n.children[i]), 0]);
+      } else {
+        stack.pop();
+        if (!n.children.length) n.ly = leaf++;
+        else n.ly = (T.nodes.get(n.children[0]).ly + T.nodes.get(n.children[n.children.length - 1]).ly) / 2;
+      }
+    }
+  };
+  // depths first (parents before children), then leaf order
+  for (const id of T.order) {
+    const n = T.nodes.get(id);
+    n.lxDepth = n.parent != null ? (T.nodes.get(n.parent).lxDepth || 0) + 1 : 0;
+  }
+  roots.forEach(visit);
+  T.leaves = Math.max(1, leaf);
+  T.mode = layoutMode === "auto" ? (T.leaves > 70 ? "radial" : "tree") : layoutMode;
+  const maxDepth = Math.max(0, ...[...T.nodes.values()].map((n) => n.lxDepth));
+  for (const n of T.nodes.values()) {
+    if (T.mode === "tree") {
+      n.x = n.lxDepth * 230;
+      n.y = n.ly * 30;
+    } else {
+      const a = (n.ly / T.leaves) * Math.PI * 2 - Math.PI / 2;
+      const ring = Math.max(60, Math.min(140, 900 / Math.max(1, maxDepth)));
+      const r = n.lxDepth === 0 ? (roots.length > 1 ? ring * 0.5 : 0) : n.lxDepth * ring;
+      n.x = Math.cos(a) * r;
+      n.y = Math.sin(a) * r;
+    }
+  }
+  dirtyLayout = false;
+  lastLayout = performance.now();
+  needsDraw = true;
+  if (!userMoved) fit();
+}
+
+// ---------------------------------------------------------------------------------------------
+// Replay: what the traversal has done after `ticks` steps.
+// ---------------------------------------------------------------------------------------------
+function freshState() {
+  return { stack: [], reached: new Set(), emits: [], frames: new Map(), kmr: [], open: [], seq: 0,
+    entered: 0, skipped: { dead: 0, entered: 0, depth: 0 }, replays: 0, calls: 0, alternatives: 0,
+    rolled: 0, last: null, result: null, evIndex: -1, ticks: 0 };
+}
+
+function apply(ev, tick) {
+  const S = D;
+  switch (ev.ev) {
+    case "enter":
+      S.stack[ev.depth] = ev.method; S.stack.length = ev.depth + 1; S.entered++; S.last = { tick, id: ev.method }; break;
+    case "exit":
+      S.stack.length = Math.max(0, ev.depth); S.last = { tick, id: ev.method, exit: true }; break;
+    case "skip":
+      S.skipped[ev.why] = (S.skipped[ev.why] || 0) + 1; S.last = { tick, id: ev.method }; break;
+    case "replay":
+      S.replays++; S.last = { tick, id: ev.method }; break;
+    case "resolve":
+      S.calls++; break;
+    case "hit": {
+      (ev.roles || []).forEach((r) => S.reached.add(r));
+      S.last = { tick, id: ev.node != null ? ev.node : "site:" + ev.site }; break;
+    }
+    case "emit": {
+      const target = ev.node != null ? ev.node : ev.site != null ? "site:" + ev.site : roleNodeOf(ev.to);
+      let from = S.stack.length - 1;
+      for (let i = S.stack.length - 1; i >= 0; i--) {
+        const n = T.nodes.get(S.stack[i]);
+        if (n && n.runsAs.has(ev.from)) { from = i; break; }
+      }
+      const path = S.stack.slice(Math.max(0, from));
+      if (target != null && path[path.length - 1] !== target) path.push(target);
+      S.emits.push({ n: S.emits.length + 1, from: ev.from, to: ev.to, file: ev.file, line: ev.line,
+        mechanism: ev.mechanism, replay: !!ev.replay, path, frames: S.open.slice(), tick });
+      S.last = { tick, id: target, emit: true };
+      break;
+    }
+    case "kmr": S.kmr.push({ site: ev.site, frames: new Map() }); S.alternatives++; break;
+    case "alt_begin": {
+      const id = ++S.seq;
+      S.frames.set(id, "open");
+      if (S.kmr.length) S.kmr[S.kmr.length - 1].frames.set(ev.k, id);
+      S.open.push(id);
+      break;
+    }
+    case "alt_end": S.open.pop(); break;
+    case "alt_rollback": case "alt_keep": {
+      const top = S.kmr[S.kmr.length - 1];
+      const id = top && top.frames.get(ev.k);
+      if (id != null) S.frames.set(id, ev.ev === "alt_rollback" ? "rolled" : "kept");
+      if (ev.ev === "alt_rollback") { S.rolled++; S.last = { tick, rollback: true }; }
+      break;
+    }
+    case "kmr_end": S.kmr.pop(); break;
+    case "result": S.result = ev; break;
+  }
+}
+
+function roleNodeOf(role) {
+  // The role's node: where the engine located it (start), else the first node it was reached at.
+  for (const r of (T.start && T.start.roles) || []) {
+    if (r.role === role) for (const id of r.nodes || []) if (T.nodes.has(id)) return id;
+  }
+  return T.roleNode.has(role) ? T.roleNode.get(role) : null;
+}
+
+function isRolled(e) { return e.frames.some((f) => D.frames.get(f) === "rolled"); }
+
+function seek(target) {
+  if (!T) return;
+  target = Math.max(0, Math.min(T.ticks.length, Math.round(target)));
+  if (!D || target < D.ticks) D = freshState();
+  // Every event up to the target-th step; a step's own number is passed to apply().
+  const upto = target > 0 ? T.ticks[target - 1] : -1;
+  for (let i = D.evIndex + 1; i <= upto; i++) {
+    const ev = T.events[i];
+    if (TICK_EVENTS.has(ev.ev)) D.ticks++;
+    apply(ev, D.ticks);
+    D.evIndex = i;
+  }
+  pos = target;
+  needsDraw = true;
+  renderSide();
+}
+
+// ---------------------------------------------------------------------------------------------
+// Drawing
+// ---------------------------------------------------------------------------------------------
+function resize() {
+  const r = $("stage").getBoundingClientRect();
+  const dpr = window.devicePixelRatio || 1;
+  cv.width = Math.max(1, r.width * dpr); cv.height = Math.max(1, r.height * dpr);
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  if (!userMoved) fit();
+  draw();
+}
+
+function redraw() { needsDraw = true; }
+
+function fit() {
+  if (!T || !T.nodes.size) return;
+  const r = $("stage").getBoundingClientRect();
+  let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
+  for (const n of T.nodes.values()) { x0 = Math.min(x0, n.x); y0 = Math.min(y0, n.y); x1 = Math.max(x1, n.x); y1 = Math.max(y1, n.y); }
+  // Labels keep their pixel size, so the widest label right of the rightmost column is room the
+  // drawing must leave, not something to scale.
+  const pad = 40;
+  let labelW = 0;
+  if (T.mode === "tree") {
+    ctx.font = "11px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace";
+    for (const n of T.nodes.values()) if (n.x === x1) labelW = Math.max(labelW, ctx.measureText(labelOf(n)).width + 30);
+  }
+  const w = Math.max(1, x1 - x0), h = Math.max(1, y1 - y0);
+  const sx = (r.width - 2 * pad - labelW) / w, sy = (r.height - 2 * pad) / h;
+  view.s = Math.min(2.2, Math.max(0.02, Math.min(sx > 0 ? sx : 0.02, sy)));
+  view.x = (r.width - labelW - w * view.s) / 2 - x0 * view.s;
+  view.y = r.height / 2 - ((y0 + y1) / 2) * view.s;
+}
+
+const W = (n) => [n.x * view.s + view.x, n.y * view.s + view.y];
+
+function draw() {
+  needsDraw = false;
+  const r = $("stage").getBoundingClientRect();
+  ctx.clearRect(0, 0, r.width, r.height);
+  $("empty").style.display = T && T.nodes.size ? "none" : "flex";
+  if (!T || !T.nodes.size || !D) return;
+  const visible = (n) => n.first < pos;
+  const onStack = new Set(D.stack);
+  const topId = D.stack.length ? D.stack[D.stack.length - 1] : null;
+  const big = T.nodes.size > 400;
+  const rad = T.mode === "tree" ? Math.max(3, Math.min(7, 7 * Math.sqrt(view.s))) : Math.max(1.6, Math.min(5, 4 * Math.sqrt(view.s)));
+  const inView = (x, y) => x > -40 && y > -40 && x < r.width + 40 && y < r.height + 40;
+
+  // Tree edges: one path for the plain ones, one for the current call stack.
+  const plain = new Path2D(), hot = new Path2D();
+  for (const n of T.nodes.values()) {
+    if (n.parent == null || !visible(n)) continue;
+    const p = T.nodes.get(n.parent);
+    const [x1, y1] = W(p), [x2, y2] = W(n);
+    if (!inView(x1, y1) && !inView(x2, y2)) continue;
+    edgeTo(onStack.has(n.id) && onStack.has(p.id) ? hot : plain, x1, y1, x2, y2);
+  }
+  ctx.lineCap = "round";
+  ctx.strokeStyle = big ? "#232b3a" : "#2c3546"; ctx.lineWidth = 1; ctx.stroke(plain);
+  ctx.strokeStyle = "#ffd166"; ctx.lineWidth = 2.2; ctx.stroke(hot);
+
+  // Interaction paths: the kept ones, and the newest rolled-back one while it is fresh.
+  const latest = D.emits.length ? D.emits[D.emits.length - 1] : null;
+  for (const e of D.emits) {
+    const rolled = isRolled(e);
+    const fresh = e === latest && pos - e.tick < 3;
+    if (rolled && !fresh) continue;
+    const path = new Path2D();
+    for (let i = 1; i < e.path.length; i++) {
+      const a = T.nodes.get(e.path[i - 1]), b = T.nodes.get(e.path[i]);
+      if (a && b) { const [x1, y1] = W(a), [x2, y2] = W(b); edgeTo(path, x1, y1, x2, y2); }
+    }
+    ctx.save();
+    if (rolled) { ctx.setLineDash([5, 5]); ctx.strokeStyle = "#8a93a6"; ctx.lineWidth = 1.6; }
+    else {
+      ctx.strokeStyle = roleColor(e.from); ctx.lineWidth = fresh ? 4.5 : 2.6;
+      if (fresh) { ctx.shadowColor = roleColor(e.from); ctx.shadowBlur = 16; }
+    }
+    ctx.stroke(path);
+    ctx.restore();
+  }
+
+  // Nodes, one path per style.
+  const P = { method: new Path2D(), stack: new Path2D(), top: new Path2D(), halo: new Path2D(),
+    hollow: new Path2D(), external: new Path2D() };
+  const rings = [];
+  const lastId = D.last && pos - D.last.tick < 2 ? D.last.id : null;
+  for (const id of T.order) {
+    const n = T.nodes.get(id);
+    if (!visible(n)) continue;
+    const [x, y] = W(n);
+    if (!inView(x, y)) continue;
+    if (id === topId || id === lastId) circle(P.halo, x, y, rad + 7);
+    if (n.kind === "external") {
+      const q = rad + 1;
+      P.external.moveTo(x, y - q); P.external.lineTo(x + q, y); P.external.lineTo(x, y + q); P.external.lineTo(x - q, y); P.external.closePath();
+    } else if (n.kind === "skipped" || n.kind === "reached") circle(P.hollow, x, y, rad * 0.85);
+    else circle(id === topId ? P.top : onStack.has(id) ? P.stack : P.method, x, y, rad);
+    if (n.owners.size) rings.push([n, x, y]);
+  }
+  ctx.fillStyle = "#ffd16633"; ctx.fill(P.halo);
+  ctx.fillStyle = "#55658a"; ctx.fill(P.method);
+  ctx.fillStyle = "#c9a54d"; ctx.fill(P.stack);
+  ctx.fillStyle = "#ffd166"; ctx.fill(P.top);
+  ctx.fillStyle = "#0e1116"; ctx.fill(P.hollow);
+  ctx.setLineDash([2, 2]); ctx.strokeStyle = "#6b7488"; ctx.lineWidth = 1.2; ctx.stroke(P.hollow); ctx.setLineDash([]);
+  ctx.fillStyle = "#2b3245"; ctx.fill(P.external); ctx.strokeStyle = "#8a93a6"; ctx.lineWidth = 1.2; ctx.stroke(P.external);
+  for (const [n, x, y] of rings) {
+    let ring = rad + 3.5;
+    for (const role of n.owners) {
+      ctx.beginPath(); ctx.arc(x, y, ring, 0, Math.PI * 2);
+      ctx.strokeStyle = roleColor(role); ctx.lineWidth = 2.5; ctx.stroke(); ring += 3;
+    }
+  }
+
+  // Labels: every node in a small tree; otherwise role nodes, the current body and the hovered one.
+  ctx.font = "11px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace";
+  ctx.textBaseline = "middle";
+  const labelAll = T.mode === "tree" && T.nodes.size <= 150 && view.s > 0.45;
+  const labelled = labelAll ? T.order.map((id) => T.nodes.get(id))
+    : [...rings.map((r) => r[0]), ...(topId != null ? [T.nodes.get(topId)] : []), ...(hover ? [hover] : [])];
+  const done = new Set(), placed = [];
+  const overlaps = (a) => placed.some((b) => a.x < b.x + b.w && b.x < a.x + a.w && a.y < b.y + b.h && b.y < a.y + a.h);
+  for (const n of labelled) {
+    if (!n || done.has(n.id) || !visible(n)) continue;
+    done.add(n.id);
+    const [x, y] = W(n);
+    if (!inView(x, y)) continue;
+    const roleNode = n.owners.size > 0;
+    const text = labelOf(n);
+    const tx = x + rad + (roleNode ? 3.5 + 3 * n.owners.size : 0) + 5;
+    const w = ctx.measureText(text).width;
+    // Nudge a label down past the ones already drawn; a leader line keeps it tied to its node.
+    let ly = y, box = { x: tx - 3, y: ly - 8, w: w + 6, h: 16 };
+    for (let k = 0; k < 8 && overlaps(box); k++) { ly += 16; box = { x: tx - 3, y: ly - 8, w: w + 6, h: 16 }; }
+    placed.push(box);
+    if (ly !== y) {
+      ctx.strokeStyle = "#5b6476"; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(x + rad, y); ctx.lineTo(tx - 3, ly); ctx.stroke();
+    }
+    ctx.fillStyle = "#0e1116cc"; ctx.fillRect(box.x, box.y, box.w, box.h);
+    ctx.fillStyle = roleNode ? "#ffffff" : n.id === topId ? "#ffd166" : "#aeb7c8";
+    ctx.fillText(text, tx, ly);
+  }
+}
+
+function circle(path, x, y, r) { path.moveTo(x + r, y); path.arc(x, y, r, 0, Math.PI * 2); }
+
+function edgeTo(path, x1, y1, x2, y2) {
+  path.moveTo(x1, y1);
+  if (T.mode === "tree") { const mx = (x1 + x2) / 2; path.bezierCurveTo(mx, y1, mx, y2, x2, y2); }
+  else path.lineTo(x2, y2);
+}
+
+function displayName(n) {
+  return n.fullName || (n.siteLine != null ? `(a node reached at line ${n.siteLine})` : "(a node with no name)");
+}
+
+function labelOf(n) {
+  let text = shortName(n.fullName) || displayName(n);
+  if (n.kind === "external") text += " (library)";
+  if (n.owners.size) text += "  ⟨" + [...n.owners].join(", ") + "⟩";
+  return text;
+}
+
+
+// ---------------------------------------------------------------------------------------------
+// The side panel
+// ---------------------------------------------------------------------------------------------
+function esc(s) { return String(s == null ? "" : s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c])); }
+function base(file) { return String(file || "").split("/").pop(); }
+
+function renderMeta() {
+  if (!T) return;
+  const h = T.header || {}, cpg = h.cpg || {};
+  const label = (T.result && T.result.label) || "";
+  $("meta").innerHTML = `<b>${esc(h.repo || T.name)}</b>${label ? " · " + esc(label) : ""}` +
+    `${h.language ? " · " + esc(h.language) : ""}${h.engine ? " · " + esc(h.engine === "rust" ? "native engine" : h.engine) : ""}`;
+  const status = $("status");
+  const cut = T.end && T.end.dropped > 0;
+  status.className = "pill " + (cut ? "cut" : T.done ? "done" : "live");
+  status.textContent = cut ? `trace cut: ${T.end.dropped} events past the limit` : T.done ? "finished" : "running";
+  const rows = [
+    ["repository", h.repo], ["draft", label || h.draft || ""],
+    ["CPG", cpg.nodes != null ? `${cpg.nodes.toLocaleString()} nodes, ${cpg.edges.toLocaleString()} edges, ${cpg.methods.toLocaleString()} methods` : ""],
+    ["entry role", T.start ? `${T.start.entryRole || "none"} (${T.start.entryRule || "-"})` : (h.entry || "")],
+  ].filter((r) => r[1]);
+  $("query").innerHTML = rows.map(([k, v]) => `<dt>${k}</dt><dd>${esc(v)}</dd>`).join("");
+  const by = new Map(((T.start && T.start.roles) || []).map((r) => [r.role, r]));
+  $("roles").innerHTML = ((T.header && T.header.roles) || []).map((r) => {
+    const s = by.get(r.role);
+    const where = `${esc(r.entity || "?")} · ${esc(base(r.file))}:${esc(r.lines || "")}`;
+    const how = s ? (s.external ? "library call" : (s.nodes && s.nodes.length ? "found" : "not found")) + (s.by ? `, by ${s.by}` : "") : "";
+    return `<div class="role" data-role="${esc(r.role)}"><span class="dot" style="background:${roleColor(r.role)}"></span>` +
+      `<span class="name">${esc(r.role)}</span><span class="state"></span><span class="where">${where}${how ? " · " + esc(how) : ""}</span></div>`;
+  }).join("") || '<div class="muted">-</div>';
+  $("legend").innerHTML = `<span><i style="background:#55658a"></i>method entered</span>` +
+    `<span><i style="background:#ffd166"></i>current body</span>` +
+    `<span><i style="border:1.5px dashed #6b7488;background:none"></i>reached, not entered</span>` +
+    `<span><i style="background:#2b3245;border-radius:1px;transform:rotate(45deg);border:1px solid #8a93a6"></i>library call</span>` +
+    `<span><i style="border:2.5px solid #ff9f1c;background:none"></i>role node (ring colour = role)</span>`;
+}
+
+function renderSide() {
+  if (!T || !D) return;
+  $("scrub").max = T.ticks.length; $("scrub").value = pos;
+  $("tick").textContent = `${pos} / ${T.ticks.length} steps`;
+  const sk = D.skipped;
+  const counters = [
+    [D.entered, "method bodies entered"], [D.replays, "bodies replayed"],
+    [(sk.dead || 0) + (sk.entered || 0) + (sk.depth || 0), "bodies skipped"], [D.calls, "calls resolved"],
+    [D.emits.filter((e) => !isRolled(e)).length, "interactions recorded"], [D.alternatives, "calls with alternatives"],
+  ];
+  $("counters").innerHTML = counters.map(([v, k]) => `<div><b>${v.toLocaleString()}</b><span>${k}</span></div>`).join("");
+  const entry = T.start && T.start.entryRole;
+  for (const el of document.querySelectorAll("#roles .role")) {
+    const isEntry = el.dataset.role === entry && D.ticks > 0;
+    const on = D.reached.has(el.dataset.role) || isEntry;
+    const st = el.querySelector(".state");
+    st.textContent = isEntry ? "entry" : on ? "reached" : ""; st.className = "state" + (on ? " on" : "");
+  }
+  const latest = D.emits[D.emits.length - 1];
+  const seenPair = new Map();
+  const rolledCount = D.emits.filter(isRolled).length;
+  $("rolledNote").innerHTML = rolledCount ? `${rolledCount.toLocaleString()} more recorded inside alternatives that were rolled back ` +
+    `(at a call with several possible targets, only the one reaching the most roles is kept). ` +
+    `<a href="#" id="toggleRolled" style="color:#aeb7c8">${showRolled ? "hide" : "show"}</a>` : "";
+  const toggle = $("toggleRolled");
+  if (toggle) toggle.onclick = (ev) => { ev.preventDefault(); showRolled = !showRolled; renderSide(); };
+  let kept = 0;
+  for (const e of D.emits) e.k = isRolled(e) ? null : ++kept;
+  $("emits").innerHTML = D.emits.filter((e) => showRolled || !isRolled(e) || (e === latest && pos - e.tick < 3)).slice(-500).map((e) => {
+    const rolled = isRolled(e);
+    const pair = e.from + "\u0000" + e.to;
+    const again = !rolled && seenPair.has(pair) ? seenPair.get(pair) : null;
+    if (!rolled && !seenPair.has(pair)) seenPair.set(pair, e.k);
+    const note = (e.replay ? " · replayed from a body traversed before" : "") +
+      (rolled ? " · rolled back (another alternative was kept)" : again != null ? ` · the same pair as ${again}, at another call` : "");
+    return `<li class="${rolled ? "rolled" : e === latest && pos - e.tick < 3 ? "fresh" : ""}"><span class="n">${rolled ? "–" : e.k}</span>` +
+      `<span class="what"><span style="color:${roleColor(e.from)}">${esc(e.from)}</span> → <span style="color:${roleColor(e.to)}">${esc(e.to)}</span></span>` +
+      `<span class="sub">${esc(e.mechanism)} · ${esc(base(e.file))}:${esc(e.line)}${note}</span></li>`;
+  }).join("") || '<li class="muted">none yet</li>';
+  const res = D.result;
+  if (res && res.ok) {
+    $("final").innerHTML = (res.interactions || []).map((i) =>
+      `<li><span class="n">${i.rank}</span><span class="what"><span style="color:${roleColor(i.from)}">${esc(i.from)}</span> → ` +
+      `<span style="color:${roleColor(i.to)}">${esc(i.to)}</span></span><span class="sub">${esc(i.mechanism)} · ${esc(base(i.file))}:${esc(i.line)}</span></li>`
+    ).join("") || '<li class="muted">no interaction</li>';
+  } else if (res) {
+    $("final").innerHTML = '<li class="muted">the query returned no order</li>';
+  } else {
+    $("final").innerHTML = `<li class="muted">${T.done && !T.result && pos >= T.ticks.length ? "not in this trace (written by secpat-walk directly)" : "at the end"}</li>`;
+  }
+}
+
+// ---------------------------------------------------------------------------------------------
+// Playback
+// ---------------------------------------------------------------------------------------------
+function rate() {
+  const n = Math.max(1, T ? T.ticks.length : 1);
+  return Math.max(3, Math.min(800, n / 30)) * parseFloat($("speed").value);
+}
+
+function setPlaying(on) {
+  playing = on && !!T;
+  $("play").textContent = playing ? "⏸ Pause" : "▶ Play";
+  lastFrame = performance.now(); acc = 0;
+}
+
+function frame(now) {
+  if (T && dirtyLayout && now - lastLayout > 250) layout();
+  if (playing && T) {
+    acc += (now - lastFrame) / 1000 * rate();
+    const steps = Math.floor(acc);
+    if (steps > 0) {
+      acc -= steps;
+      const target = Math.min(T.ticks.length, pos + steps);
+      if (target !== pos) seek(target);
+      if (pos >= T.ticks.length && T.done && (T.result || T.end)) {
+        setPlaying(false);
+        maybeSwitch();
+      }
+    }
+  }
+  lastFrame = now;
+  if (needsDraw) draw();
+  requestAnimationFrame(frame);
+}
+
+// ---------------------------------------------------------------------------------------------
+// Loading: embedded (an export), or from the viewer server.
+// ---------------------------------------------------------------------------------------------
+function show(name) {
+  T = emptyTrace(name); D = freshState(); pos = 0; userMoved = false; hover = null; needsDraw = true;
+  renderMeta(); renderSide();
+}
+
+function addEvents(events) {
+  const before = T.header, beforeStart = T.start, beforeResult = T.result, beforeDone = T.done;
+  for (const ev of events) ingest(ev);
+  if (T.header !== before || T.start !== beforeStart || T.result !== beforeResult || T.done !== beforeDone) renderMeta();
+  if (dirtyLayout) layout();
+  renderSide();
+}
+
+async function loadFromServer(name) {
+  const token = ++loadToken;
+  show(name);
+  setPlaying(true);
+  $("export").href = "/api/export?name=" + encodeURIComponent(name);
+  while (token === loadToken) {
+    let data;
+    try {
+      const r = await fetch(`/api/trace?name=${encodeURIComponent(name)}&offset=${T.offset}`);
+      if (!r.ok) throw new Error(r.status);
+      data = await r.json();
+    } catch (e) { await sleep(2000); continue; }
+    if (token !== loadToken) return;
+    for (const [k, v] of Object.entries(data.dropped || {})) T.dropped[k] = (T.dropped[k] || 0) + v;
+    T.offset = data.offset;
+    if (data.events.length) addEvents(data.events);
+    if (!data.more) await sleep(T.done ? (T.result ? 3000 : 500) : 400);
+  }
+}
+
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+async function pollList() {
+  try {
+    const r = await fetch("/api/traces");
+    const data = await r.json();
+    const sel = $("traces");
+    const current = T ? T.name : null;
+    sel.innerHTML = data.traces.map((t) => `<option value="${esc(t.name)}">${esc(t.name.replace(/\.trace\.jsonl$/, ""))}</option>`).join("");
+    if (current) sel.value = current;
+    if (!data.follow) { $("follow").checked = false; $("follow").parentElement.style.display = "none"; }
+    newestSeen = data.traces.length ? data.traces[0].name : null;
+    if (!T && newestSeen) loadFromServer(newestSeen);
+    else maybeSwitch();
+  } catch (e) { /* the server may be restarting */ }
+  setTimeout(pollList, 2000);
+}
+
+function maybeSwitch() {
+  if (EMBEDDED || !$("follow").checked || !newestSeen || !T || newestSeen === T.name) return;
+  const finished = T.done && pos >= T.ticks.length && !playing;
+  if (finished) loadFromServer(newestSeen);
+}
+
+// ---------------------------------------------------------------------------------------------
+// Interaction: controls, keys, zoom and pan, hover.
+// ---------------------------------------------------------------------------------------------
+$("play").onclick = () => { if (T && pos >= T.ticks.length) seek(0); setPlaying(!playing); };
+$("restart").onclick = () => { seek(0); };
+$("back").onclick = () => { setPlaying(false); seek(pos - 1); };
+$("fwd").onclick = () => { setPlaying(false); seek(pos + 1); };
+$("end").onclick = () => { setPlaying(false); seek(T ? T.ticks.length : 0); };
+$("scrub").oninput = (e) => { setPlaying(false); seek(+e.target.value); };
+$("layout").onchange = (e) => { layoutMode = e.target.value; if (T) { userMoved = false; layout(); } };
+$("fit").onclick = () => { userMoved = false; fit(); redraw(); };
+$("traces").onchange = (e) => { $("follow").checked = false; loadFromServer(e.target.value); };
+window.addEventListener("keydown", (e) => {
+  if (e.target.tagName === "SELECT" || e.target.tagName === "INPUT" && e.target.type !== "range") return;
+  if (e.key === " ") { e.preventDefault(); $("play").click(); }
+  else if (e.key === "ArrowRight") { e.preventDefault(); $("fwd").click(); }
+  else if (e.key === "ArrowLeft") { e.preventDefault(); $("back").click(); }
+  else if (e.key === "Home") $("restart").click();
+  else if (e.key === "End") $("end").click();
+});
+
+let drag = null;
+cv.addEventListener("mousedown", (e) => { drag = { x: e.clientX, y: e.clientY, vx: view.x, vy: view.y }; cv.classList.add("drag"); });
+window.addEventListener("mouseup", () => { drag = null; cv.classList.remove("drag"); });
+window.addEventListener("mousemove", (e) => {
+  if (drag) { view.x = drag.vx + e.clientX - drag.x; view.y = drag.vy + e.clientY - drag.y; userMoved = true; redraw(); return; }
+  const r = cv.getBoundingClientRect();
+  const mx = e.clientX - r.left, my = e.clientY - r.top;
+  if (!T || !D || mx < 0 || my < 0 || mx > r.width || my > r.height) { hideTip(); return; }
+  let best = null, bd = 12 * 12;
+  for (const n of T.nodes.values()) {
+    if (!(n.first < pos)) continue;
+    const [x, y] = W(n); const d = (x - mx) ** 2 + (y - my) ** 2;
+    if (d < bd) { bd = d; best = n; }
+  }
+  if (best !== hover) redraw();
+  hover = best;
+  if (!best) { hideTip(); return; }
+  const tip = $("tip");
+  const kinds = { method: "method entered", skipped: "reached, not entered (it cannot reach a further role, or was entered before)",
+    reached: "reached, not entered", external: "library call (no body in the repository)" };
+  const parent = best.parent != null ? T.nodes.get(best.parent) : null;
+  tip.innerHTML = `<div class="fn">${esc(displayName(best))}</div>` +
+    `<div class="row">${esc(kinds[best.kind] || best.kind)}${best.file ? " · " + esc(best.file) + (best.line ? ":" + best.line : "") : ""}</div>` +
+    (best.siteLine != null ? `<div class="row">first called at line ${best.siteLine}</div>` : "") +
+    (best.owners.size ? `<div class="row">role node: ${esc([...best.owners].join(", "))}</div>` : "") +
+    (best.runsAs.size ? `<div class="row">runs as: ${esc([...best.runsAs].join(", "))}</div>` : "") +
+    (parent ? `<div class="row">first reached from ${esc(shortName(parent.fullName))}</div>` : "") +
+    `<div class="row">depth ${best.lxDepth} · step ${best.first + 1}</div>`;
+  tip.style.display = "block";
+  const tw = tip.offsetWidth, th = tip.offsetHeight;
+  tip.style.left = Math.min(r.width - tw - 8, mx + 14) + "px";
+  tip.style.top = Math.min(r.height - th - 8, my + 14) + "px";
+});
+function hideTip() { if (hover) redraw(); hover = null; $("tip").style.display = "none"; }
+cv.addEventListener("wheel", (e) => {
+  e.preventDefault();
+  const r = cv.getBoundingClientRect();
+  const mx = e.clientX - r.left, my = e.clientY - r.top;
+  const k = Math.exp(-e.deltaY * 0.0015);
+  const s = Math.max(0.01, Math.min(8, view.s * k));
+  view.x = mx - (mx - view.x) * (s / view.s); view.y = my - (my - view.y) * (s / view.s); view.s = s;
+  userMoved = true; redraw();
+}, { passive: false });
+cv.addEventListener("dblclick", () => { userMoved = false; fit(); redraw(); });
+window.addEventListener("resize", resize);
+
+// ---------------------------------------------------------------------------------------------
+if (EMBEDDED) {
+  for (const el of document.querySelectorAll(".server-only")) el.style.display = "none";
+  show(EMBEDDED.name || "trace");
+  T.dropped = EMBEDDED.dropped || {};
+  addEvents(EMBEDDED.events || []);
+  T.done = true;
+  setPlaying(true);
+} else {
+  pollList();
+}
+resize();
+requestAnimationFrame(frame);
+</script>
+</body>
+</html>

@@ -1,6 +1,6 @@
 """``secpat-interaction-order``: the interaction order from the command line.
 
-Two commands, both on :func:`detect`:
+Three commands. ``run`` and ``dataset`` call :func:`detect`; ``view`` shows traversals:
 
 ``run``
     One role mapping in one repository, given on the command line.
@@ -8,6 +8,10 @@ Two commands, both on :func:`detect`:
 ``dataset``
     Records of the paper's dataset. For each, derives the order of its ground-truth
     role mapping and compares it with the ``interaction_order`` stored beside it.
+
+``view``
+    The traversal view (``view.py``): a local web page that replays the traces saved
+    with ``SECPAT_VIEW=nodes``, or writes one of them as a standalone HTML file.
 
 Before the traversal, ``dataset`` drops the roles the pattern marks ``required:
 false`` (``Subject``, ``System``) and the steps that involve them. That is the rule
@@ -41,7 +45,7 @@ _LANGUAGES = {"java": "java", "javasrc": "java", "python": "python", "pythonsrc"
 def main(argv: list[str] | None = None) -> int:
     args = _parser().parse_args(argv)
     logging.basicConfig(level=logging.WARNING, format="%(message)s")
-    if args.engine:
+    if getattr(args, "engine", None):
         config.JOERN_ENGINE = args.engine
     return args.command(args)
 
@@ -93,6 +97,26 @@ def _parser() -> argparse.ArgumentParser:
     dataset.add_argument("--output", type=Path, help="write each derived order to this folder")
     _engine_option(dataset)
     dataset.set_defaults(command=_dataset)
+
+    view_cmd = commands.add_parser(
+        "view",
+        help="replay saved traversals in a web page",
+        description="Serve the traversal view: a local web page that replays traversal traces "
+                    "(saved with SECPAT_VIEW=nodes on the native engine). Given a folder, it follows "
+                    "the newest trace as new ones arrive.",
+    )
+    view_cmd.add_argument(
+        "trace", nargs="?", type=Path,
+        help=f"a trace file, or a folder of them (default: {config.SECPAT_VIEW_DIR}, or SECPAT_VIEW_DIR)",
+    )
+    view_cmd.add_argument("--port", type=int, default=config.SECPAT_VIEW_PORT,
+                          help=f"the port (default: {config.SECPAT_VIEW_PORT}, or SECPAT_VIEW_PORT)")
+    view_cmd.add_argument("--host", default="127.0.0.1", help="the address to listen on (default: 127.0.0.1)")
+    view_cmd.add_argument("--export", type=Path, metavar="OUT.html",
+                          help="write the trace as one HTML file that replays offline, and exit")
+    view_cmd.add_argument("--idle-exit", type=float, default=0, metavar="SECONDS",
+                          help="stop after this long with no page open and no new trace (default: never)")
+    view_cmd.set_defaults(command=_view)
     return parser
 
 
@@ -262,6 +286,31 @@ def scored(pattern: dict | None, mappings: dict[str, dict]) -> tuple[dict[str, d
         and (step.get("to") or "").strip() not in optional
     ]
     return walked, behaviour
+
+
+# --- view -------------------------------------------------------------------------------
+
+
+def _view(args: argparse.Namespace) -> int:
+    from . import view
+
+    target = (args.trace or config.SECPAT_VIEW_DIR).expanduser()
+    if args.export:
+        if not target.is_file():
+            sys.exit(f"secpat-interaction-order: --export needs one trace file, not {target}")
+        out = view.export(target, args.export)
+        print(f"wrote {out} ({out.stat().st_size / 1e6:.1f} MB)")
+        return 0
+    if not target.exists():
+        if args.trace is None:
+            target.mkdir(parents=True, exist_ok=True)
+        else:
+            sys.exit(f"secpat-interaction-order: {target} does not exist")
+    try:
+        view.serve(target, host=args.host, port=args.port, idle_exit=args.idle_exit)
+    except OSError as exc:
+        sys.exit(f"secpat-interaction-order: cannot listen on {args.host}:{args.port}: {exc}")
+    return 0
 
 
 # --- shared -----------------------------------------------------------------------------

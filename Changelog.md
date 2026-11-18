@@ -8,6 +8,31 @@ All notable changes to this project are documented in this file. The format foll
 Joern (`profiling/jobs/jobs.jsonl`); the others have fewer than two grounded roles. "Published
 orders" are that run's outputs. 19 drafts timed out in it and have no order.
 
+## [Unreleased] (branch traversal-view)
+
+### Added
+
+- The traversal view (`view.py`, `view.html`; standard library only). `SECPAT_VIEW=nodes` makes
+  every query on the native engine save its traversal's event log (`secpat-walk run --trace`) in
+  `SECPAT_VIEW_DIR`, with the returned order appended as a `result` line, and starts a viewer on
+  `SECPAT_VIEW_PORT` (127.0.0.1) if none is running. `secpat-interaction-order view [TRACE|DIR]`
+  serves a page that draws the methods the traversal reaches as a call tree (or a circle, for
+  large ones), rings the role nodes, lights up the path of each recorded interaction, and replays
+  it all with a timeline; given a folder, it follows new traces. `--export OUT.html` (or the
+  page's Export button) writes one trace as a single file that replays offline. A traced query
+  runs `secpat-walk run` even with `SECPAT_WALK_SERVE=1`. On Joern, `SECPAT_VIEW=nodes` warns once
+  and saves nothing.
+- `tests/test_view.py`: reading traces (left-out events, partial lines, batches), the export, the
+  server (only trace files of its folder), starting the viewer, and `detect()` with and without
+  `SECPAT_VIEW`, on a stand-in `secpat-walk`.
+
+### Output
+
+Unchanged. With `SECPAT_VIEW=nodes`, `secpat-interaction-order dataset --engine rust` gives the
+stored order on 100 of 100 records (16 s; 100 traces, 8 MB). On three drafts (camunda-bpm-platform,
+factcast, bws-base-api) the result files are identical with and without `--trace`; the largest
+traversal took 2.91 s with the trace against 2.54 s without (five runs each).
+
 ## [0.2.0] - 2026-11-18
 
 Version 0.2.0 has two parts, each with its own sections. This one adds a progress display: while

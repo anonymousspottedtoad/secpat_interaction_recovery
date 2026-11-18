@@ -158,6 +158,32 @@ secpat-interaction-order dataset --dataset $D --engine rust
 All 100 records take 18 s instead of about 23 minutes. For secpatrec's
 `secpat interaction`, set `JOERN_ENGINE=rust`.
 
+## Watch a traversal
+
+On the native engine, `SECPAT_VIEW=nodes` saves a trace of every query's traversal: the methods
+it enters, the role nodes it reaches and the interactions it records. A local web page replays it
+step by step:
+
+```bash
+export SECPAT_VIEW=nodes JOERN_ENGINE=rust
+secpat-interaction-order dataset --dataset $D \
+    --repo ErtanSidar_turkcell-common --pattern verifiable_token_based_authentication
+```
+
+```text
+traversal view: http://127.0.0.1:8765/  (traces in /root/.cache/secpat/view)
+[1/1] verifiable_token_based_authentication__ErtanSidar_turkcell-common: 4 interaction(s), same as the dataset
+1 of 1 record(s) give the same interaction order as the dataset (0 s).
+```
+
+Open the address. The page draws the methods as a call tree, rings each role's node in its
+colour, and lights up the path of each interaction as the traversal records it, with a timeline to
+play, pause and step through. It follows new traces as they come, so it can stay open during a
+long run. **Export HTML** (or `secpat-interaction-order view TRACE --export out.html`) saves one
+traversal as a single file that replays offline. On a remote machine, forward the port first:
+`ssh -L 8765:127.0.0.1:8765 user@host`. [docs/USAGE.md](docs/USAGE.md#the-traversal-view) has
+the details.
+
 ## Settings
 
 Environment variables:
@@ -169,6 +195,9 @@ Environment variables:
 | `JOERN_ENGINE` | `joern` | `rust` runs the traversal on `secpat-walk` (the same as `--engine rust`) |
 | `SECPAT_WALK_BIN` | `secpat-walk` on `PATH` | the native engine's binary |
 | `SECPAT_PROGRESS` | `auto` | `on` shows a progress line while a query runs; `off` hides it |
+| `SECPAT_VIEW` | `off` | `nodes` saves each traversal for the traversal view (native engine only) |
+| `SECPAT_VIEW_DIR` | `~/.cache/secpat/view` | where the traces go |
+| `SECPAT_VIEW_PORT` | 8765 | the traversal view's port, on 127.0.0.1 |
 
 ## More
 

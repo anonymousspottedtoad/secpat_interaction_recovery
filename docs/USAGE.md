@@ -48,6 +48,7 @@ Two rules of the traversal are not described in Appendix C:
 | `joern_local.py` | the local runner — `joern-parse` / `joern --script` on this machine |
 | `rust_walk.py` | the native engine runner (`JOERN_ENGINE=rust`, see below) |
 | `progress.py` | the progress display (`SECPAT_PROGRESS`, see below) |
+| `view.py`, `view.html` | the traversal view (`SECPAT_VIEW`, see below): saves traces, serves and exports the page |
 | `joern/walk.sc` | the traversal: locates roles, steps the CFG, returns interactions |
 | `joern/python.sc`, `joern/java.sc` | `LangSpec` profiles — what differs between frontends |
 | `config.py` | `JOERN_*` env vars, read at import time |
@@ -127,6 +128,66 @@ The line is drawn with tqdm when it is installed
 `detect(..., label=...)` names the draft (the default is the entry role and the number of roles).
 The profiling runners (`profiling/prof_walk.py`, `profiling/warm_worker.py`) add an outer bar
 over their drafts with `[i/N]`, the current repository and an ETA.
+
+## The traversal view
+
+`SECPAT_VIEW=nodes` makes every query on the native engine save its traversal, and a local web
+page replays it. The README's [Watch a traversal](../README.md#watch-a-traversal) shows a run.
+
+**What is saved.** Each query writes one file in `SECPAT_VIEW_DIR` (default
+`~/.cache/secpat/view`), named `<time>__<repository>__<draft>__<n>.trace.jsonl`: the native
+engine's event log (`secpat-walk run --trace`), then one `result` line that `detect()` appends
+with the order the query returned. The engine also writes `<file>.graph.json`, the CPG subgraph
+the events move over; the page does not need it. The events, one JSON object per line:
+
+| `ev` | what happened |
+| --- | --- |
+| `header`, `start` | the query (repository, CPG size, roles, steps); where each role was found, the entry role |
+| `enter`, `exit` | the traversal starts / finishes a method body (`depth`, the roles it runs as) |
+| `skip`, `replay` | a body not traversed (`dead`: it can reach no further role; `entered`: done before) or replayed from the memo |
+| `resolve` | what a call runs |
+| `hit` | control reached a node a role owns |
+| `emit` | an interaction recorded (`from`, `to`, the call site, `mechanism`) |
+| `kmr`, `alt_begin`, `alt_end`, `alt_rollback`, `alt_keep`, `kmr_end` | a call with several possible targets: each is traversed, and only the one reaching the most roles is kept |
+| `step` | one CFG node stepped (most of a large trace; the page leaves these out) |
+| `end`, `result` | the counters; the order the query returned |
+
+A trace costs little: on the largest traversal of the 379 drafts (camunda-bpm-platform, 147,555
+events, 27 MB) the traversal took 2.91 s with the trace against 2.54 s without, and on the
+dataset's records the difference is within the noise. The interaction order is the same with
+and without it: all 100 records of the dataset give the stored order with `SECPAT_VIEW=nodes`.
+
+**The viewer.** When a query saves a trace and nothing answers on `SECPAT_VIEW_PORT`, `detect()`
+starts `secpat-interaction-order view SECPAT_VIEW_DIR --idle-exit 1800` in the background (its
+output goes to `viewer.log` in that folder) and prints the address once. That viewer stops after
+30 minutes with no page open and no new trace. To run one yourself:
+
+```bash
+secpat-interaction-order view                       # follows SECPAT_VIEW_DIR
+secpat-interaction-order view TRACE.trace.jsonl     # one saved trace
+secpat-interaction-order view TRACE.trace.jsonl --export traversal.html
+```
+
+It listens on 127.0.0.1 only (`--host` changes that) and serves only the trace files in its
+folder. The page:
+
+- **The drawing.** Each method the traversal reaches is one node, placed by the body that first
+  reached it: a tree from left to right, or a circle when there are more than 70 leaves (the
+  layout menu switches). Filled: a method body entered; dashed: reached but not entered; diamond: a
+  library call. A role's node has a ring in the role's colour. The current call stack is yellow.
+  When the traversal records an interaction, the path from the source role's body to the target
+  lights up in the source role's colour and stays lit. Scroll to zoom, drag to pan, double-click to
+  fit, hover a node for its full name, file and line.
+- **The side panel.** The roles (where each was found, and whether the traversal has reached it),
+  the interactions as recorded, and the interaction order the query returned. An interaction
+  recorded inside an alternative that was rolled back is counted, and listed on request.
+- **The timeline.** Play, pause, step (arrow keys), jump to the start or the end, and the speed. A
+  step is one event the page draws; at 1× a whole traversal plays in about 30 seconds.
+- **Export HTML.** The page and the trace in one file, with no outside links, that replays
+  offline; the same as `view --export`.
+
+Only the native engine writes traces for now. On Joern, `SECPAT_VIEW=nodes` logs one warning and
+saves nothing.
 
 ## The Python API and the script, by hand
 
@@ -370,7 +431,7 @@ on `jobs.jsonl` (see the joern-rust README) and compare its folder the same way.
 
 ## Tests
 
-`tests/` covers the command and the progress display, without Joern (`pip install -e ".[dev]"`,
+`tests/` covers the command, the progress display and the traversal view, without Joern (`pip install -e ".[dev]"`,
 then `pytest`). The checks against the paper's dataset are in the [README](../README.md):
 `secpat-interaction-order dataset` on one record and on all 100, and secpatrec's
 `secpat interaction` for the scores.

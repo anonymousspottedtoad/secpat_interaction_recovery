@@ -43,8 +43,12 @@ _DETAIL_TAIL = 2000
 
 
 def query(repo: str, language: str, repo_path: Path, params: dict[str, str],
-          display: progress.Display | None = None) -> dict | None:
-    """The walk's JSON result for ``repo`` with ``params`` (roles, behaviour, entry), or ``None``."""
+          display: progress.Display | None = None, trace: Path | None = None) -> dict | None:
+    """The walk's JSON result for ``repo`` with ``params`` (roles, behaviour, entry), or ``None``.
+
+    ``trace``: also write the traversal's event log there (``secpat-walk run --trace``), for the
+    traversal view. Only the one-shot mode traces, so a traced query never uses ``serve``.
+    """
     repo_path = Path(repo_path).absolute()
     if not repo_path.is_dir():
         logger.warning("secpat-walk: no checkout for %s at %s", repo, repo_path)
@@ -59,10 +63,10 @@ def query(repo: str, language: str, repo_path: Path, params: dict[str, str],
         started = time.monotonic()
         if display is not None:
             display.phase("starting secpat-walk")
-        if config.SECPAT_WALK_SERVE:
+        if config.SECPAT_WALK_SERVE and trace is None:
             ok = _serve_query(repo, cpg, repo_path, frontend, params, output, display)
         else:
-            ok = _run_query(repo, cpg, repo_path, frontend, params, output, display)
+            ok = _run_query(repo, cpg, repo_path, frontend, params, output, display, trace)
         if not ok:
             return None
         try:
@@ -76,7 +80,7 @@ def query(repo: str, language: str, repo_path: Path, params: dict[str, str],
         shutil.rmtree(workdir, ignore_errors=True)
 
 
-def _run_query(repo, cpg, repo_path, frontend, params, output, display=None) -> bool:
+def _run_query(repo, cpg, repo_path, frontend, params, output, display=None, trace=None) -> bool:
     command = [
         config.SECPAT_WALK_BIN, "run",
         "--cpg", str(cpg), "--input", str(repo_path), "--language", frontend,
@@ -84,6 +88,8 @@ def _run_query(repo, cpg, repo_path, frontend, params, output, display=None) -> 
         "--entry", params.get("entry", ""), "--output", str(output),
         "--timeout", str(config.JOERN_TIMEOUT_SECONDS),
     ]
+    if trace is not None:
+        command += ["--trace", str(trace)]
     try:
         if display is not None and display.active:
             completed = progress.run(command, timeout=config.JOERN_TIMEOUT_SECONDS + 60, display=display)
