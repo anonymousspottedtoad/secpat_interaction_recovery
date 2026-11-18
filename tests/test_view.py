@@ -73,7 +73,8 @@ def test_traces_lists_trace_files_newest_first(tmp_path):
 
 
 def test_export_is_one_offline_file_with_the_trace_inside(tmp_path):
-    events = EVENTS[:2] + [{"ev": "enter", "method": 1, "fullName": "</script><b>x", "depth": 0}]
+    header = dict(EVENTS[0], input="/home/me/repo", cpg={"path": "/home/me/repo.cpg", "nodes": 5})
+    events = [header, EVENTS[1], {"ev": "enter", "method": 1, "fullName": "</script><b>x", "depth": 0}]
     path = _trace(tmp_path, events=events)
     out = view.export(path, tmp_path / "out" / "demo.html")
     html = out.read_text()
@@ -81,7 +82,9 @@ def test_export_is_one_offline_file_with_the_trace_inside(tmp_path):
     assert "</script><b>x" not in html and "<\\/script><b>x" in html
     assert "http://" not in html and "https://" not in html
     data = html.split('<script id="trace-data" type="application/json">', 1)[1].split("</script>", 1)[0]
-    assert json.loads(data.replace("<\\/", "</"))["events"][2]["fullName"] == "</script><b>x"
+    embedded = json.loads(data.replace("<\\/", "</"))
+    assert embedded["events"][2]["fullName"] == "</script><b>x"
+    assert "/home/me" not in html and embedded["events"][0]["cpg"] == {"nodes": 5}
 
 
 def test_finish_appends_the_result(tmp_path, monkeypatch):

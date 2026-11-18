@@ -209,6 +209,18 @@ def _slim(event: dict) -> dict:
             "name": event.get("name"), "targets": targets}
 
 
+def _shareable(data: dict) -> dict:
+    """``data`` without the header's machine paths (``input``, ``cpg.path``)."""
+    events = []
+    for event in data["events"]:
+        if event.get("ev") == "header":
+            event = {k: v for k, v in event.items() if k != "input"}
+            if isinstance(event.get("cpg"), dict):
+                event["cpg"] = {k: v for k, v in event["cpg"].items() if k != "path"}
+        events.append(event)
+    return {**data, "events": events}
+
+
 def traces(folder: Path) -> list[dict]:
     """The traces in ``folder``, newest first."""
     found = []
@@ -232,8 +244,12 @@ def page(embedded: dict | None = None) -> str:
 
 
 def export(trace: Path, out: Path) -> Path:
-    """One HTML file that replays ``trace`` offline: the page, with the trace inside."""
-    data = read_all(trace)
+    """One HTML file that replays ``trace`` offline: the page, with the trace inside.
+
+    The header's absolute paths (the CPG file, the checkout) are left out: an export is for
+    sharing, and the page does not use them.
+    """
+    data = _shareable(read_all(trace))
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(page({"name": trace.name, **data}), encoding="utf-8")
     return out
@@ -299,7 +315,7 @@ def make_server(target: Path, host: str = "127.0.0.1", port: int = 8765) -> Thre
                     offset = 0
                 return self._json(read(path, offset))
             if url.path == "/api/export":
-                body = page({"name": path.name, **read_all(path)}).encode("utf-8")
+                body = page({"name": path.name, **_shareable(read_all(path))}).encode("utf-8")
                 filename = path.name.removesuffix(SUFFIX) + ".html"
                 return self._send(200, body, "text/html; charset=utf-8",
                                   {"Content-Disposition": f'attachment; filename="{filename}"'})
