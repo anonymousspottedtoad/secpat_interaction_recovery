@@ -14,7 +14,10 @@ Two modes:
   line per query; it keeps the last CPG open, so consecutive queries on one repository (both
   sides of a Level 3 comparison, say) read it once.
 
-Like the Joern backends, every failure returns ``None`` and is logged at WARNING.
+Like the Joern backends, every failure returns ``None`` and is logged at WARNING. With a
+progress display on (:mod:`.progress`), the engine runs with ``SECPAT_PROGRESS=lines`` and its
+stderr is read as it comes: progress lines go to the query's display, the rest is kept as before
+(one-shot) or dropped as before (``serve``).
 """
 
 from __future__ import annotations
@@ -31,7 +34,7 @@ import threading
 import time
 from pathlib import Path
 
-from . import config, joern_local
+from . import config, joern_local, progress
 from .joern_service import frontend_for
 
 logger = logging.getLogger(__name__)
@@ -39,24 +42,27 @@ logger = logging.getLogger(__name__)
 _DETAIL_TAIL = 2000
 
 
-def query(repo: str, language: str, repo_path: Path, params: dict[str, str]) -> dict | None:
+def query(repo: str, language: str, repo_path: Path, params: dict[str, str],
+          display: progress.Display | None = None) -> dict | None:
     """The walk's JSON result for ``repo`` with ``params`` (roles, behaviour, entry), or ``None``."""
     repo_path = Path(repo_path).absolute()
     if not repo_path.is_dir():
         logger.warning("secpat-walk: no checkout for %s at %s", repo, repo_path)
         return None
     frontend = frontend_for(language)
-    cpg = joern_local._ensure_cpg(repo, frontend, repo_path)
+    cpg = joern_local._ensure_cpg(repo, frontend, repo_path, display)
     if cpg is None:
         return None
     workdir = Path(tempfile.mkdtemp(prefix="secpat-walk-"))
     try:
         output = workdir / "result.json"
         started = time.monotonic()
+        if display is not None:
+            display.phase("starting secpat-walk")
         if config.SECPAT_WALK_SERVE:
-            ok = _serve_query(repo, cpg, repo_path, frontend, params, output)
+            ok = _serve_query(repo, cpg, repo_path, frontend, params, output, display)
         else:
-            ok = _run_query(repo, cpg, repo_path, frontend, params, output)
+            ok = _run_query(repo, cpg, repo_path, frontend, params, output, display)
         if not ok:
             return None
         try:
@@ -70,7 +76,7 @@ def query(repo: str, language: str, repo_path: Path, params: dict[str, str]) -> 
         shutil.rmtree(workdir, ignore_errors=True)
 
 
-def _run_query(repo, cpg, repo_path, frontend, params, output) -> bool:
+def _run_query(repo, cpg, repo_path, frontend, params, output, display=None) -> bool:
     command = [
         config.SECPAT_WALK_BIN, "run",
         "--cpg", str(cpg), "--input", str(repo_path), "--language", frontend,
@@ -79,8 +85,11 @@ def _run_query(repo, cpg, repo_path, frontend, params, output) -> bool:
         "--timeout", str(config.JOERN_TIMEOUT_SECONDS),
     ]
     try:
-        completed = subprocess.run(command, capture_output=True, text=True, check=False,
-                                   timeout=config.JOERN_TIMEOUT_SECONDS + 60)
+        if display is not None and display.active:
+            completed = progress.run(command, timeout=config.JOERN_TIMEOUT_SECONDS + 60, display=display)
+        else:
+            completed = subprocess.run(command, capture_output=True, text=True, check=False,
+                                       timeout=config.JOERN_TIMEOUT_SECONDS + 60)
     except FileNotFoundError:
         logger.warning("secpat-walk: %s is not installed or not on PATH -- build joern-rust "
                        "(`cargo build --release -p secpat-walk`) or set SECPAT_WALK_BIN.",
@@ -98,12 +107,19 @@ def _run_query(repo, cpg, repo_path, frontend, params, output) -> bool:
 
 
 class _Server:
-    """One `secpat-walk serve` process, answering one query at a time."""
+    """One `secpat-walk serve` process, answering one query at a time.
 
-    def __init__(self):
+    With ``progress_lines`` it runs with ``SECPAT_PROGRESS=lines`` and its stderr is read, so the
+    query being answered gets its progress lines (``display``); without, stderr is discarded.
+    """
+
+    def __init__(self, progress_lines: bool = False):
+        self.display: progress.Display | None = None
         self.proc = subprocess.Popen(
             [config.SECPAT_WALK_BIN, "serve", "--timeout", str(config.JOERN_TIMEOUT_SECONDS)],
-            stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL,
+            stdin=subprocess.PIPE, stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE if progress_lines else subprocess.DEVNULL,
+            env=dict(os.environ, SECPAT_PROGRESS="lines") if progress_lines else None,
             text=True, bufsize=1)
         self.lock = threading.Lock()
         self.count = 0
@@ -111,14 +127,25 @@ class _Server:
         # readline() already pulled into the buffer.
         self.lines: queue.Queue = queue.Queue()
         threading.Thread(target=self._pump, daemon=True).start()
+        if progress_lines:
+            threading.Thread(target=self._pump_stderr, daemon=True).start()
 
     def _pump(self):
         for line in self.proc.stdout:
             self.lines.put(line)
         self.lines.put(None)
 
-    def ask(self, job: dict, timeout: float) -> tuple[bool, str]:
+    def _pump_stderr(self):
+        """Progress lines to the current query's display; everything else is dropped, as before."""
+        for line in self.proc.stderr:
+            display = self.display
+            if display is not None:
+                display.feed(line)
+
+    def ask(self, job: dict, timeout: float, display: progress.Display | None = None) -> tuple[bool, str]:
         with self.lock:
+            # Kept after the answer: a progress line the engine writes after its DONE still lands here.
+            self.display = display
             self.count += 1
             job = dict(job, id=f"q{self.count}")
             self.proc.stdin.write(json.dumps(job) + "\n")
@@ -150,11 +177,11 @@ class _Server:
 _server: _Server | None = None
 
 
-def _serve_query(repo, cpg, repo_path, frontend, params, output) -> bool:
+def _serve_query(repo, cpg, repo_path, frontend, params, output, display=None) -> bool:
     global _server
     try:
         if _server is None or _server.proc.poll() is not None:
-            _server = _Server()
+            _server = _Server(progress_lines=display is not None and display.active)
             atexit.register(_server.close)
     except FileNotFoundError:
         logger.warning("secpat-walk: %s is not installed or not on PATH.", config.SECPAT_WALK_BIN)
@@ -163,7 +190,7 @@ def _serve_query(repo, cpg, repo_path, frontend, params, output) -> bool:
         "cpgPath": str(cpg), "inputPath": str(repo_path), "language": frontend,
         "roles": params.get("roles", ""), "behaviour": params.get("behaviour", ""),
         "entry": params.get("entry", ""), "outputPath": str(output),
-    }, config.JOERN_TIMEOUT_SECONDS + 60)
+    }, config.JOERN_TIMEOUT_SECONDS + 60, display)
     if not ok:
         logger.warning("secpat-walk serve: the query for %s failed: %s", repo, detail)
         if _server.proc.poll() is None and "in time" in detail:

@@ -67,6 +67,13 @@ SECPAT_WALK_BIN = os.getenv("SECPAT_WALK_BIN", "secpat-walk")
 # consecutive queries on one repository read its CPG once.
 SECPAT_WALK_SERVE = os.getenv("SECPAT_WALK_SERVE", "").strip().lower() in ("1", "true", "yes")
 
+# ── progress display ──────────────────────────────────────────────────────────
+
+# What a query shows while it runs (`progress.py`): "auto" (a display when stderr is a terminal),
+# "on" / "bar" (a display; when stderr is not a terminal, a log line at most every ~10 s), "lines"
+# (the engine's own SECPAT_PROGRESS lines, passed through to stderr), or "off".
+SECPAT_PROGRESS = os.getenv("SECPAT_PROGRESS", "auto").strip().lower() or "auto"
+
 # ── CPG builds (local joern-parse) ────────────────────────────────────────────
 
 # Delombok mode for JAVASRC builds. "types-only" is what the query service used; "no-delombok"

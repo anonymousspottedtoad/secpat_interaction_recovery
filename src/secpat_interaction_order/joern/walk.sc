@@ -78,8 +78,10 @@ trait LangSpec {
   entry: String = "",
   behaviour: String = ""
 ) = {
+  Progress.begin(cpgPath, inputPath)   // progress lines on stderr, only with SECPAT_PROGRESS=lines
   loadGraph(cpgPath, inputPath, language)
   val repo = new Repo(inputPath)
+  Progress.phase("locate")
 
   // 1. Which method does a call run?
   val graph = new CallGraph(repo)
@@ -93,6 +95,7 @@ trait LangSpec {
 
   // 4. Step the control-flow graph from there, recording each change of role.
   val walker = new Walker(graph, ownership)
+  Progress.phase("traverse", walker)
   start.node.foreach { case (m, from) =>
     val roles = ownership.roleOfNode.getOrElse(m.id, List(start.role))
     walker.coLocatedAtStart(m, from, roles)
@@ -102,6 +105,7 @@ trait LangSpec {
   // 5. Report each interaction once, in the order it was first reached.
   val interactions = firstOccurrences(walker.edges.toList)
   writeResult(outputPath, render(graph, located, start, interactions))
+  Progress.done(interactions.size)
   println(s"derived ${interactions.size} interaction(s) from ${located.size} role(s), entry=${start.role}")
 }
 
@@ -1280,6 +1284,7 @@ class Walker(graph: CallGraph, ownership: Ownership) {
     val key = (m.id, fromId, sources.sorted.mkString(" "))
     if (test(key)) return
     addKey(key)
+    if (Progress.on) Progress.body(m.id, depth)
     val myChain = if (chain >= 0) chain else { chains += 1; chains }
     val mk: MemoKey = (m.id, fromId, sources, via.size, dispatched, framework)
     val cands = memo.getOrElse(mk, Nil)
@@ -1368,6 +1373,7 @@ class Walker(graph: CallGraph, ownership: Ownership) {
     while (pending.nonEmpty) {
       val n = pending.pop()
       if (visitedNodes.add(n.id)) {
+        if (Progress.on) Progress.step(n)
         val line = n.lineNumber.getOrElse(-1)
 
         n match {
@@ -1394,6 +1400,7 @@ class Walker(graph: CallGraph, ownership: Ownership) {
                   // alternative is judged against the same state.
                   val (kept, skipped) = ts.partition(t => alternativeMayEmit(t, c, h, sources, dispatched))
                   alternativesSkipped += skipped.size
+                  if (Progress.on) Progress.alternatives += kept.size
                   keepMostRoles(kept.map(t => () => go(Some(t))))
               }
             }
@@ -1475,3 +1482,119 @@ def render(graph: CallGraph, located: List[RoleNode], start: Entry,
 
 def writeResult(outputPath: String, out: ujson.Obj): Unit =
   java.nio.file.Files.write(java.nio.file.Paths.get(outputPath), out.render().getBytes("UTF-8"))
+
+
+// ═══ progress (SECPAT_PROGRESS=lines) ════════════════════════════════════════
+//
+// For a caller's progress display (progress.py). With SECPAT_PROGRESS=lines in the environment,
+// the run writes one line to stderr at most twice a second, and a last one with "done": true:
+//
+//   SECPAT_PROGRESS {"engine":"joern","repo":..,"draft":..,"phase":..,"elapsed_s":..,
+//                    "cpg":{"nodes":..,"edges":..,"methods":..},"bodies":..,"replayed":..,...}
+//
+// The native engine writes the same format. Without the variable, each hook in `exec` and the
+// Walker costs one boolean test. Nothing here changes what the traversal computes, and the
+// traversal reads nothing from here.
+
+object Progress {
+  val on: Boolean = sys.env.get("SECPAT_PROGRESS").exists(_.trim.equalsIgnoreCase("lines"))
+  /** The draft's label, from SECPAT_PROGRESS_DRAFT; a batch running several drafts sets it per draft. */
+  var draft: String = sys.env.get("SECPAT_PROGRESS_DRAFT").filter(_.nonEmpty).orNull
+
+  private var repo, phaseName = ""
+  private var cpgSize: Option[ujson.Obj] = None
+  private var walker: Walker = null
+  private var started, lastLine = 0L
+  private var ticks = 0
+  private val methods = scala.collection.mutable.HashSet[Long]()
+  // Bodies entered (replays included), CFG nodes stepped, call sites resolved, alternatives traversed.
+  private var bodies, cfgSteps, calls = 0L
+  var alternatives = 0L
+  private var depth, maxDepth = 0
+
+  /** A new run on `cpgPath` (`<repo>__<FRONTEND>.cpg`), or on the checkout at `inputPath`. */
+  def begin(cpgPath: String, inputPath: String): Unit = if (on) {
+    val name = Option(java.nio.file.Paths.get(if (cpgPath.nonEmpty) cpgPath else inputPath).getFileName)
+    repo = name.map(_.toString.split("__").head.stripSuffix(".cpg")).getOrElse("")
+    cpgSize = None; walker = null; methods.clear()
+    bodies = 0; cfgSteps = 0; calls = 0; alternatives = 0; depth = 0; maxDepth = 0
+    started = System.nanoTime
+    phaseName = "load"
+    emit(false, -1)
+  }
+
+  /** `exec` moves on to `name`; the graph is loaded by then, so its size is read at the first. */
+  def phase(name: String, w: Walker = null): Unit = if (on) {
+    if (cpgSize.isEmpty) cpgSize = Some(graphSize())
+    phaseName = name
+    if (w != null) walker = w
+    if (System.nanoTime - lastLine >= 500000000L) emit(false, -1)
+  }
+
+  def body(method: Long, d: Int): Unit = {
+    bodies += 1; methods += method; depth = d
+    if (d > maxDepth) maxDepth = d
+    tick()
+  }
+
+  def step(n: CfgNode): Unit = {
+    cfgSteps += 1
+    n match { case c: Call if isRealCall(c) => calls += 1; case _ => () }
+    tick()
+  }
+
+  /** The result is written: the last line, with the reported interaction count. */
+  def done(interactions: Int): Unit = if (on) { phaseName = "done"; emit(true, interactions) }
+
+  /** The clock is read once per 1024 ticks. */
+  private def tick(): Unit = {
+    ticks += 1
+    if ((ticks & 1023) == 0 && System.nanoTime - lastLine >= 500000000L) emit(false, -1)
+  }
+
+  private def graphSize(): ujson.Obj = {
+    val g = cpg.graph
+    val o = ujson.Obj("nodes" -> g.nodeCount)
+    edgeCount(g).foreach(n => o("edges") = n.toDouble)
+    o("methods") = g.nodeCount("METHOD")
+    o
+  }
+
+  /** Every edge once. flatgraph keeps, per (node kind, direction, edge kind), an offset array whose
+    * last entry is that slot's edge count; it is package-private, hence the reflection.
+    * `Graph.edgeCount` gives the same number by visiting every edge (1.3 s on a 37 MB CPG). */
+  private def edgeCount(g: flatgraph.Graph): Option[Long] = scala.util.Try {
+    val slots = g.getClass.getMethod("neighbors").invoke(g).asInstanceOf[Array[AnyRef]]
+    val s = g.schema
+    (for (nk <- s.nodeKinds; ek <- s.edgeKinds)
+      yield slots(s.neighborOffsetArrayIndex(nk, flatgraph.Edge.Direction.Outgoing, ek)) match {
+        case q: Array[Int] if q.nonEmpty => q(q.length - 1).toLong
+        case _                           => 0L
+      }).sum
+  }.toOption
+
+  /** One line; `interactions` < 0: count the distinct (source, target) pairs emitted so far. */
+  private def emit(done: Boolean, interactions: Int): Unit = {
+    lastLine = System.nanoTime
+    val o = ujson.Obj("engine" -> "joern", "repo" -> repo,
+                      "draft" -> (if (draft == null) ujson.Null else ujson.Str(draft)),
+                      "phase" -> phaseName, "elapsed_s" -> math.round((lastLine - started) / 1e7) / 100.0)
+    cpgSize.foreach(c => o("cpg") = c)
+    // ujson writes a Long as a string, hence the Doubles (exact below 2^53).
+    o("bodies") = bodies.toDouble
+    o("replayed") = if (walker == null) 0.0 else walker.memoHits.toDouble
+    o("distinct_methods") = methods.size
+    o("calls") = calls.toDouble
+    o("cfg_steps") = cfgSteps.toDouble
+    o("interactions") =
+      if (interactions >= 0) interactions
+      else if (walker == null) 0
+      else walker.edges.iterator.map(e => (e.source, e.target)).toSet.size
+    o("depth") = depth
+    o("max_depth") = maxDepth
+    o("alternatives") = alternatives.toDouble
+    o("done") = done
+    System.err.println("SECPAT_PROGRESS " + o.render())
+    System.err.flush()
+  }
+}

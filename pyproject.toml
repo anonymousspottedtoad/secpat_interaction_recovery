@@ -15,8 +15,13 @@ authors = [{ name = "Anonymous" }]
 # None: the traversal runs on the Joern query service, reached over stdlib `urllib`.
 dependencies = []
 
+[project.scripts]
+secpat-interaction-order = "secpat_interaction_order.cli:main"
+
 [project.optional-dependencies]
 dev = ["pytest", "ruff>=0.4"]
+# A tqdm bar for SECPAT_PROGRESS; without it the package draws a line of its own.
+progress = ["tqdm"]
 
 [project.urls]
 Repository = "https://github.com/anonymousspottedtoad/secpat_interaction_recovery"

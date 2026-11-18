@@ -1,125 +1,185 @@
 # secpat-interaction-order
 
-Derives the order in which a role mapping's roles interact, by traversing the repo's
-Code Property Graph with Joern — a Joern query service, or a local Joern install.
-Installed by:
+Recovers the order in which the roles of a security pattern interact in a codebase. You give
+it the place in the code of each role (the role mapping). It traverses the repository's code
+property graph (CPG) with [Joern](https://joern.io) and returns the interactions in order. This
+is the interaction sequence recovery of the paper *A Hybrid Approach for Automated Security
+Pattern Recovery* (Section III-B2 and Appendix C), for Java and Python.
 
-- **`secpat-scoring`** — Level 3 compares two orders derived here (it imports the
-  result types; the caller binds `detect` to a repo and passes it in).
-- **`secpat-recovery`** — stage 3 of a recovery run writes the order into
-  `recovery.json`.
+It runs on its own, as the command `secpat-interaction-order`:
 
-## The paper
+- `secpat-interaction-order dataset` re-derives the interaction orders of the paper's dataset
+  and checks them against the stored ones (one record, or all 100);
+- `secpat-interaction-order run` derives the order of any role mapping in any Java or Python
+  repository.
 
-This package is the interaction sequence recovery of the paper *A Hybrid Approach
-for Automated Security Pattern Recovery* (Section III-B2, Interaction Sequence
-Recovery). The paper's Appendix C (Using Code Property Graphs for Interaction
-Recovery) describes the traversal rules and the edges the traversal adds, and
-[`JOERN.md`](src/secpat_interaction_order/JOERN.md) works through one example. The
-appendix is at <https://doi.org/10.5281/zenodo.23664769>, and its Appendix G lists
-the other artifacts. The traversal derived the groundtruth interaction sequences of the
-paper's dataset (in version 0.1.0; 0.2.0 removes repeated work without changing its
-rules or, on every order it was compared with, its output: see
-[Changelog.md](Changelog.md)), and IRC
-([secpat_evaluation_metrics](https://github.com/anonymousspottedtoad/secpat_evaluation_metrics))
-traverses both sides with it. It has rules for Java and Python, the two languages of
-the paper.
+[secpatrec](https://github.com/anonymousspottedtoad/secpatrec), the paper's main artifact, uses
+it as a library.
 
-In the output, an interaction of the paper is one entry of `interactions` (`from`,
-`to`, the call site and its `path`), the entry role is `entryRole`, and the label
-of an edge in Appendix C is its `mechanism`.
+## What you need
 
-Two rules of the traversal are not described in Appendix C:
+- Python 3.11 or newer, and this package (it has no dependencies):
 
-- **`co-located`.** When one code node carries several roles (one entity mapped to
-  more than one role), the traversal records the interactions the pattern prescribes
-  among those roles, labelled `co-located`. 20 of the 280 groundtruth interactions
-  are `co-located`.
-- **The entry role.** Appendix C starts the traversal at the sender of the pattern's
-  first action whose role is mapped to code (`entryRule: behaviour`). The traversal uses
-  that role only if no other mapped role reaches it. Otherwise it starts at the
-  role, among those no other role reaches, that reaches the most roles
-  (`entryRule: code-root`), and with no such role it has no entry. 3 of the 100
-  groundtruth records start at a `code-root`.
+  ```bash
+  pip install "secpat-interaction-order @ git+https://github.com/anonymousspottedtoad/secpat_interaction_recovery.git@v0.2.0"
+  ```
 
-## What is in here
+  secpatrec installs it too, so the command is also in secpatrec's environment.
+- Joern 4.0.627 with a full JDK. secpatrec's README installs both (its section "2. Joern 4.0.627").
+- The paper's dataset, which includes a prebuilt CPG for every repository:
 
-| Module | Does |
-| ------ | ---- |
-| `detector.py` | `detect()` -> `DetectionResult`; sends the mapping, reads the order back |
-| `joern_service.py` | the HTTP client — POSTs `walk.sc` + a profile to a query service |
-| `joern_local.py` | the local runner — `joern-parse` / `joern --script` on this machine |
-| `joern/walk.sc` | the traversal: locates roles, steps the CFG, returns interactions |
-| `joern/python.sc`, `joern/java.sc` | `LangSpec` profiles — what differs between frontends |
-| `config.py` | `JOERN_*` env vars, read at import time |
-| `JOERN.md` | source -> CPG -> traversal, with a worked example |
+  ```bash
+  pip install --upgrade huggingface_hub
+  hf buckets sync hf://buckets/AnonymousSpottedToad/securityPatternsRecovery dataset
+  ```
 
-The traversal itself runs in Joern (or, opt-in, in the native engine described below);
-nothing is traversed in Python. The package has no dependencies.
+- Optional: `secpat-walk`, a native engine from the repository joern-rust. It gives the same
+  results without starting Joern (see [Faster: the native engine](#faster-the-native-engine)).
 
-## Where Joern runs
+## Check one case
 
-**A query service** — set `JOERN_SERVICE_URL` (and `JOERN_SERVICE_TOKEN`). The service
-holds the checkouts and a CPG per repo; `detect()` sends the repo's name. The service
-is not one of the paper's artifacts, so to reproduce the paper, use local Joern.
-
-**Local Joern** — leave `JOERN_SERVICE_URL` unset, and pass `detect(..., repo_path=<checkout>)`:
-
-| Setting | Default | |
-| ------- | ------- | - |
-| `JOERN_BIN` / `JOERN_PARSE_BIN` | `joern` / `joern-parse` on PATH | the two Joern binaries |
-| `JOERN_CPG_ROOT` | `~/.cache/secpat/joern_cpg` | the CPG store, `<repo>__<FRONTEND>.cpg` |
-| `JOERN_TIMEOUT_SECONDS` | 900 | one query |
-| `JOERN_BUILD_TIMEOUT_SECONDS` | 3600 | one CPG build |
-
-A CPG already in the store is used as is — the file naming is the service's, so a
-copy of a service's CPG store works unchanged. A missing one is built with
-`joern-parse` (Java with `--delombok-mode types-only`, as the service builds it)
-and kept. Two things to get right:
-
-- **A prebuilt CPG must match its checkout's content, not its location.** Joern
-  records file names relative to the folder it parsed, so a CPG and a copy of its
-  checkout can move together anywhere. A checkout edited after the build is not
-  detected — delete the CPG to have it rebuilt.
-- **The graph depends on the Joern install.** Use Joern 4.0.627 and a full JDK: the
-  paper's dataset ships CPGs built with them (JDK 25), and secpatrec's README
-  installs both. A JRE-only install resolves fewer Java types, so its orders are not
-  comparable.
-
-## Faster engines and builds
-
-Profiling (`profiling/PROFILING.md`) found that a local `joern --script` query
-spends ~11 s starting Joern for a traversal that mostly takes well under a second. Two options, both
-returning the same orders:
-
-| Setting | Default | |
-| ------- | ------- | - |
-| `JOERN_ENGINE` | `joern` | `rust` runs the traversal on `secpat-walk` (repository joern-rust), which reads the same CPGs |
-| `SECPAT_WALK_BIN` / `SECPAT_WALK_SERVE` | `secpat-walk` / off | the native binary; keep one `serve` process per Python process |
-| `JOERN_DELOMBOK_MODE` | `types-only` | `no-delombok` builds a Lombok repo in a fifth of the time and memory |
-| `JOERN_PARSE_DATAFLOW` | off | builds skip reaching definitions (`--max-num-def 0`), which the traversal never reads |
-| `JOERN_PARSE_XMX` | unset | heap cap for every JVM a build starts, delombok's children included |
-
-## Install
+One record of the dataset: verifiable token-based authentication in the Java repository
+`ErtanSidar_turkcell-common`.
 
 ```bash
-pip install "secpat-interaction-order @ git+https://github.com/anonymousspottedtoad/secpat_interaction_recovery.git@v0.1.0"
+D=/path/to/dataset
+secpat-interaction-order dataset --dataset $D \
+    --repo ErtanSidar_turkcell-common --pattern verifiable_token_based_authentication
 ```
 
-`secpat-scoring` pins it by name, so a consumer installing scoring from git lists this
-URL as well (pip will not resolve it from an index).
+```text
+[1/1] verifiable_token_based_authentication__ErtanSidar_turkcell-common: 4 interaction(s), same as the dataset
+1 of 1 record(s) give the same interaction order as the dataset (13 s).
+```
 
-## Checking an install
+It reads the record's ground-truth role mapping
+(`ground_truth/java/verifiable_token_based_authentication__ErtanSidar_turkcell-common.json`) and
+the pattern's steps (`security_patterns/verifiable_token_based_authentication/04_pattern.json`).
+Then it traverses the record's CPG on Joern and compares the result with the `interaction_order`
+stored in the ground-truth file. It takes about 13 s, most of it Joern starting up. Any other
+record works the same way: its repository and pattern are listed in `manifest_java_*.json` and
+`manifest_python_*.json`.
 
-The repository has no test suite. To check an install against known numbers, run
-secpatrec's Experiment 2 on the `pipeline` experiment: it traverses the paper's
-recoveries again with this package, and its scores equal those stored in the
-dataset's `evaluation.json` files.
+### Your own role mapping
 
-## Changelog
+`run` takes the role mapping on the command line. The same record, with its four roles written
+out:
 
-See [Changelog.md](Changelog.md).
+```bash
+secpat-interaction-order run \
+  --codebase $D/codebase/repos/java/ErtanSidar_turkcell-common \
+  --cpg-dir $D/codebase/cpg \
+  --language java \
+  --roles '[
+    {"role": "Enforcer",      "entity": "doFilterInternal",  "file": "src/main/java/io/github/ertansidar/security/filter/BaseJwtAuthFilter.java", "lines": "27"},
+    {"role": "Verifier",      "entity": "validateToken",     "file": "src/main/java/io/github/ertansidar/security/jwt/BaseJwtService.java",    "lines": "41"},
+    {"role": "Key manager",   "entity": "getSignKey",        "file": "src/main/java/io/github/ertansidar/security/jwt/BaseJwtService.java",    "lines": "71"},
+    {"role": "Cryptographer", "entity": "parseSignedClaims", "file": "src/main/java/io/github/ertansidar/security/jwt/BaseJwtService.java",    "lines": "46"}]' \
+  --behaviour '[
+    {"step": "2", "from": "Enforcer", "to": "Verifier"},
+    {"step": "3", "from": "Verifier", "to": "Key manager"},
+    {"step": "4", "from": "Verifier", "to": "Cryptographer"}]' \
+  --output result.json
+```
+
+```text
+derived 4 interaction(s) from 4 role(s), entry=Enforcer (12.6 s)
+  1. Enforcer → Key manager    src/main/java/io/github/ertansidar/security/jwt/BaseJwtService.java:54  call
+  2. Enforcer → Verifier       src/main/java/io/github/ertansidar/security/filter/BaseJwtAuthFilter.java:45  call
+  3. Verifier → Key manager    src/main/java/io/github/ertansidar/security/jwt/BaseJwtService.java:44  call
+  4. Verifier → Cryptographer  src/main/java/io/github/ertansidar/security/jwt/BaseJwtService.java:42  call
+```
+
+Each line is one interaction: the two roles, the call site, and how the first role reaches the
+second (the edge label of Appendix C). `result.json` has the same, plus the calls in between.
+
+| option | |
+| --- | --- |
+| `--codebase` | the repository's folder |
+| `--language` | `java` or `python` |
+| `--roles` | one entry per role: its name, the function or class (`entity`), the `file` (relative to `--codebase`) and the line. `@FILE` reads the list from a file |
+| `--behaviour` | optional: the pattern's steps, which choose the role the traversal starts from ([the rule](docs/USAGE.md#the-output-and-the-paper)) |
+| `--entry` | optional: the role to start from, instead |
+| `--cpg-dir` | the folder with the repository's CPG, `<folder name>__JAVASRC.cpg` (or `__PYTHONSRC`). Without it, or when the file is not there, Joern's `joern-parse` builds the CPG first, in `~/.cache/secpat/joern_cpg` (seconds for a small repository, minutes for a large one) |
+| `--output` | write the result as JSON |
+| `--engine` | `joern` (the default) or `rust` |
+
+## Reproduce the whole dataset
+
+The same `dataset` command without `--repo` and `--pattern` checks all 100 records:
+
+```bash
+secpat-interaction-order dataset --dataset $D
+```
+
+```text
+[1/100] authentication_pwd__Open-Core-Finance_corefinance: 4 interaction(s), same as the dataset
+...
+[100/100] session_based_access_control__kinde-oss_kinde-python-sdk: 3 interaction(s), same as the dataset
+100 of 100 record(s) give the same interaction order as the dataset (23 min).
+```
+
+It takes about 23 minutes on Joern, or 18 s with `--engine rust`. A record that
+differs is printed with both orders, and the command then exits with status 1. `--output DIR`
+saves every derived order.
+
+These ground-truth orders are the reference that the paper's Level 3 (IRC) scores the recovered
+orders against. To compute the scores themselves, use secpatrec's `secpat interaction` (its
+Experiment 2), which runs this package and secpatrec's scoring package. Run it from secpatrec's
+folder, with `dataset/` inside:
+
+```bash
+secpat interaction --models gpt-6.1-sol \
+    --manifests dataset/manifest_java_full_20261005.json \
+    --manifests dataset/manifest_python_full_20261005.json \
+    --groundtruth-path dataset/ground_truth \
+    --cpg-path dataset/codebase/cpg \
+    --repos-path dataset/codebase/repos \
+    --patterns-path dataset/security_patterns \
+    --recoveries-path dataset/experiment_outputs
+```
+
+This takes about an hour on Joern, or 2 minutes with the native engine. The scores in
+`output/index.html` equal the ones stored in
+`dataset/experiment_outputs/pipeline/gpt-6.1-sol/<language>/evaluation.json`.
+[secpatrec's README](https://github.com/anonymousspottedtoad/secpatrec#what-reproduces-which-result)
+maps them to the paper's tables and figures.
+
+## Faster: the native engine
+
+`secpat-walk` (repository joern-rust) runs the same traversal without Joern and gives the same
+results. Build it as its README says and put it on `PATH` (or set `SECPAT_WALK_BIN` to it). Then
+add `--engine rust` to any command above:
+
+```bash
+secpat-interaction-order dataset --dataset $D --engine rust
+```
+
+All 100 records take 18 s instead of about 23 minutes. For secpatrec's
+`secpat interaction`, set `JOERN_ENGINE=rust`.
+
+## Settings
+
+Environment variables:
+
+| Variable | Default | |
+| --- | --- | --- |
+| `JOERN_BIN` | `joern` on `PATH` | the Joern binary |
+| `JOERN_TIMEOUT_SECONDS` | 900 | the time limit of one query |
+| `JOERN_ENGINE` | `joern` | `rust` runs the traversal on `secpat-walk` (the same as `--engine rust`) |
+| `SECPAT_WALK_BIN` | `secpat-walk` on `PATH` | the native engine's binary |
+| `SECPAT_PROGRESS` | `auto` | `on` shows a progress line while a query runs; `off` hides it |
+
+## More
+
+- [docs/USAGE.md](docs/USAGE.md): the Python API (`detect()`), the Joern script on its own,
+  every setting, the progress display and the profiling scripts.
+- [JOERN.md](src/secpat_interaction_order/JOERN.md): how the traversal works, on a worked
+  example, including the two rules that Appendix C does not describe.
+- [profiling/PROFILING.md](profiling/PROFILING.md): where a query's time goes, and how version
+  0.2.0 made the traversal faster without changing its output.
+- [Changelog.md](Changelog.md)
 
 ## License
 
-MIT — see [LICENSE](LICENSE).
+MIT, see [LICENSE](LICENSE).

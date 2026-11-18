@@ -1032,6 +1032,7 @@ Sections of `walk.sc`, in file order, which is also the order they run:
 | 3 | the traversal (`startsOf`, `walkBody`) | §2, §3, §4, §5 |
 | 4 | entry role, then the single `walkBody` call | §2 |
 | 5 | emit | §6 |
+| – | progress lines (`Progress`), opt-in, never read by the traversal | Implementation notes |
 
 Sections 1-3 only define things; nothing executes until §4.
 
@@ -1829,6 +1830,30 @@ only safe choice, and what the dropped rows cost is §6 of the narrative above.
 (which reading of the citation found it -- the number that says whether the line
 is still load-bearing), and `file` / `line` (where it was found, which differs
 from the citation exactly when the lookup crossed files).
+
+
+## `Progress` (`═══ progress (SECPAT_PROGRESS=lines)`)
+
+Opt-in progress lines for a caller's display (`progress.py`), in the format the
+native engine writes too. With `SECPAT_PROGRESS=lines` in the environment, `exec`
+names its phases (`load`, `locate`, `traverse`, `done`) and three hooks in the
+`Walker` count what the traversal does: a body entered in `walkBody` (past the
+entered-set test, so memo replays count; with its depth and method), a CFG node
+stepped in `walkOnce` (and whether it is a call site, i.e. a `targetsOf`), and the
+`keepMostRoles` alternatives traversed. Replays and interactions are read from the
+`Walker`'s own `memoHits` and `edges` when a line is written. A line goes to stderr
+at most twice a second, the clock being read once per 1024 steps, and a last one
+carries `"done": true`. The CPG's node, edge and method counts are read once, after
+loading: flatgraph's per-kind offset arrays give the edge count without visiting
+an edge. `SECPAT_PROGRESS_DRAFT` names the draft in the lines.
+
+Without the variable each hook is one boolean test. Nothing the hooks write is read
+by the traversal, so its result is the same byte for byte either way (12 drafts
+checked, see Changelog.md). Only the traversal's own steps tick: the CFGs the
+`keepMostRoles` cut steps to decide liveness (`liveCtx`, `liveGivenEntered`) do not,
+so where that analysis dominates, lines come less often than twice a second. On
+camunda-bpm-platform the first 1,024 steps took 2.5 s; after that, a line came every
+0.5 s.
 
 ---
 

@@ -8,7 +8,96 @@ All notable changes to this project are documented in this file. The format foll
 Joern (`profiling/jobs/jobs.jsonl`); the others have fewer than two grounded roles. "Published
 orders" are that run's outputs. 19 drafts timed out in it and have no order.
 
-## [0.2.0] - unreleased (branch release-0.2.0)
+## [0.2.0] - 2026-11-18
+
+Version 0.2.0 has two parts, each with its own sections. This one adds a progress display: while
+`detect()` runs, it shows which repository and draft it is on and how much work the traversal has
+done. It also adds a command, `secpat-interaction-order`, so the package runs on its own. The
+other part, below, makes the traversal stop repeating work. Neither changes the traversal's
+output (see each part's Output).
+
+### Added
+
+- The command `secpat-interaction-order` (`cli.py`; also `python -m secpat_interaction_order`),
+  standard library only. `run` derives the order of one role mapping given on the command line
+  (`--codebase`, `--language`, `--roles`, optional `--behaviour`, `--entry`, `--cpg-dir`,
+  `--output`). `dataset --dataset DIR [--repo R] [--pattern P]` derives the order of each record's
+  ground-truth role mapping and compares `entryRole`, `entryRule`, `interactions` and
+  `anchoredRoles` with the record's stored `interaction_order`; it exits with 1 if any differs.
+  Before the traversal it drops the roles the pattern marks `required: false` and the steps that
+  involve them, as secpat-scoring's `scored_mappings` does, and it skips the traversal when fewer
+  than two roles are found in code, as secpatrec's `detect_action_sequence` does. Both take
+  `--engine joern|rust`. On the paper's dataset: 100 of 100 records give the stored order, every
+  field of the written files equal to the stored ones (18 s on `secpat-walk`, 23 min on
+  Joern).
+- `tests/test_cli.py`: the role rule, the comparison and exit status, and `run`'s arguments and
+  output, with `detect` stubbed.
+
+- `SECPAT_PROGRESS` and `progress.py`. `auto` (the default) shows one line, redrawn in place,
+  when stderr is a terminal: repository / draft, elapsed time, engine and phase, the CPG's size
+  and the traversal's counters. `on` does the same, and when stderr is not a terminal it logs a
+  line (logger `secpat_interaction_order.progress`, INFO) at most every 10 s. `lines` passes the
+  engine's raw lines through to stderr, and `off` shows nothing. Log records are printed above the
+  line rather than into it. Standard library only; with tqdm installed (the new optional extra
+  `progress = ["tqdm"]`) the line is a tqdm bar.
+- Progress lines from `joern/walk.sc`: with `SECPAT_PROGRESS=lines` in its environment, the
+  traversal writes `SECPAT_PROGRESS {json}` to stderr at most twice a second, and a last line with
+  `"done": true`. The format is shared with the native engine (`secpat-walk`). The fields are
+  `engine`, `repo`, `draft` (from `SECPAT_PROGRESS_DRAFT`), `phase` (`load`, `locate`,
+  `traverse`, `done`), `elapsed_s`, `cpg` (node, edge and method counts, read once after
+  loading), and the counters `bodies` (bodies entered, memo replays included), `replayed`,
+  `distinct_methods`, `calls` (call sites resolved), `cfg_steps`, `interactions`, `depth`,
+  `max_depth` and `alternatives` (`keepMostRoles` alternatives traversed). The code is one
+  section at the end of `walk.sc` plus four calls in `exec` and three one-line hooks in the
+  `Walker`. Without the variable each hook is one boolean test.
+- The runners read those lines while the engine runs: `joern_local.py` and the one-shot
+  `rust_walk.py` stream the child's stderr when a display is on (progress lines to the display,
+  everything else captured for the failure log as before), and `secpat-walk serve` gets its
+  stderr read instead of discarded. With the display off, both run exactly as before. The query
+  service answers only at the end, so against it the line shows how long the query has waited.
+- `detect(..., label=...)` names the draft in the display; the default is the entry role and
+  the number of roles.
+- `profiling/prof_walk.py` and `profiling/warm_worker.py`: an outer bar over the drafts
+  (`[i/N]`, the current repository, ETA), and the running draft's progress lines.
+- `tests/test_progress.py`: line parsing, mode selection, the non-terminal log fallback, the
+  terminal line, and streamed runs against a stand-in `joern` (same result, same failure log,
+  same timeout behaviour as `subprocess.run`).
+
+### Changed
+
+- `profiling/prof_walk.py` patches either `exec` (with or without the progress calls), so it
+  still profiles older traversals; its counter patches apply to the new `walk.sc` exactly as to
+  `walk_opt3.sc`.
+- README rewritten for reviewers: what is needed, how to check one case
+  (`secpat-interaction-order dataset --repo --pattern`, and `run` with a role mapping written out),
+  how to reproduce the whole dataset (`secpat-interaction-order dataset`, and secpatrec's
+  `secpat interaction` for the scores), and the native engine. Every command in it was run on the
+  paper's dataset, and its outputs are shown next to it.
+- The rest of the former README moved to the new `docs/USAGE.md`: how the output maps to the
+  paper, the modules, where Joern runs and its settings, the faster engines and builds, the
+  progress display, `detect()` from a shell (now on a dataset record), the Joern script on its own
+  (`joern --script`) with its `--param`s, and the batch runners in `profiling/`. JOERN.md: a note on
+  `Progress`.
+
+### Output
+
+Unchanged. Checked on 12 drafts, one Joern JVM at a time: 5 Java and 5 Python drafts with at
+least two interactions (CPGs of 0.2–0.4 MB), factcast, and
+java/limit_request_rate/camunda_camunda-bpm-platform (a 6 s traversal of 5,812 bodies, so the
+periodic lines fire). Each ran with `SECPAT_PROGRESS` unset and with `SECPAT_PROGRESS=lines`,
+both through `profiling/prof_walk.py` and through a plain `joern --script` of `walk.sc` and the
+profile:
+
+| Check | Result |
+|---|---|
+| the 4 runs' `result.json` files, byte for byte | **12 / 12 identical** |
+| `compare_golden.py`, each run, against the published orders | 10 / 10 identical; factcast and camunda-bpm-platform are former timeouts |
+| against `opt-full` / `opt3-timeouts` | 11 / 11 and 2 / 2 identical |
+| `detect()` on camunda-bpm-platform with local Joern: display off, on in a terminal (tqdm and the package's line), on without a terminal | the same `DetectionResult`, equal to `opt3-timeouts` |
+| `detect()` with `JOERN_ENGINE=rust` (one-shot and `serve`), progress off, on and `lines` | the same result |
+
+
+## [0.2.0], first part: the traversal no longer repeats work
 
 The traversal no longer repeats work. Its rules are unchanged, and on the 360 drafts that
 had an order its output is identical (see Output for which run shows what). 17 of the 19
