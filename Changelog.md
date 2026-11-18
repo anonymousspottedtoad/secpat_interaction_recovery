@@ -8,11 +8,13 @@ All notable changes to this project are documented in this file. The format foll
 Joern (`profiling/jobs/jobs.jsonl`); the others have fewer than two grounded roles. "Published
 orders" are that run's outputs. 19 drafts timed out in it and have no order.
 
-## [Unreleased] (branch progress)
+## [0.2.0] - 2026-11-18
 
-A progress display: while `detect()` runs, it shows which repository and draft it is on and how
-much work the traversal has done. A command, `secpat-interaction-order`, so the package runs on
-its own. The traversal's output is unchanged (see Output).
+Version 0.2.0 has two parts, each with its own sections. This one adds a progress display: while
+`detect()` runs, it shows which repository and draft it is on and how much work the traversal has
+done. It also adds a command, `secpat-interaction-order`, so the package runs on its own. The
+other part, below, makes the traversal stop repeating work. Neither changes the traversal's
+output (see each part's Output).
 
 ### Added
 
@@ -95,7 +97,7 @@ profile:
 | `detect()` with `JOERN_ENGINE=rust` (one-shot and `serve`), progress off, on and `lines` | the same result |
 
 
-## [0.2.0] - unreleased (branch release-0.2.0)
+## [0.2.0], first part: the traversal no longer repeats work
 
 The traversal no longer repeats work. Its rules are unchanged, and on the 360 drafts that
 had an order its output is identical (see Output for which run shows what). 17 of the 19

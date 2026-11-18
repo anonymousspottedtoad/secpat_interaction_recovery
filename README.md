@@ -21,11 +21,10 @@ it as a library.
 - Python 3.11 or newer, and this package (it has no dependencies):
 
   ```bash
-  pip install "secpat-interaction-order @ git+https://github.com/anonymousspottedtoad/secpat_interaction_recovery.git"
+  pip install "secpat-interaction-order @ git+https://github.com/anonymousspottedtoad/secpat_interaction_recovery.git@v0.2.0"
   ```
 
-  secpatrec installs an older version, 0.1.0, which has no command. Installing this one over it
-  is safe.
+  secpatrec installs it too, so the command is also in secpatrec's environment.
 - Joern 4.0.627 with a full JDK. secpatrec's README installs both (its section "2. Joern 4.0.627").
 - The paper's dataset, which includes a prebuilt CPG for every repository:
 
@@ -157,8 +156,7 @@ secpat-interaction-order dataset --dataset $D --engine rust
 ```
 
 All 100 records take 18 s instead of about 23 minutes. For secpatrec's
-`secpat interaction`, install this package in secpatrec's environment (the `pip install` line
-above) and set `JOERN_ENGINE=rust`.
+`secpat interaction`, set `JOERN_ENGINE=rust`.
 
 ## Settings
 
