@@ -38,6 +38,9 @@
     color: var(--dim); font-size: 11px; background: #0e1116cc; padding: 5px 8px; border-radius: 6px; }
   #legend span { display: inline-flex; align-items: center; gap: 5px; }
   #legend i { display: inline-block; width: 10px; height: 10px; border-radius: 50%; }
+  #note { position: absolute; left: 10px; top: 10px; max-width: 70%; color: var(--dim); font-size: 11px;
+    background: #0e1116cc; padding: 4px 8px; border-radius: 6px; display: none; pointer-events: none; }
+  #note.bad { color: var(--warn); }
   aside { border-left: 1px solid var(--line); background: var(--panel); overflow-y: auto; padding: 4px 0 16px; }
   aside h2 { font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: var(--dim);
     margin: 14px 14px 6px; font-weight: 600; }
@@ -89,6 +92,7 @@
     <div id="empty">No trace yet.<br><br>Run a query with <code>SECPAT_VIEW=nodes JOERN_ENGINE=rust</code>,<br>
       or open a saved trace with <code>secpat-interaction-order view TRACE</code>.</div>
     <div id="tip"></div>
+    <div id="note"></div>
     <div id="legend"></div>
   </section>
   <aside id="side">
@@ -115,7 +119,7 @@
   <span class="sep"></span>
   <select id="layout" title="Layout">
     <option value="auto" selected>layout: auto</option><option value="tree">layout: tree</option>
-    <option value="radial">layout: radial</option>
+    <option value="radial">layout: radial</option><option value="cpg">layout: whole CPG</option>
   </select>
   <button id="fit" title="Fit to the window (double-click the canvas)">Fit</button>
   <span class="sep server-only"></span>
@@ -145,7 +149,11 @@ let D = null;           // what the traversal has done up to `pos`
 let pos = 0;            // ticks applied
 let playing = false, acc = 0, lastFrame = 0;
 let view = { s: 1, x: 0, y: 0 }, userMoved = false;
-let hover = null, layoutMode = "auto", dirtyLayout = false, lastLayout = 0;
+let hover = null, hoverMap = -1, layoutMode = "auto", dirtyLayout = false, lastLayout = 0;
+let layoutChosen = false, serverLayoutSeen = false;
+const urlLayout = new URLSearchParams(location.search).get("layout");
+if (["auto", "tree", "radial", "cpg"].includes(urlLayout)) { layoutMode = urlLayout; layoutChosen = true; }
+else if (EMBEDDED && EMBEDDED.layout) layoutMode = EMBEDDED.layout;
 let loadToken = 0, newestSeen = null, needsDraw = true, showRolled = false;
 
 function emptyTrace(name) {
@@ -156,7 +164,11 @@ function emptyTrace(name) {
 
 function shortName(full) {
   if (!full) return "";
-  const head = String(full).split(":")[0].replace(/^<unresolvedNamespace>\./, "").replace(/^<operator>\./, "");
+  // Java: pkg.Class.method:signature. Python: path/file.py:<module>.Class.method
+  const py = String(full).match(/^(.*?)\.py:(.*)$/);
+  let head = py ? py[2] : String(full).split(":")[0];
+  head = head.replace(/^<unresolvedNamespace>\./, "").replace(/^<operator>\./, "").replace(/^<module>\./, "");
+  if (py && head === "<module>") return py[1].split("/").pop() + ".py (module)";
   const parts = head.split(".");
   return parts.length >= 2 ? parts.slice(-2).join(".") : head;
 }
@@ -314,9 +326,13 @@ function layout() {
   }
   roots.forEach(visit);
   T.leaves = Math.max(1, leaf);
-  T.mode = layoutMode === "auto" ? (T.leaves > 70 ? "radial" : "tree") : layoutMode;
+  const auto = T.leaves > 70 ? "radial" : "tree";
+  T.mode = layoutMode === "cpg" ? (mapShown() ? "cpg" : auto) : layoutMode === "auto" ? auto : layoutMode;
+  if (T.mode === "cpg") placeOnMap();
   const maxDepth = Math.max(0, ...[...T.nodes.values()].map((n) => n.lxDepth));
   for (const n of T.nodes.values()) {
+    if (T.mode === "cpg") continue;
+    n.px = 0; n.py = 0; n.mi = -1;
     if (T.mode === "tree") {
       n.x = n.lxDepth * 230;
       n.y = n.ly * 30;
@@ -331,7 +347,345 @@ function layout() {
   dirtyLayout = false;
   lastLayout = performance.now();
   needsDraw = true;
+  if (T.mode !== T.drawnMode) { T.drawnMode = T.mode; renderMeta(); mapNote(); }
   if (!userMoved) fit();
+}
+
+// ---------------------------------------------------------------------------------------------
+// The whole-CPG map (layout "whole CPG"): every method of the repository in its folders and files,
+// a treemap where a box's area is its number of methods, and the library methods the repository
+// calls in a strip on the right (by package, then class). From `secpat-walk methods`, once per CPG.
+// The traversal is drawn on top: its methods at their places, a call site next to its method.
+// ---------------------------------------------------------------------------------------------
+let CM = null;                 // the map shown
+const cmCache = new Map();     // CPG key -> { map } | { loading } | { error }
+
+function mapKey() {
+  if (EMBEDDED) return "embedded";
+  const c = T && T.header && T.header.cpg;
+  return c && c.nodes != null ? `${c.nodes}-${c.edges}` : null;
+}
+
+function mapShown() { return !!CM && CM.key === mapKey(); }
+
+function setNote(text, bad) {
+  const el = $("note");
+  el.textContent = text || ""; el.className = bad ? "bad" : ""; el.style.display = text ? "block" : "none";
+}
+
+function mapNote() {
+  if (layoutMode !== "cpg") return setNote("");
+  if (mapShown()) {
+    return setNote(`whole CPG: ${CM.internal.toLocaleString()} methods in ${CM.files.length.toLocaleString()} files, ` +
+      `${CM.library.toLocaleString()} library methods, ${CM.calls.toLocaleString()} calls · hover a method for its calls`);
+  }
+  const hit = cmCache.get(mapKey());
+  setNote(hit && hit.error ? hit.error : "loading the map of the whole CPG…", !!(hit && hit.error));
+}
+
+async function ensureMap() {
+  const key = mapKey();
+  if (layoutMode !== "cpg" || !T || !key) return mapNote();
+  const hit = cmCache.get(key);
+  if (hit && hit.map) { if (CM !== hit.map) { CM = hit.map; userMoved = false; dirtyLayout = true; } return mapNote(); }
+  if (hit) return mapNote();  // loading, or failed (choosing the layout again retries)
+  const entry = { loading: true };
+  cmCache.set(key, entry);
+  mapNote();
+  const name = T.name;
+  try {
+    let raw;
+    if (EMBEDDED) {
+      if (!EMBEDDED.cpg) throw new Error("this export has none");
+      raw = EMBEDDED.cpg;
+    } else {
+      const r = await fetch(`/api/cpg?name=${encodeURIComponent(name)}`);
+      raw = await r.json();
+      if (!r.ok) throw new Error(raw.error || r.status);
+    }
+    entry.map = buildMap(raw, key);
+  } catch (e) {
+    entry.error = `no map of the whole CPG: ${e.message}`;
+  }
+  entry.loading = false;
+  if (entry.map && mapKey() === key) { CM = entry.map; userMoved = false; dirtyLayout = true; }
+  mapNote();
+}
+
+function buildMap(raw, key) {
+  const ms = raw.methods || [], n = ms.length;
+  const r = $("stage").getBoundingClientRect();
+  const W = 1600, H = Math.round(W * Math.max(0.45, Math.min(1, (r.height || 600) / (r.width || 1000))));
+  const M = { key, n, W, H, files: raw.files || [], name: ms.map((m) => m[2]), meta: ms,
+    x: new Float32Array(n), y: new Float32Array(n), r: new Float32Array(n),
+    byId: new Map(), byFull: new Map(), boxes: [], leaves: [], internal: 0, library: 0,
+    calls: (raw.calls || []).length, medR: 1 };
+  for (let i = 0; i < n; i++) {
+    M.byId.set(ms[i][0], i);
+    if (ms[i][6]) { M.library++; if (!M.byFull.has(ms[i][2])) M.byFull.set(ms[i][2], i); } else M.internal++;
+  }
+  M.out = csr(n, raw.calls || [], 0, 1);
+  M.inn = csr(n, raw.calls || [], 1, 0);
+
+  const box = (name, kind) => ({ name, kind, kids: new Map(), list: [], weight: 0, sorted: [] });
+  const repo = box("repository", "root"), lib = box("library methods", "root");
+  for (let i = 0; i < n; i++) {
+    const m = ms[i];
+    if (m[6]) {
+      // java.util.Map.get:java.lang.Object(java.lang.Object) -> package java.util, class Map
+      const head = String(m[2]).replace(/:[^:]*\(.*\)$/, "");
+      const cut = head.lastIndexOf(".");
+      const cls = cut > 0 ? head.slice(0, cut) : "(top level)";
+      const cut2 = cls.lastIndexOf(".");
+      const pkg = cut2 > 0 ? cls.slice(0, cut2) : cls;
+      let p = lib.kids.get(pkg);
+      if (!p) lib.kids.set(pkg, (p = box(pkg, "package")));
+      const cname = cut2 > 0 ? cls.slice(cut2 + 1) : cls;
+      let c = p.kids.get(cname);
+      if (!c) p.kids.set(cname, (c = box(cname, "file")));
+      c.path = cls;
+      c.list.push(i);
+    } else {
+      const path = m[3] >= 0 ? M.files[m[3]] : "(no file)";
+      const parts = path.split("/");
+      let d = repo;
+      for (let k = 0; k < parts.length - 1; k++) {
+        let x = d.kids.get(parts[k]);
+        if (!x) d.kids.set(parts[k], (x = box(parts[k], "dir")));
+        d = x;
+      }
+      const leaf = "\u0000" + parts[parts.length - 1];
+      let f = d.kids.get(leaf);
+      if (!f) d.kids.set(leaf, (f = box(parts[parts.length - 1], "file")));
+      f.path = path;
+      f.list.push(i);
+    }
+  }
+  const weigh = (b) => {
+    if (b.kind === "file") { b.weight = b.list.length; return; }
+    for (const k of b.kids.values()) weigh(k);
+    b.sorted = [...b.kids.values()].filter((k) => k.weight > 0).sort((a, c) => c.weight - a.weight);
+    b.weight = b.sorted.reduce((t, k) => t + k.weight, 0);
+    // a folder holding one folder only: one box, "src/main/java/org"
+    while (b.kind === "dir" && b.sorted.length === 1 && b.sorted[0].kind === "dir") {
+      b.name += "/" + b.sorted[0].name; b.sorted = b.sorted[0].sorted;
+    }
+  };
+  weigh(repo); weigh(lib);
+  const libShare = lib.weight ? Math.max(0.12, Math.min(0.3, lib.weight / (lib.weight + repo.weight))) : 0;
+  const gap = libShare ? 14 : 0;
+  placeBox(M, repo, 0, 0, W * (1 - libShare) - gap / 2, H, 0);
+  if (libShare) placeBox(M, lib, W * (1 - libShare) + gap / 2, 0, W * libShare - gap / 2, H, 0);
+  const rs = [];
+  for (let i = 0; i < n; i++) if (!ms[i][6]) rs.push(M.r[i]);
+  rs.sort((a, b) => a - b);
+  M.medR = rs.length ? rs[rs.length >> 1] : 2;
+  return M;
+}
+
+function csr(n, pairs, a, b) {
+  const start = new Int32Array(n + 1), list = new Int32Array(pairs.length);
+  for (const p of pairs) start[p[a] + 1]++;
+  for (let i = 0; i < n; i++) start[i + 1] += start[i];
+  const at = start.slice(0, n);
+  for (const p of pairs) list[at[p[a]]++] = p[b];
+  return { start, list };
+}
+
+function placeBox(M, b, x, y, w, h, depth) {
+  const rec = { b, x, y, w, h, depth };
+  M.boxes.push(rec);
+  if (b.kind === "file") { M.leaves.push(rec); grid(M, b, x, y, w, h); return; }
+  const pad = depth ? Math.min(w, h) * 0.03 + 0.4 : 0;
+  // a folder's name sits in a band at its top
+  const band = h > 24 ? Math.min(depth ? 7 : 16, h * 0.08) : 0;
+  squarify(b.sorted, x + pad, y + pad + band, Math.max(0.01, w - 2 * pad), Math.max(0.01, h - 2 * pad - band),
+    (k, kx, ky, kw, kh) => placeBox(M, k, kx, ky, kw, kh, depth + 1));
+}
+
+function squarify(kids, x, y, w, h, place) {
+  // Bruls, Huizing, van Wijk (2000): rows of boxes as close to squares as the order allows.
+  const total = kids.reduce((t, k) => t + k.weight, 0);
+  if (!total) return;
+  const area = kids.map((k) => (k.weight / total) * w * h);
+  let i = 0;
+  while (i < kids.length) {
+    const side = Math.min(w, h);
+    let sum = area[i], hi = area[i], lo = area[i], j = i + 1;
+    let worst = Math.max((side * side * hi) / (sum * sum), (sum * sum) / (side * side * lo));
+    while (j < kids.length) {
+      const s2 = sum + area[j], h2 = Math.max(hi, area[j]), l2 = Math.min(lo, area[j]);
+      const w2 = Math.max((side * side * h2) / (s2 * s2), (s2 * s2) / (side * side * l2));
+      if (w2 > worst) break;
+      worst = w2; sum = s2; hi = h2; lo = l2; j++;
+    }
+    if (w >= h) {
+      const sw = sum / h; let yy = y;
+      for (let k = i; k < j; k++) { const kh = area[k] / sw; place(kids[k], x, yy, sw, kh); yy += kh; }
+      x += sw; w -= sw;
+    } else {
+      const sh = sum / w; let xx = x;
+      for (let k = i; k < j; k++) { const kw = area[k] / sh; place(kids[k], xx, y, kw, sh); xx += kw; }
+      y += sh; h -= sh;
+    }
+    i = j;
+  }
+}
+
+function grid(M, b, x, y, w, h) {
+  // A file's methods in a grid of square cells, in line order.
+  const list = b.list.slice().sort((a, c) => M.meta[a][4] - M.meta[c][4]);
+  const pad = Math.min(w, h) * 0.08;
+  x += pad; y += pad; w = Math.max(0.01, w - 2 * pad); h = Math.max(0.01, h - 2 * pad);
+  const k = list.length, guess = Math.max(1, Math.round(Math.sqrt((k * w) / h)));
+  let cols = 1, cell = 0;
+  for (let c = Math.max(1, guess - 3); c <= Math.min(k, guess + 3); c++) {
+    const size = Math.min(w / c, h / Math.ceil(k / c));
+    if (size > cell) { cell = size; cols = c; }
+  }
+  const rows = Math.ceil(k / cols);
+  const ox = x + (w - cols * cell) / 2, oy = y + (h - rows * cell) / 2;
+  list.forEach((i, j) => {
+    M.x[i] = ox + ((j % cols) + 0.5) * cell;
+    M.y[i] = oy + (Math.floor(j / cols) + 0.5) * cell;
+    M.r[i] = cell * 0.34;
+  });
+}
+
+function placeOnMap() {
+  // A method at its place on the map; anything else the traversal reached (a call site, a field)
+  // next to the method it was reached from, a few pixels off, so it shows at any zoom.
+  const around = new Map();
+  for (const id of T.order) {
+    const n = T.nodes.get(id);
+    let i = CM.byId.get(id);
+    if (i == null && n.kind === "external" && n.fullName) i = CM.byFull.get(n.fullName);
+    n.px = 0; n.py = 0; n.mi = i == null ? -1 : i;
+    if (i != null) { n.x = CM.x[i]; n.y = CM.y[i]; continue; }
+    const p = n.parent != null ? T.nodes.get(n.parent) : null;
+    const k = around.get(n.parent) || 0;
+    around.set(n.parent, k + 1);
+    if (p) { n.x = p.x; n.y = p.y; n.px = (p.px || 0) + 11 + 10 * (k % 4); n.py = (p.py || 0) - 10 - 10 * Math.floor(k / 4); }
+    else { n.x = CM.W + 30; n.y = 20 + 16 * k; }
+  }
+}
+
+// The map itself is drawn once per view (zoom, pan, size) into a second canvas, then copied.
+// A large map takes tens of milliseconds to draw: while a zoom or a pan goes on, the last picture
+// is stretched to the new view, and the map is drawn again once the view stays still.
+const bg = document.createElement("canvas"), bgx = bg.getContext("2d");
+let bgKey = "", bgView = null, bgCost = 0, bgTimer = 0;
+
+function mapLayer(w, h) {
+  const dpr = window.devicePixelRatio || 1;
+  const key = [CM.key, view.s, view.x, view.y, w, h, dpr].join("|");
+  if (key !== bgKey) {
+    const same = bgView && bgView.map === CM.key && bgView.w === w && bgView.h === h && bgView.dpr === dpr;
+    if (same && bgCost > 25 && !bgView.due) {
+      const k = view.s / bgView.s;
+      ctx.save(); ctx.translate(view.x - bgView.x * k, view.y - bgView.y * k); ctx.scale(k, k);
+      ctx.drawImage(bg, 0, 0, w, h); ctx.restore();
+      clearTimeout(bgTimer);
+      bgTimer = setTimeout(() => { bgView.due = true; redraw(); }, 140);
+      return;
+    }
+    const t0 = performance.now();
+    bg.width = cv.width; bg.height = cv.height;
+    bgx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    bgx.clearRect(0, 0, w, h);
+    drawMap(bgx, w, h);
+    bgCost = performance.now() - t0;
+    bgKey = key;
+    bgView = { map: CM.key, s: view.s, x: view.x, y: view.y, w, h, dpr, due: false };
+  }
+  ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.drawImage(bg, 0, 0); ctx.restore();
+}
+
+function drawMap(c, w, h) {
+  const s = view.s, out = (x, y, bw, bh) => x > w || y > h || x + bw < 0 || y + bh < 0;
+  const files = new Path2D(), folders = new Path2D(), dots = new Path2D(), libDots = new Path2D();
+  const named = [];
+  for (const rec of CM.boxes) {
+    const x = rec.x * s + view.x, y = rec.y * s + view.y, bw = rec.w * s, bh = rec.h * s;
+    if (out(x, y, bw, bh) || (bw < 1.2 && bh < 1.2)) continue;
+    if (rec.b.kind === "file") files.rect(x, y, bw, bh); else if (rec.depth) folders.rect(x, y, bw, bh);
+    const text = rec.b.kind === "dir" ? rec.b.name + "/" : rec.b.name;
+    if (x > -4 && y > -4 && bw > text.length * 6.2 + 10 && bh > (rec.b.kind === "file" ? 26 : 16)) named.push([rec, x, y, text]);
+  }
+  c.fillStyle = "#131a25"; c.fill(files);
+  c.strokeStyle = "#232c3c"; c.lineWidth = 1; c.stroke(folders);
+  if (CM.medR * s >= 0.7) {
+    for (let i = 0; i < CM.n; i++) {
+      const x = CM.x[i] * s + view.x, y = CM.y[i] * s + view.y, q = Math.max(0.6, CM.r[i] * s);
+      if (x < -q || y < -q || x > w + q || y > h + q) continue;
+      const p = CM.meta[i][6] ? libDots : dots;
+      if (q > 2.5) circle(p, x, y, q); else p.rect(x - q, y - q, 2 * q, 2 * q);
+    }
+    c.fillStyle = "#2a3343"; c.fill(dots);
+    c.fillStyle = "#33304a"; c.fill(libDots);
+  }
+  // Names, outer boxes first; one that would overlap a name already drawn is left out.
+  c.font = "11px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace";
+  c.textBaseline = "top";
+  named.sort((a, b) => a[0].depth - b[0].depth);
+  const taken = [];
+  for (const [rec, x, y, text] of named) {
+    if (taken.length >= 400) break;
+    const t = { x: x + 2, y: y + 1, w: text.length * 6.6 + 2, h: 13 };
+    if (taken.some((o) => t.x < o.x + o.w && o.x < t.x + t.w && t.y < o.y + o.h && o.y < t.y + t.h)) continue;
+    taken.push(t);
+    c.fillStyle = rec.depth === 0 ? "#8a93a6" : rec.b.kind === "file" ? "#4d586c" : "#6b7488";
+    c.fillText(text, x + 3, y + 2);
+  }
+}
+
+function namesInside(lit, r) {
+  const s = view.s;
+  ctx.font = "11px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace";
+  ctx.textAlign = "center"; ctx.textBaseline = "middle";
+  for (const rec of CM.leaves) {
+    const x = rec.x * s + view.x, y = rec.y * s + view.y;
+    if (x > r.width || y > r.height || x + rec.w * s < 0 || y + rec.h * s < 0) continue;
+    for (const i of rec.b.list) {
+      const q = CM.r[i] * s, cx = CM.x[i] * s + view.x, cy = CM.y[i] * s + view.y;
+      const room = Math.floor((2 * q - 8) / 6.6);
+      if (room < 5 || cx < -q || cy < -q || cx > r.width + q || cy > r.height + q) continue;
+      const name = String(CM.meta[i][1]);
+      ctx.fillStyle = lit.has(i) ? "#0e1116" : "#8a93a6";
+      ctx.fillText(name.length > room ? name.slice(0, room - 1) + "…" : name, cx, cy);
+    }
+  }
+  ctx.textAlign = "left";
+}
+
+function drawCalls(i) {
+  // The hovered method's calls as the CPG records them: out in blue, in (its callers) in yellow.
+  const s = view.s, x0 = CM.x[i] * s + view.x, y0 = CM.y[i] * s + view.y;
+  for (const [g, colour] of [[CM.out, "#4cc9f0aa"], [CM.inn, "#f9c74f88"]]) {
+    const path = new Path2D();
+    for (let k = g.start[i]; k < g.start[i + 1] && k < g.start[i] + 400; k++) {
+      const j = g.list[k], x = CM.x[j] * s + view.x, y = CM.y[j] * s + view.y;
+      if (g === CM.out) { path.moveTo(x0, y0); arc(path, x0, y0, x, y); }
+      else { path.moveTo(x, y); arc(path, x, y, x0, y0); }
+    }
+    ctx.strokeStyle = colour; ctx.lineWidth = 1.2; ctx.stroke(path);
+  }
+}
+
+function mapAt(mx, my) {
+  // The map method under the mouse: the file box it is in, then that file's nearest method.
+  const wx = (mx - view.x) / view.s, wy = (my - view.y) / view.s;
+  for (const rec of CM.leaves) {
+    if (wx < rec.x || wy < rec.y || wx > rec.x + rec.w || wy > rec.y + rec.h) continue;
+    let best = -1, bd = Infinity;
+    for (const i of rec.b.list) {
+      const d = (CM.x[i] - wx) ** 2 + (CM.y[i] - wy) ** 2;
+      if (d < bd) { bd = d; best = i; }
+    }
+    const reach = Math.max(CM.r[best] * 1.6, 8 / view.s);
+    return bd <= reach * reach ? best : -1;
+  }
+  return -1;
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -437,10 +791,11 @@ function resize() {
 function redraw() { needsDraw = true; }
 
 function fit() {
-  if (!T || !T.nodes.size) return;
+  if (!T || (!T.nodes.size && T.mode !== "cpg")) return;
   const r = $("stage").getBoundingClientRect();
   let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
-  for (const n of T.nodes.values()) { x0 = Math.min(x0, n.x); y0 = Math.min(y0, n.y); x1 = Math.max(x1, n.x); y1 = Math.max(y1, n.y); }
+  if (T.mode === "cpg") { x0 = 0; y0 = 0; x1 = CM.W; y1 = CM.H; }
+  else for (const n of T.nodes.values()) { x0 = Math.min(x0, n.x); y0 = Math.min(y0, n.y); x1 = Math.max(x1, n.x); y1 = Math.max(y1, n.y); }
   // Labels keep their pixel size, so the widest label right of the rightmost column is room the
   // drawing must leave, not something to scale.
   const pad = 40;
@@ -451,24 +806,27 @@ function fit() {
   }
   const w = Math.max(1, x1 - x0), h = Math.max(1, y1 - y0);
   const sx = (r.width - 2 * pad - labelW) / w, sy = (r.height - 2 * pad) / h;
-  view.s = Math.min(2.2, Math.max(0.02, Math.min(sx > 0 ? sx : 0.02, sy)));
+  view.s = Math.min(T.mode === "cpg" ? 40 : 2.2, Math.max(0.02, Math.min(sx > 0 ? sx : 0.02, sy)));
   view.x = (r.width - labelW - w * view.s) / 2 - x0 * view.s;
   view.y = r.height / 2 - ((y0 + y1) / 2) * view.s;
 }
 
-const W = (n) => [n.x * view.s + view.x, n.y * view.s + view.y];
+const W = (n) => [n.x * view.s + view.x + (n.px || 0), n.y * view.s + view.y + (n.py || 0)];
 
 function draw() {
   needsDraw = false;
   const r = $("stage").getBoundingClientRect();
   ctx.clearRect(0, 0, r.width, r.height);
-  $("empty").style.display = T && T.nodes.size ? "none" : "flex";
+  const onMap = T && T.mode === "cpg";
+  $("empty").style.display = T && (T.nodes.size || onMap) ? "none" : "flex";
+  if (onMap) { mapLayer(r.width, r.height); if (hoverMap >= 0) drawCalls(hoverMap); }
   if (!T || !T.nodes.size || !D) return;
   const visible = (n) => n.first < pos;
   const onStack = new Set(D.stack);
   const topId = D.stack.length ? D.stack[D.stack.length - 1] : null;
   const big = T.nodes.size > 400;
-  const rad = T.mode === "tree" ? Math.max(3, Math.min(7, 7 * Math.sqrt(view.s))) : Math.max(1.6, Math.min(5, 4 * Math.sqrt(view.s)));
+  const rad = onMap ? Math.max(2.6, Math.min(7, CM.medR * view.s * 1.2))
+    : T.mode === "tree" ? Math.max(3, Math.min(7, 7 * Math.sqrt(view.s))) : Math.max(1.6, Math.min(5, 4 * Math.sqrt(view.s)));
   const inView = (x, y) => x > -40 && y > -40 && x < r.width + 40 && y < r.height + 40;
 
   // Tree edges: one path for the plain ones, one for the current call stack.
@@ -481,7 +839,7 @@ function draw() {
     edgeTo(onStack.has(n.id) && onStack.has(p.id) ? hot : plain, x1, y1, x2, y2);
   }
   ctx.lineCap = "round";
-  ctx.strokeStyle = big ? "#232b3a" : "#2c3546"; ctx.lineWidth = 1; ctx.stroke(plain);
+  ctx.strokeStyle = onMap ? "#56679a99" : big ? "#232b3a" : "#2c3546"; ctx.lineWidth = 1; ctx.stroke(plain);
   ctx.strokeStyle = "#ffd166"; ctx.lineWidth = 2.2; ctx.stroke(hot);
 
   // Interaction paths: the kept ones, and the newest rolled-back one while it is fresh.
@@ -508,35 +866,40 @@ function draw() {
   // Nodes, one path per style.
   const P = { method: new Path2D(), stack: new Path2D(), top: new Path2D(), halo: new Path2D(),
     hollow: new Path2D(), external: new Path2D() };
-  const rings = [];
+  const R = (n) => (onMap && n.mi >= 0 ? Math.max(rad, CM.r[n.mi] * view.s * 1.05) : rad);
+  const rings = [], lit = new Set();
   const lastId = D.last && pos - D.last.tick < 2 ? D.last.id : null;
   for (const id of T.order) {
     const n = T.nodes.get(id);
     if (!visible(n)) continue;
-    const [x, y] = W(n);
+    const [x, y] = W(n), rn = R(n);
     if (!inView(x, y)) continue;
-    if (id === topId || id === lastId) circle(P.halo, x, y, rad + 7);
+    if (id === topId || id === lastId) circle(P.halo, x, y, rn + 7);
     if (n.kind === "external") {
-      const q = rad + 1;
+      const q = rn + 1;
       P.external.moveTo(x, y - q); P.external.lineTo(x + q, y); P.external.lineTo(x, y + q); P.external.lineTo(x - q, y); P.external.closePath();
-    } else if (n.kind === "skipped" || n.kind === "reached") circle(P.hollow, x, y, rad * 0.85);
-    else circle(id === topId ? P.top : onStack.has(id) ? P.stack : P.method, x, y, rad);
-    if (n.owners.size) rings.push([n, x, y]);
+    } else if (n.kind === "skipped" || n.kind === "reached") circle(P.hollow, x, y, rn * 0.85);
+    else { circle(id === topId ? P.top : onStack.has(id) ? P.stack : P.method, x, y, rn); if (n.mi >= 0) lit.add(n.mi); }
+    if (n.owners.size) rings.push([n, x, y, rn]);
   }
   ctx.fillStyle = "#ffd16633"; ctx.fill(P.halo);
-  ctx.fillStyle = "#55658a"; ctx.fill(P.method);
+  ctx.fillStyle = onMap ? "#8fa8ff" : "#55658a"; ctx.fill(P.method);
   ctx.fillStyle = "#c9a54d"; ctx.fill(P.stack);
   ctx.fillStyle = "#ffd166"; ctx.fill(P.top);
   ctx.fillStyle = "#0e1116"; ctx.fill(P.hollow);
   ctx.setLineDash([2, 2]); ctx.strokeStyle = "#6b7488"; ctx.lineWidth = 1.2; ctx.stroke(P.hollow); ctx.setLineDash([]);
   ctx.fillStyle = "#2b3245"; ctx.fill(P.external); ctx.strokeStyle = "#8a93a6"; ctx.lineWidth = 1.2; ctx.stroke(P.external);
-  for (const [n, x, y] of rings) {
-    let ring = rad + 3.5;
+  for (const [n, x, y, rn] of rings) {
+    let ring = rn + 3.5;
     for (const role of n.owners) {
       ctx.beginPath(); ctx.arc(x, y, ring, 0, Math.PI * 2);
       ctx.strokeStyle = roleColor(role); ctx.lineWidth = 2.5; ctx.stroke(); ring += 3;
     }
   }
+
+  // Zoomed in on the map: every method's name inside its dot.
+  const inside = onMap && CM.medR * view.s >= 20;
+  if (inside) namesInside(lit, r);
 
   // Labels: every node in a small tree; otherwise role nodes, the current body and the hovered one.
   ctx.font = "11px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace";
@@ -553,14 +916,18 @@ function draw() {
     if (!inView(x, y)) continue;
     const roleNode = n.owners.size > 0;
     const text = labelOf(n);
-    const tx = x + rad + (roleNode ? 3.5 + 3 * n.owners.size : 0) + 5;
-    const w = ctx.measureText(text).width;
+    const w = ctx.measureText(text).width, off = R(n) + (roleNode ? 3.5 + 3 * n.owners.size : 0) + 5;
+    // right of the node, or left of it when that would run off the window; under a large dot
+    const under = off > 18;
+    const tx = under ? x - w / 2 : x + off + w > r.width - 4 && x - off - w > 4 ? x - off - w : x + off;
     // Nudge a label down past the ones already drawn; a leader line keeps it tied to its node.
-    let ly = y, box = { x: tx - 3, y: ly - 8, w: w + 6, h: 16 };
+    let ly = under ? y + off + 6 : y, box = { x: tx - 3, y: ly - 8, w: w + 6, h: 16 };
     for (let k = 0; k < 8 && overlaps(box); k++) { ly += 16; box = { x: tx - 3, y: ly - 8, w: w + 6, h: 16 }; }
     placed.push(box);
-    if (ly !== y) {
-      ctx.strokeStyle = "#5b6476"; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(x + rad, y); ctx.lineTo(tx - 3, ly); ctx.stroke();
+    if (ly !== y && !under) {
+      const left = tx < x, rn = R(n);
+      ctx.strokeStyle = "#5b6476"; ctx.lineWidth = 1; ctx.beginPath();
+      ctx.moveTo(left ? x - rn : x + rn, y); ctx.lineTo(left ? tx + w + 3 : tx - 3, ly); ctx.stroke();
     }
     ctx.fillStyle = "#0e1116cc"; ctx.fillRect(box.x, box.y, box.w, box.h);
     ctx.fillStyle = roleNode ? "#ffffff" : n.id === topId ? "#ffd166" : "#aeb7c8";
@@ -570,9 +937,16 @@ function draw() {
 
 function circle(path, x, y, r) { path.moveTo(x + r, y); path.arc(x, y, r, 0, Math.PI * 2); }
 
+function arc(path, x1, y1, x2, y2) {
+  // A call on the map bends to its right, so a call and its return way do not overlap.
+  const dx = x2 - x1, dy = y2 - y1;
+  path.quadraticCurveTo((x1 + x2) / 2 - dy * 0.2, (y1 + y2) / 2 + dx * 0.2, x2, y2);
+}
+
 function edgeTo(path, x1, y1, x2, y2) {
   path.moveTo(x1, y1);
   if (T.mode === "tree") { const mx = (x1 + x2) / 2; path.bezierCurveTo(mx, y1, mx, y2, x2, y2); }
+  else if (T.mode === "cpg") arc(path, x1, y1, x2, y2);
   else path.lineTo(x2, y2);
 }
 
@@ -618,7 +992,9 @@ function renderMeta() {
     return `<div class="role" data-role="${esc(r.role)}"><span class="dot" style="background:${roleColor(r.role)}"></span>` +
       `<span class="name">${esc(r.role)}</span><span class="state"></span><span class="where">${where}${how ? " · " + esc(how) : ""}</span></div>`;
   }).join("") || '<div class="muted">-</div>';
-  $("legend").innerHTML = `<span><i style="background:#55658a"></i>method entered</span>` +
+  $("legend").innerHTML = (T.mode === "cpg" ? `<span><i style="background:#2a3343;border-radius:1px"></i>method not reached</span>` +
+    `<span><i style="background:#131924;border:1px solid #2a3343;border-radius:1px"></i>file (box in its folder's box)</span>` : "") +
+    `<span><i style="background:${T.mode === "cpg" ? "#8fa8ff" : "#55658a"}"></i>method entered</span>` +
     `<span><i style="background:#ffd166"></i>current body</span>` +
     `<span><i style="border:1.5px dashed #6b7488;background:none"></i>reached, not entered</span>` +
     `<span><i style="background:#2b3245;border-radius:1px;transform:rotate(45deg);border:1px solid #8a93a6"></i>library call</span>` +
@@ -723,6 +1099,7 @@ function addEvents(events) {
   const before = T.header, beforeStart = T.start, beforeResult = T.result, beforeDone = T.done;
   for (const ev of events) ingest(ev);
   if (T.header !== before || T.start !== beforeStart || T.result !== beforeResult || T.done !== beforeDone) renderMeta();
+  if (T.header !== before) ensureMap();
   if (dirtyLayout) layout();
   renderSide();
 }
@@ -731,7 +1108,7 @@ async function loadFromServer(name) {
   const token = ++loadToken;
   show(name);
   setPlaying(true);
-  $("export").href = "/api/export?name=" + encodeURIComponent(name);
+  exportLink();
   while (token === loadToken) {
     let data;
     try {
@@ -749,6 +1126,10 @@ async function loadFromServer(name) {
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
+function exportLink() {
+  if (T && !EMBEDDED) $("export").href = `/api/export?name=${encodeURIComponent(T.name)}${layoutMode === "cpg" ? "&layout=cpg" : ""}`;
+}
+
 async function pollList() {
   try {
     const r = await fetch("/api/traces");
@@ -758,6 +1139,10 @@ async function pollList() {
     sel.innerHTML = data.traces.map((t) => `<option value="${esc(t.name)}">${esc(t.name.replace(/\.trace\.jsonl$/, ""))}</option>`).join("");
     if (current) sel.value = current;
     if (!data.follow) { $("follow").checked = false; $("follow").parentElement.style.display = "none"; }
+    if (!serverLayoutSeen) {
+      serverLayoutSeen = true;
+      if (!layoutChosen && data.layout) { layoutMode = data.layout; $("layout").value = layoutMode; exportLink(); if (T) { ensureMap(); layout(); } }
+    }
     newestSeen = data.traces.length ? data.traces[0].name : null;
     if (!T && newestSeen) loadFromServer(newestSeen);
     else maybeSwitch();
@@ -780,7 +1165,13 @@ $("back").onclick = () => { setPlaying(false); seek(pos - 1); };
 $("fwd").onclick = () => { setPlaying(false); seek(pos + 1); };
 $("end").onclick = () => { setPlaying(false); seek(T ? T.ticks.length : 0); };
 $("scrub").oninput = (e) => { setPlaying(false); seek(+e.target.value); };
-$("layout").onchange = (e) => { layoutMode = e.target.value; if (T) { userMoved = false; layout(); } };
+$("layout").onchange = (e) => {
+  layoutMode = e.target.value; layoutChosen = true; exportLink();
+  const hit = cmCache.get(mapKey());
+  if (layoutMode === "cpg" && hit && hit.error) cmCache.delete(mapKey());  // try again
+  ensureMap();
+  if (T) { userMoved = false; layout(); }
+};
 $("fit").onclick = () => { userMoved = false; fit(); redraw(); };
 $("traces").onchange = (e) => { $("follow").checked = false; loadFromServer(e.target.value); };
 window.addEventListener("keydown", (e) => {
@@ -806,32 +1197,43 @@ window.addEventListener("mousemove", (e) => {
     const [x, y] = W(n); const d = (x - mx) ** 2 + (y - my) ** 2;
     if (d < bd) { bd = d; best = n; }
   }
-  if (best !== hover) redraw();
-  hover = best;
-  if (!best) { hideTip(); return; }
+  // On the map, any method can be hovered, reached or not.
+  const mi = T.mode === "cpg" ? (best ? best.mi : mapAt(mx, my)) : -1;
+  if (best !== hover || mi !== hoverMap) redraw();
+  hover = best; hoverMap = mi;
+  if (!best && mi < 0) { hideTip(); return; }
   const tip = $("tip");
-  const kinds = { method: "method entered", skipped: "reached, not entered (it cannot reach a further role, or was entered before)",
-    reached: "reached, not entered", external: "library call (no body in the repository)" };
-  const parent = best.parent != null ? T.nodes.get(best.parent) : null;
-  tip.innerHTML = `<div class="fn">${esc(displayName(best))}</div>` +
-    `<div class="row">${esc(kinds[best.kind] || best.kind)}${best.file ? " · " + esc(best.file) + (best.line ? ":" + best.line : "") : ""}</div>` +
-    (best.siteLine != null ? `<div class="row">first called at line ${best.siteLine}</div>` : "") +
-    (best.owners.size ? `<div class="row">role node: ${esc([...best.owners].join(", "))}</div>` : "") +
-    (best.runsAs.size ? `<div class="row">runs as: ${esc([...best.runsAs].join(", "))}</div>` : "") +
-    (parent ? `<div class="row">first reached from ${esc(shortName(parent.fullName))}</div>` : "") +
-    `<div class="row">depth ${best.lxDepth} · step ${best.first + 1}</div>`;
+  const calls = mi < 0 ? "" : `<div class="row">calls ${(CM.out.start[mi + 1] - CM.out.start[mi]).toLocaleString()} methods, ` +
+    `called by ${(CM.inn.start[mi + 1] - CM.inn.start[mi]).toLocaleString()} (calls the CPG records)</div>`;
+  if (!best) {
+    const m = CM.meta[mi];
+    tip.innerHTML = `<div class="fn">${esc(m[2])}</div>` +
+      `<div class="row">${m[6] ? "library method" : esc(m[3] >= 0 ? CM.files[m[3]] : "") + (m[4] >= 0 ? ":" + m[4] : "")}</div>` +
+      `<div class="row">not reached by this traversal${pos < T.ticks.length ? " (so far)" : ""}</div>` + calls;
+  } else {
+    const kinds = { method: "method entered", skipped: "reached, not entered (it cannot reach a further role, or was entered before)",
+      reached: "reached, not entered", external: "library call (no body in the repository)" };
+    const parent = best.parent != null ? T.nodes.get(best.parent) : null;
+    tip.innerHTML = `<div class="fn">${esc(displayName(best))}</div>` +
+      `<div class="row">${esc(kinds[best.kind] || best.kind)}${best.file ? " · " + esc(best.file) + (best.line ? ":" + best.line : "") : ""}</div>` +
+      (best.siteLine != null ? `<div class="row">first called at line ${best.siteLine}</div>` : "") +
+      (best.owners.size ? `<div class="row">role node: ${esc([...best.owners].join(", "))}</div>` : "") +
+      (best.runsAs.size ? `<div class="row">runs as: ${esc([...best.runsAs].join(", "))}</div>` : "") +
+      (parent ? `<div class="row">first reached from ${esc(shortName(parent.fullName))}</div>` : "") +
+      `<div class="row">depth ${best.lxDepth} · step ${best.first + 1}</div>` + calls;
+  }
   tip.style.display = "block";
   const tw = tip.offsetWidth, th = tip.offsetHeight;
   tip.style.left = Math.min(r.width - tw - 8, mx + 14) + "px";
   tip.style.top = Math.min(r.height - th - 8, my + 14) + "px";
 });
-function hideTip() { if (hover) redraw(); hover = null; $("tip").style.display = "none"; }
+function hideTip() { if (hover || hoverMap >= 0) redraw(); hover = null; hoverMap = -1; $("tip").style.display = "none"; }
 cv.addEventListener("wheel", (e) => {
   e.preventDefault();
   const r = cv.getBoundingClientRect();
   const mx = e.clientX - r.left, my = e.clientY - r.top;
   const k = Math.exp(-e.deltaY * 0.0015);
-  const s = Math.max(0.01, Math.min(8, view.s * k));
+  const s = Math.max(0.01, Math.min(T && T.mode === "cpg" ? 60 : 8, view.s * k));
   view.x = mx - (mx - view.x) * (s / view.s); view.y = my - (my - view.y) * (s / view.s); view.s = s;
   userMoved = true; redraw();
 }, { passive: false });
@@ -839,8 +1241,10 @@ cv.addEventListener("dblclick", () => { userMoved = false; fit(); redraw(); });
 window.addEventListener("resize", resize);
 
 // ---------------------------------------------------------------------------------------------
+$("layout").value = layoutMode;
 if (EMBEDDED) {
   for (const el of document.querySelectorAll(".server-only")) el.style.display = "none";
+  if (!EMBEDDED.cpg) { $("layout").querySelector('option[value="cpg"]').remove(); if (layoutMode === "cpg") layoutMode = "auto"; $("layout").value = layoutMode; }
   show(EMBEDDED.name || "trace");
   T.dropped = EMBEDDED.dropped || {};
   addEvents(EMBEDDED.events || []);

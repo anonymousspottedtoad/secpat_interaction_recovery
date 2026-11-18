@@ -9,13 +9,21 @@ and one trace as a single HTML file that replays offline.
 
 Standard library only. The viewer reads traces; nothing here takes part in a traversal, and a
 trace is written only when ``SECPAT_VIEW=nodes``.
+
+With ``SECPAT_VIEW_FULL_CPG`` (``--full-view-cpg``) the page draws the traversal on a map of the
+whole CPG instead: every method of the repository in its folders and files, and the library
+methods it calls, with the traversal's methods lit up. :func:`cpg_map` saves that map once per
+CPG (``secpat-walk methods``), in ``cpg/`` next to the traces.
 """
 
 from __future__ import annotations
 
+import gzip
 import json
 import logging
+import os
 import re
+import shutil
 import socket
 import subprocess
 import sys
@@ -38,12 +46,20 @@ PAGE = Path(__file__).with_name("view.html")
 #: Answered on ``/api/ping``, so a viewer can be told apart from whatever else holds the port.
 APP = "secpat-traversal-view"
 
+#: What this viewer can do beyond replaying traces, also on ``/api/ping``.
+FEATURES = ("cpg",)
+
 #: Events the page does not draw. ``step`` (one CFG node) is most of a large trace (79,401 of
 #: 147,555 on camunda-bpm-platform); ``alt_skip`` and ``passed`` are bookkeeping. Counted, not sent.
 DROPPED = frozenset({"step", "alt_skip", "passed"})
 
 #: At most this many events per ``/api/trace`` answer; the page asks again for the rest.
 BATCH = 20000
+
+#: Where the whole-CPG maps go, inside the traces folder: one per CPG.
+MAPS = "cpg"
+
+_map_lock = threading.Lock()
 
 _announced = False
 _warned_engine = False
@@ -71,6 +87,11 @@ def finish(trace: Path, result: dict | None, label: str = "") -> None:
     if not trace.is_file():
         logger.warning("traversal view: the native engine wrote no trace at %s", trace)
         return
+    if config.SECPAT_VIEW_FULL_CPG:
+        try:
+            cpg_map(trace)
+        except MapUnavailable as exc:
+            logger.warning("traversal view: no whole-CPG map: %s", exc)
     line = {"ev": "result", "ok": isinstance(result, dict), "label": label}
     if isinstance(result, dict):
         line.update(
@@ -99,19 +120,23 @@ def announce(trace: Path) -> None:
         return
     _announced = True
     port, folder = config.SECPAT_VIEW_PORT, Path(config.SECPAT_VIEW_DIR)
-    state = _ping(port)
+    state, features = _ping(port)
     if state == "other":
         print(f"traversal view: port {port} is taken by another program; set SECPAT_VIEW_PORT, then run "
               f"`secpat-interaction-order view {folder}`. Traces: {folder}", file=sys.stderr)
         return
     if state == "none":
         log = (folder / "viewer.log").open("a", encoding="utf-8")
-        subprocess.Popen(
-            [sys.executable, "-m", "secpat_interaction_order", "view", str(folder),
-             "--port", str(port), "--idle-exit", "1800"],
-            stdin=subprocess.DEVNULL, stdout=log, stderr=log, start_new_session=True,
-        )
-    print(f"traversal view: http://127.0.0.1:{port}/  (traces in {folder})", file=sys.stderr)
+        command = [sys.executable, "-m", "secpat_interaction_order", "view", str(folder),
+                   "--port", str(port), "--idle-exit", "1800"]
+        if config.SECPAT_VIEW_FULL_CPG:
+            command.append("--full-view-cpg")
+        subprocess.Popen(command, stdin=subprocess.DEVNULL, stdout=log, stderr=log, start_new_session=True)
+    layout = "?layout=cpg" if config.SECPAT_VIEW_FULL_CPG else ""
+    print(f"traversal view: http://127.0.0.1:{port}/{layout}  (traces in {folder})", file=sys.stderr)
+    if state == "viewer" and config.SECPAT_VIEW_FULL_CPG and "cpg" not in features:
+        print(f"traversal view: the viewer already on port {port} is an older one, without the whole-CPG map; "
+              "stop it (pkill -f \"[s]ecpat_interaction_order view\") and run again.", file=sys.stderr)
 
 
 def warn_engine(engine: str) -> None:
@@ -125,21 +150,117 @@ def warn_engine(engine: str) -> None:
         )
 
 
-def _ping(port: int) -> str:
-    """``viewer`` if our viewer answers on ``port``, ``other`` if something else holds it, else ``none``."""
+def _ping(port: int) -> tuple[str, list]:
+    """``viewer`` if our viewer answers on ``port``, ``other`` if something else holds it, else ``none``;
+    and the viewer's features."""
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
         sock.settimeout(0.3)
         if sock.connect_ex(("127.0.0.1", port)) != 0:
-            return "none"
+            return "none", []
     try:
         with urllib.request.urlopen(f"http://127.0.0.1:{port}/api/ping", timeout=1) as answer:
-            return "viewer" if json.load(answer).get("app") == APP else "other"
+            info = json.load(answer)
     except (OSError, ValueError):
-        return "other"
+        return "other", []
+    if not isinstance(info, dict) or info.get("app") != APP:
+        return "other", []
+    return "viewer", list(info.get("features") or [])
 
 
 def _slug(text: str) -> str:
     return re.sub(r"[^A-Za-z0-9._-]+", "-", text or "").strip("-")[:80]
+
+
+# --- the whole-CPG map --------------------------------------------------------------------
+
+
+class MapUnavailable(Exception):
+    """The trace's CPG has no map, and one cannot be made here (the reason is the message)."""
+
+
+def header(trace: Path) -> dict:
+    """The trace's ``header`` event (its first line), or ``{}``."""
+    try:
+        with trace.open("rb") as handle:
+            event = json.loads(handle.readline() or b"{}")
+    except (OSError, ValueError):
+        return {}
+    return event if event.get("ev") == "header" else {}
+
+
+def map_name(head: dict) -> str | None:
+    """The map's file name for the CPG a trace header names: the CPG's name and its size."""
+    cpg = head.get("cpg") or {}
+    path = cpg.get("path") or cpg.get("name") or ""
+    if not path or cpg.get("nodes") is None or cpg.get("edges") is None:
+        return None
+    stem = re.split(r"[/\\]", path)[-1].removesuffix(".cpg")
+    return f"{_slug(stem)}__{cpg['nodes']}-{cpg['edges']}.json"
+
+
+def cpg_map(trace: Path, build: bool = True) -> Path:
+    """The whole-CPG map of ``trace``'s CPG, in ``cpg/`` next to it; made now if missing and ``build``.
+
+    ``secpat-walk methods`` writes it: every method of the CPG (file, lines, library or not) and the
+    calls the CPG records between them. One per CPG, shared by its traces; at most one is made at a
+    time. Raises :class:`MapUnavailable` when there is none and none can be made.
+    """
+    head = header(trace)
+    name = map_name(head)
+    if name is None:
+        raise MapUnavailable("the trace's header does not name its CPG")
+    out = trace.parent / MAPS / name
+    if out.is_file():
+        return out
+    if not build:
+        raise MapUnavailable("no map saved for this CPG")
+    cpg = Path((head.get("cpg") or {}).get("path") or "")
+    if not cpg.is_file():
+        raise MapUnavailable(f"the CPG is not on this machine ({cpg})")
+    binary = shutil.which(config.SECPAT_WALK_BIN)
+    if binary is None and os.path.isfile(config.SECPAT_WALK_BIN):
+        binary = config.SECPAT_WALK_BIN
+    if binary is None:
+        raise MapUnavailable(f"secpat-walk not found ({config.SECPAT_WALK_BIN}); set SECPAT_WALK_BIN")
+    out.parent.mkdir(parents=True, exist_ok=True)
+    with _map_lock, _FileLock(out.parent / ".lock"):
+        if out.is_file():
+            return out
+        part = out.with_name(f".{name}.{os.getpid()}.part")
+        command = [binary, "methods", "--cpg", str(cpg), "--input", str(head.get("input") or ""), "--output", str(part)]
+        try:
+            done = subprocess.run(command, capture_output=True, text=True, timeout=config.JOERN_TIMEOUT_SECONDS)
+        except (OSError, subprocess.TimeoutExpired) as exc:
+            part.unlink(missing_ok=True)
+            raise MapUnavailable(f"secpat-walk methods failed: {exc}") from exc
+        if done.returncode != 0 or not part.is_file():
+            part.unlink(missing_ok=True)
+            message = (done.stderr or done.stdout).strip().splitlines()
+            raise MapUnavailable(f"secpat-walk methods failed: {message[-1] if message else done.returncode}")
+        part.replace(out)
+    return out
+
+
+class _FileLock:
+    """An exclusive lock on ``path`` across processes (a no-op where ``fcntl`` is missing)."""
+
+    def __init__(self, path: Path):
+        self.path = path
+        self.handle = None
+
+    def __enter__(self):
+        try:
+            import fcntl
+        except ImportError:  # Windows
+            return self
+        self.handle = self.path.open("a")
+        fcntl.flock(self.handle, fcntl.LOCK_EX)
+        return self
+
+    def __exit__(self, *exc):
+        if self.handle is not None:
+            self.handle.close()  # releases the lock
+        return False
 
 
 # --- reading traces ---------------------------------------------------------------------
@@ -243,27 +364,39 @@ def page(embedded: dict | None = None) -> str:
     return html.replace("<!--TRACE-DATA-->", tag, 1)
 
 
-def export(trace: Path, out: Path) -> Path:
+def export(trace: Path, out: Path, full_cpg: bool = False) -> Path:
     """One HTML file that replays ``trace`` offline: the page, with the trace inside.
 
-    The header's absolute paths (the CPG file, the checkout) are left out: an export is for
-    sharing, and the page does not use them.
+    With ``full_cpg``, the whole-CPG map goes in too and the page opens on it (made first if
+    missing; without it when it cannot be made). The header's absolute paths (the CPG file, the
+    checkout) are left out: an export is for sharing, and the page does not use them.
     """
-    data = _shareable(read_all(trace))
     out.parent.mkdir(parents=True, exist_ok=True)
-    out.write_text(page({"name": trace.name, **data}), encoding="utf-8")
+    out.write_text(page(_exported(trace, full_cpg)), encoding="utf-8")
     return out
+
+
+def _exported(trace: Path, full_cpg: bool) -> dict:
+    data = {"name": trace.name, **_shareable(read_all(trace))}
+    if full_cpg:
+        try:
+            data["cpg"] = json.loads(cpg_map(trace).read_text(encoding="utf-8"))
+            data["layout"] = "cpg"
+        except (MapUnavailable, OSError, ValueError) as exc:
+            logger.warning("traversal view: exported without the whole-CPG map: %s", exc)
+    return data
 
 
 # --- the server -------------------------------------------------------------------------
 
 
-def serve(target: Path, host: str = "127.0.0.1", port: int = 8765, idle_exit: float = 0) -> None:
+def serve(target: Path, host: str = "127.0.0.1", port: int = 8765, idle_exit: float = 0,
+          full_cpg: bool = False) -> None:
     """Serve the page for ``target`` until interrupted (see :func:`make_server`).
 
     ``idle_exit`` > 0 stops the server after that many seconds with no request and no new trace.
     """
-    server = make_server(target, host, port)
+    server = make_server(target, host, port, full_cpg=full_cpg)
     target = target.resolve()
     folder = target if target.is_dir() else target.parent
     if idle_exit > 0:
@@ -278,11 +411,15 @@ def serve(target: Path, host: str = "127.0.0.1", port: int = 8765, idle_exit: fl
         server.server_close()
 
 
-def make_server(target: Path, host: str = "127.0.0.1", port: int = 8765) -> ThreadingHTTPServer:
+def make_server(target: Path, host: str = "127.0.0.1", port: int = 8765,
+                full_cpg: bool = False) -> ThreadingHTTPServer:
     """A server for ``target``: one trace file, or a folder whose newest trace the page follows.
 
-    Only trace files directly in that folder are served (only ``target`` itself when it is a file).
+    Only trace files directly in that folder are served (only ``target`` itself when it is a file),
+    and their CPGs' maps. ``full_cpg``: pages open on the whole-CPG map unless their address says
+    otherwise (``?layout=``).
     """
+    zipped: dict[Path, tuple[float, bytes]] = {}
     target = target.resolve()
     folder = target if target.is_dir() else target.parent
     only = None if target.is_dir() else target.name
@@ -299,12 +436,13 @@ def make_server(target: Path, host: str = "127.0.0.1", port: int = 8765) -> Thre
             if url.path in ("/", "/index.html"):
                 return self._send(200, page().encode("utf-8"), "text/html; charset=utf-8")
             if url.path == "/api/ping":
-                return self._json({"app": APP})
+                return self._json({"app": APP, "features": list(FEATURES)})
             if url.path == "/api/traces":
                 listed = traces(folder)
                 if only is not None:
                     listed = [t for t in listed if t["name"] == only]
-                return self._json({"folder": str(folder), "follow": only is None, "traces": listed})
+                return self._json({"folder": str(folder), "follow": only is None, "traces": listed,
+                                   "layout": "cpg" if full_cpg else ""})
             path = self._trace(query.get("name", ""))
             if path is None:
                 return self._send(404, b"no such trace", "text/plain")
@@ -314,8 +452,14 @@ def make_server(target: Path, host: str = "127.0.0.1", port: int = 8765) -> Thre
                 except ValueError:
                     offset = 0
                 return self._json(read(path, offset))
+            if url.path == "/api/cpg":
+                try:
+                    found = cpg_map(path)
+                except MapUnavailable as exc:
+                    return self._send(404, json.dumps({"error": str(exc)}).encode("utf-8"), "application/json")
+                return self._map(found)
             if url.path == "/api/export":
-                body = page({"name": path.name, **_shareable(read_all(path))}).encode("utf-8")
+                body = page(_exported(path, query.get("layout") == "cpg")).encode("utf-8")
                 filename = path.name.removesuffix(SUFFIX) + ".html"
                 return self._send(200, body, "text/html; charset=utf-8",
                                   {"Content-Disposition": f'attachment; filename="{filename}"'})
@@ -329,6 +473,19 @@ def make_server(target: Path, host: str = "127.0.0.1", port: int = 8765) -> Thre
                 return None
             path = folder / name
             return path if path.is_file() else None
+
+        def _map(self, found: Path):
+            """A map is large (up to about 10 MB) and compresses about 8 to 1: sent gzipped."""
+            mtime = found.stat().st_mtime
+            cached = zipped.get(found)
+            if cached is None or cached[0] != mtime:
+                cached = (mtime, gzip.compress(found.read_bytes(), compresslevel=5))
+                if len(zipped) >= 6:
+                    zipped.pop(next(iter(zipped)))
+                zipped[found] = cached
+            if "gzip" in (self.headers.get("Accept-Encoding") or ""):
+                return self._send(200, cached[1], "application/json", {"Content-Encoding": "gzip"})
+            return self._send(200, gzip.decompress(cached[1]), "application/json")
 
         def _json(self, data: dict):
             self._send(200, json.dumps(data, ensure_ascii=False).encode("utf-8"), "application/json")

@@ -22,16 +22,30 @@ orders" are that run's outputs. 19 drafts timed out in it and have no order.
   page's Export button) writes one trace as a single file that replays offline. A traced query
   runs `secpat-walk run` even with `SECPAT_WALK_SERVE=1`. On Joern, `SECPAT_VIEW=nodes` warns once
   and saves nothing.
+- The whole-CPG view: `--full-view-cpg` (`run`, `dataset`, `view`) or `SECPAT_VIEW_FULL_CPG=1`
+  draws each traversal on a map of the whole CPG, a treemap of the repository's folders and files
+  with one dot per method, and the library methods it calls on the right; the methods light up as
+  the traversal reaches them, and hovering any method shows its calls. `view.cpg_map()` saves the
+  map once per CPG with `secpat-walk methods` (`cpg/` in the traces folder); the viewer makes a
+  missing one on request (`/api/cpg`, gzipped) and exports carry it. `/api/ping` lists the
+  viewer's features, so a run can tell an older viewer apart.
 - `tests/test_view.py`: reading traces (left-out events, partial lines, batches), the export, the
   server (only trace files of its folder), starting the viewer, and `detect()` with and without
-  `SECPAT_VIEW`, on a stand-in `secpat-walk`.
+  `SECPAT_VIEW`, on a stand-in `secpat-walk`; the whole-CPG map (made once per CPG, served
+  gzipped, made on request, missing CPG, in exports, the flag).
+
+### Fixed
+
+- The page's short names of Python methods: `RateLimitMiddleware.__call__`, not the file's path
+  (`effgen/api/middleware.py`).
 
 ### Output
 
 Unchanged. With `SECPAT_VIEW=nodes`, `secpat-interaction-order dataset --engine rust` gives the
 stored order on 100 of 100 records (16 s; 100 traces, 8 MB). On three drafts (camunda-bpm-platform,
 factcast, bws-base-api) the result files are identical with and without `--trace`; the largest
-traversal took 2.91 s with the trace against 2.54 s without (five runs each).
+traversal took 2.91 s with the trace against 2.54 s without (five runs each). With
+`--full-view-cpg`, 100 of 100 records give the stored order too (23 s; 93 maps, 92 MB).
 
 ## [0.2.0] - 2026-11-18
 

@@ -48,7 +48,7 @@ Two rules of the traversal are not described in Appendix C:
 | `joern_local.py` | the local runner — `joern-parse` / `joern --script` on this machine |
 | `rust_walk.py` | the native engine runner (`JOERN_ENGINE=rust`, see below) |
 | `progress.py` | the progress display (`SECPAT_PROGRESS`, see below) |
-| `view.py`, `view.html` | the traversal view (`SECPAT_VIEW`, see below): saves traces, serves and exports the page |
+| `view.py`, `view.html` | the traversal view (`SECPAT_VIEW`, see below): saves traces and whole-CPG maps, serves and exports the page |
 | `joern/walk.sc` | the traversal: locates roles, steps the CFG, returns interactions |
 | `joern/python.sc`, `joern/java.sc` | `LangSpec` profiles — what differs between frontends |
 | `config.py` | `JOERN_*` env vars, read at import time |
@@ -185,6 +185,37 @@ folder. The page:
   step is one event the page draws; at 1× a whole traversal plays in about 30 seconds.
 - **Export HTML.** The page and the trace in one file, with no outside links, that replays
   offline; the same as `view --export`.
+
+**The whole CPG.** With `--full-view-cpg` (on `run`, `dataset` or `view`) or
+`SECPAT_VIEW_FULL_CPG=1`, the page draws the traversal on a map of the whole CPG (the layout menu's
+"whole CPG"; the address `?layout=cpg` opens on it too):
+
+- **The map.** Every method of the repository is a dot, in a box for its file, inside boxes for
+  its folders (a treemap: a box's area is its number of methods; a folder holding only one folder
+  is one box, `src/main/java/org`). The library methods the repository calls sit in a strip on the
+  right, by package and class. Dots not reached are grey; zoomed in far enough, each dot shows its
+  method's name.
+- **The traversal on it.** A method the traversal enters lights up at its place; a call site or
+  a field it reaches (a library role's call, a role on a field) sits next to the method it was
+  reached from; the calls the traversal followed are drawn as arcs, and the interactions light up
+  as in the call tree. Hover any method, reached or not, for its name, file and line, and its calls
+  as the CPG records them: blue to the methods it calls, yellow from its callers.
+- **The file.** `secpat-walk methods` writes the map, once per CPG, as
+  `cpg/<CPG name>__<nodes>-<edges>.json` in the traces folder: every method except the
+  `<operator>` ones (file, lines, library or not) and the CPG's calls between them. A library
+  method counts only when a call has it as its one target: Python's CPG links an untyped call to
+  every library method of that name (2.3 million calls on ctrl-gaurav_effGen otherwise). A run
+  with the flag makes the map after each query when it is missing (0.3 s on camunda-bpm-platform:
+  45,501 methods, 110,079 calls, 10 MB). All 100 records of the dataset give the stored order with
+  the flag, in 23 s against 16 s without (93 maps, 92 MB, the largest 12.9 MB).
+- **The viewer.** It makes a missing map when a page asks for one, if the trace's CPG and
+  `secpat-walk` are on this machine (one at a time), and sends maps gzipped (about 8 to 1).
+  `view --full-view-cpg` opens pages on the map; with `--export`, the map goes into the file.
+  The page's Export button includes it when the page shows the map. A viewer started before this
+  version has no map; the run says so, and stopping it (`pkill -f "[s]ecpat_interaction_order view"`)
+  lets the next run start a new one.
+
+The map needs a `secpat-walk` with the `methods` command (joern-rust, branch `traversal-view`).
 
 Only the native engine writes traces for now. On Joern, `SECPAT_VIEW=nodes` logs one warning and
 saves nothing.

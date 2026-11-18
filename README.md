@@ -103,6 +103,7 @@ second (the edge label of Appendix C). `result.json` has the same, plus the call
 | `--cpg-dir` | the folder with the repository's CPG, `<folder name>__JAVASRC.cpg` (or `__PYTHONSRC`). Without it, or when the file is not there, Joern's `joern-parse` builds the CPG first, in `~/.cache/secpat/joern_cpg` (seconds for a small repository, minutes for a large one) |
 | `--output` | write the result as JSON |
 | `--engine` | `joern` (the default) or `rust` |
+| `--full-view-cpg` | save the traversal and show it on a map of the whole CPG ([Watch a traversal](#watch-a-traversal)) |
 
 ## Reproduce the whole dataset
 
@@ -184,6 +185,25 @@ traversal as a single file that replays offline. On a remote machine, forward th
 `ssh -L 8765:127.0.0.1:8765 user@host`. [docs/USAGE.md](docs/USAGE.md#the-traversal-view) has
 the details.
 
+To see the traversal inside the whole CPG, add `--full-view-cpg` (or set `SECPAT_VIEW_FULL_CPG=1`):
+
+```bash
+secpat-interaction-order dataset --dataset $D --engine rust --full-view-cpg \
+    --repo ErtanSidar_turkcell-common --pattern verifiable_token_based_authentication
+```
+
+```text
+traversal view: http://127.0.0.1:8765/?layout=cpg  (traces in /root/.cache/secpat/view)
+[1/1] verifiable_token_based_authentication__ErtanSidar_turkcell-common: 4 interaction(s), same as the dataset
+1 of 1 record(s) give the same interaction order as the dataset (0 s).
+```
+
+The page then draws every method of the repository, in boxes for its folders and files, and the
+library methods it calls, and lights up the methods as the traversal reaches them. Hover any
+method for its calls; zoom in to read the names. The map is saved once per CPG, next to the
+traces (under a second each; 93 maps, 92 MB, for the whole dataset). The layout menu switches
+between the map and the call tree.
+
 ## Settings
 
 Environment variables:
@@ -198,6 +218,7 @@ Environment variables:
 | `SECPAT_VIEW` | `off` | `nodes` saves each traversal for the traversal view (native engine only) |
 | `SECPAT_VIEW_DIR` | `~/.cache/secpat/view` | where the traces go |
 | `SECPAT_VIEW_PORT` | 8765 | the traversal view's port, on 127.0.0.1 |
+| `SECPAT_VIEW_FULL_CPG` | off | `1` shows each traversal on a map of the whole CPG (the same as `--full-view-cpg`; turns on `SECPAT_VIEW`) |
 
 ## More
 

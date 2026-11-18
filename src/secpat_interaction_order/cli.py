@@ -47,6 +47,9 @@ def main(argv: list[str] | None = None) -> int:
     logging.basicConfig(level=logging.WARNING, format="%(message)s")
     if getattr(args, "engine", None):
         config.JOERN_ENGINE = args.engine
+    if getattr(args, "full_view_cpg", False):
+        config.SECPAT_VIEW_FULL_CPG = True
+        config.SECPAT_VIEW = "nodes"
     return args.command(args)
 
 
@@ -83,6 +86,7 @@ def _parser() -> argparse.ArgumentParser:
     )
     run.add_argument("--output", type=Path, help="write the result, as JSON, to this file")
     _engine_option(run)
+    _full_view_option(run)
     run.set_defaults(command=_run)
 
     dataset = commands.add_parser(
@@ -96,6 +100,7 @@ def _parser() -> argparse.ArgumentParser:
     dataset.add_argument("--pattern", default="", help="only the records of this pattern")
     dataset.add_argument("--output", type=Path, help="write each derived order to this folder")
     _engine_option(dataset)
+    _full_view_option(dataset)
     dataset.set_defaults(command=_dataset)
 
     view_cmd = commands.add_parser(
@@ -116,6 +121,11 @@ def _parser() -> argparse.ArgumentParser:
                           help="write the trace as one HTML file that replays offline, and exit")
     view_cmd.add_argument("--idle-exit", type=float, default=0, metavar="SECONDS",
                           help="stop after this long with no page open and no new trace (default: never)")
+    view_cmd.add_argument(
+        "--full-view-cpg", action="store_true", default=config.SECPAT_VIEW_FULL_CPG,
+        help="open on a map of the whole CPG, the traversal's methods lit up on it (with --export: put "
+             "the map in the file); made with secpat-walk when missing (default: off, or SECPAT_VIEW_FULL_CPG)",
+    )
     view_cmd.set_defaults(command=_view)
     return parser
 
@@ -125,6 +135,14 @@ def _engine_option(parser: argparse.ArgumentParser) -> None:
         "--engine", choices=("joern", "rust"),
         help="joern (local Joern) or rust (secpat-walk, from SECPAT_WALK_BIN or PATH); "
              f"(default: {config.JOERN_ENGINE}, or JOERN_ENGINE)",
+    )
+
+
+def _full_view_option(parser: argparse.ArgumentParser) -> None:
+    parser.add_argument(
+        "--full-view-cpg", action="store_true",
+        help="save each traversal for the traversal view and show it on a map of the whole CPG "
+             "(native engine; the same as SECPAT_VIEW_FULL_CPG=1)",
     )
 
 
@@ -298,7 +316,7 @@ def _view(args: argparse.Namespace) -> int:
     if args.export:
         if not target.is_file():
             sys.exit(f"secpat-interaction-order: --export needs one trace file, not {target}")
-        out = view.export(target, args.export)
+        out = view.export(target, args.export, full_cpg=args.full_view_cpg)
         print(f"wrote {out} ({out.stat().st_size / 1e6:.1f} MB)")
         return 0
     if not target.exists():
@@ -307,7 +325,7 @@ def _view(args: argparse.Namespace) -> int:
         else:
             sys.exit(f"secpat-interaction-order: {target} does not exist")
     try:
-        view.serve(target, host=args.host, port=args.port, idle_exit=args.idle_exit)
+        view.serve(target, host=args.host, port=args.port, idle_exit=args.idle_exit, full_cpg=args.full_view_cpg)
     except OSError as exc:
         sys.exit(f"secpat-interaction-order: cannot listen on {args.host}:{args.port}: {exc}")
     return 0

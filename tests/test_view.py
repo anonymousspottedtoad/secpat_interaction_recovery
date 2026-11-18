@@ -119,7 +119,7 @@ def _get(srv, path):
 
 def test_server_serves_the_page_the_list_and_the_traces(server):
     srv, folder = server
-    assert json.loads(_get(srv, "/api/ping")[2]) == {"app": view.APP}
+    assert json.loads(_get(srv, "/api/ping")[2]) == {"app": view.APP, "features": ["cpg"]}
     status, headers, body = _get(srv, "/")
     assert status == 200 and b"Traversal view" in body and b'id="trace-data"' not in body
     listed = json.loads(_get(srv, "/api/traces")[2])
@@ -157,7 +157,7 @@ def test_server_for_one_file_lists_only_that_file(tmp_path):
 def test_announce_starts_a_viewer_once_and_prints_its_address(tmp_path, monkeypatch, capsys):
     started = []
     monkeypatch.setattr(view, "_announced", False)
-    monkeypatch.setattr(view, "_ping", lambda port: "none")
+    monkeypatch.setattr(view, "_ping", lambda port: ("none", []))
     monkeypatch.setattr(view.subprocess, "Popen", lambda *a, **k: started.append(a[0]))
     monkeypatch.setattr(config, "SECPAT_VIEW_DIR", tmp_path)
     monkeypatch.setattr(config, "SECPAT_VIEW_PORT", 8123)
@@ -172,7 +172,7 @@ def test_announce_does_not_start_a_second_viewer_or_take_another_programs_port(t
     monkeypatch.setattr(config, "SECPAT_VIEW_DIR", tmp_path)
     for state, said in (("viewer", "traversal view: http://"), ("other", "taken by another program")):
         monkeypatch.setattr(view, "_announced", False)
-        monkeypatch.setattr(view, "_ping", lambda port, s=state: s)
+        monkeypatch.setattr(view, "_ping", lambda port, s=state: (s, ["cpg"] if s == "viewer" else []))
         view.announce(tmp_path / "x.trace.jsonl")
         assert said in capsys.readouterr().err
 
@@ -180,17 +180,28 @@ def test_announce_does_not_start_a_second_viewer_or_take_another_programs_port(t
 # ── detect() with SECPAT_VIEW=nodes, on a stand-in secpat-walk ────────────────
 
 FAKE_WALK = textwrap.dedent("""
-    import json, sys
+    import json, os, sys
     args = sys.argv[1:]
-    assert args[0] == "run", args
     opt = {args[i]: args[i + 1] for i in range(1, len(args) - 1) if args[i].startswith("--")}
+    if args[0] == "methods":
+        log = os.path.join(os.path.dirname(os.path.abspath(sys.argv[0])), "methods.log")
+        open(log, "a").write(opt["--cpg"] + "\\n")
+        open(opt["--output"], "w").write(json.dumps({
+            "version": 1, "cpg": {"name": "demo__JAVASRC.cpg", "nodes": 3, "edges": 4, "methods": 2},
+            "files": ["A.java"],
+            "methods": [[1, "a", "p.A.a:void()", 0, 1, 2, 0], [2, "b", "p.A.b:void()", 0, 3, 4, 0]],
+            "calls": [[0, 1]]}))
+        sys.exit(0)
+    assert args[0] == "run", args
     result = {"schemaVersion": 2, "lang": "JAVASRC", "entryRole": opt["--entry"], "entryRule": "behaviour",
               "anchoredRoles": [{"role": "A", "kind": "METHOD"}],
               "interactions": [{"from": "A", "to": "B", "file": "A.java", "line": 3, "via": [],
                                 "mechanism": "call", "path": [], "parent": None}]}
     open(opt["--output"], "w").write(json.dumps(result))
     if "--trace" in opt:
-        open(opt["--trace"], "w").write(json.dumps({"ev": "header", "engine": "rust"}) + "\\n"
+        header = {"ev": "header", "engine": "rust", "input": opt["--input"],
+                  "cpg": {"path": opt["--cpg"], "nodes": 3, "edges": 4, "methods": 2}}
+        open(opt["--trace"], "w").write(json.dumps(header) + "\\n"
                                         + json.dumps({"ev": "end", "ok": True}) + "\\n")
 """)
 
@@ -211,6 +222,7 @@ def fake_walk(tmp_path, monkeypatch):
     monkeypatch.setattr(config, "JOERN_ENGINE", "rust")
     monkeypatch.setattr(config, "SECPAT_PROGRESS", "off")
     monkeypatch.setattr(config, "SECPAT_VIEW_DIR", tmp_path / "traces")
+    monkeypatch.setattr(config, "SECPAT_VIEW_FULL_CPG", False)
     monkeypatch.setattr(view, "announce", lambda trace: None)
     return checkout
 
@@ -250,3 +262,106 @@ def test_detect_on_joern_warns_once_and_saves_nothing(tmp_path, monkeypatch, cap
         detect("demo", "java", MAPPING, entry="A", repo_path=tmp_path)
     assert sum("SECPAT_VIEW=nodes" in r.message for r in caplog.records) == 1
     assert not (tmp_path / "traces").exists()
+
+
+# ── the whole-CPG map (SECPAT_VIEW_FULL_CPG / --full-view-cpg) ─────────────────
+
+
+def test_detect_with_the_full_cpg_view_saves_one_map_per_cpg(fake_walk, tmp_path, monkeypatch):
+    monkeypatch.setattr(config, "SECPAT_VIEW", "nodes")
+    monkeypatch.setattr(config, "SECPAT_VIEW_FULL_CPG", True)
+    detect("demo", "java", MAPPING, entry="A", repo_path=fake_walk, label="one")
+    detect("demo", "java", MAPPING, entry="A", repo_path=fake_walk, label="two")
+    assert len(list((tmp_path / "traces").glob("*.trace.jsonl"))) == 2
+    (saved,) = (tmp_path / "traces" / "cpg").glob("*.json")
+    assert saved.name == "demo__JAVASRC__3-4.json"
+    assert json.loads(saved.read_text())["methods"][0][2] == "p.A.a:void()"
+    assert len((tmp_path / "methods.log").read_text().splitlines()) == 1  # made once, then reused
+
+
+def _traced(fake_walk, tmp_path, monkeypatch):
+    """A trace from the stand-in engine, its CPG still on disk, and no map yet."""
+    monkeypatch.setattr(config, "SECPAT_VIEW", "nodes")
+    detect("demo", "java", MAPPING, entry="A", repo_path=fake_walk, label="pat")
+    (trace,) = (tmp_path / "traces").glob("*.trace.jsonl")
+    assert not (tmp_path / "traces" / "cpg").exists()
+    return trace
+
+
+def test_server_makes_a_missing_map_and_sends_it_gzipped(fake_walk, tmp_path, monkeypatch):
+    import gzip
+
+    trace = _traced(fake_walk, tmp_path, monkeypatch)
+    srv = view.make_server(trace.parent, port=0, full_cpg=True)
+    threading.Thread(target=srv.serve_forever, daemon=True).start()
+    try:
+        base = f"http://127.0.0.1:{srv.server_port}"
+        assert "cpg" in json.load(urllib.request.urlopen(base + "/api/ping"))["features"]
+        assert json.load(urllib.request.urlopen(base + "/api/traces"))["layout"] == "cpg"
+        request = urllib.request.Request(f"{base}/api/cpg?name={trace.name}", headers={"Accept-Encoding": "gzip"})
+        with urllib.request.urlopen(request) as answer:
+            assert answer.headers["Content-Encoding"] == "gzip"
+            assert len(json.loads(gzip.decompress(answer.read()))["methods"]) == 2
+        plain = json.load(urllib.request.urlopen(f"{base}/api/cpg?name={trace.name}"))
+        assert plain["calls"] == [[0, 1]]
+        assert len((tmp_path / "methods.log").read_text().splitlines()) == 1
+    finally:
+        srv.shutdown()
+        srv.server_close()
+
+
+def test_no_map_when_the_cpg_is_gone(fake_walk, tmp_path, monkeypatch):
+    trace = _traced(fake_walk, tmp_path, monkeypatch)
+    (tmp_path / "cpg" / "demo__JAVASRC.cpg").unlink()
+    with pytest.raises(view.MapUnavailable, match="not on this machine"):
+        view.cpg_map(trace)
+    srv = view.make_server(trace.parent, port=0)
+    threading.Thread(target=srv.serve_forever, daemon=True).start()
+    try:
+        with pytest.raises(urllib.error.HTTPError) as failed:
+            urllib.request.urlopen(f"http://127.0.0.1:{srv.server_port}/api/cpg?name={trace.name}")
+        assert failed.value.code == 404 and "not on this machine" in json.load(failed.value)["error"]
+        assert json.load(urllib.request.urlopen(f"http://127.0.0.1:{srv.server_port}/api/traces"))["layout"] == ""
+    finally:
+        srv.shutdown()
+        srv.server_close()
+
+
+def test_export_with_the_full_cpg_view_carries_the_map(fake_walk, tmp_path, monkeypatch):
+    trace = _traced(fake_walk, tmp_path, monkeypatch)
+    plain = view.export(trace, tmp_path / "plain.html").read_text()
+    full = view.export(trace, tmp_path / "full.html", full_cpg=True).read_text()
+    assert "p.A.a:void()" not in plain and '"layout":"cpg"' not in plain
+    assert "p.A.a:void()" in full and '"layout":"cpg"' in full
+    assert str(tmp_path / "cpg") not in full  # the CPG's path stays out of a shared file
+
+
+def test_announce_with_the_full_cpg_view(tmp_path, monkeypatch, capsys):
+    started = []
+    monkeypatch.setattr(config, "SECPAT_VIEW_FULL_CPG", True)
+    monkeypatch.setattr(config, "SECPAT_VIEW_DIR", tmp_path)
+    monkeypatch.setattr(config, "SECPAT_VIEW_PORT", 8123)
+    monkeypatch.setattr(view.subprocess, "Popen", lambda *a, **k: started.append(a[0]))
+    monkeypatch.setattr(view, "_announced", False)
+    monkeypatch.setattr(view, "_ping", lambda port: ("none", []))
+    view.announce(tmp_path / "x.trace.jsonl")
+    assert started[0][-1] == "--full-view-cpg"
+    assert "http://127.0.0.1:8123/?layout=cpg" in capsys.readouterr().err
+    # a viewer from before the map: said so, not restarted behind the user's back
+    monkeypatch.setattr(view, "_announced", False)
+    monkeypatch.setattr(view, "_ping", lambda port: ("viewer", []))
+    view.announce(tmp_path / "x.trace.jsonl")
+    assert "an older one" in capsys.readouterr().err and len(started) == 1
+
+
+def test_the_flag_turns_the_view_on(monkeypatch):
+    from secpat_interaction_order import cli
+
+    for argv in (["dataset", "--dataset", "d", "--full-view-cpg"], ["run", "--codebase", "c", "--language", "java",
+                                                                   "--roles", "[]", "--full-view-cpg"]):
+        assert cli._parser().parse_args(argv).full_view_cpg
+    monkeypatch.setattr(config, "SECPAT_VIEW", "off")
+    monkeypatch.setattr(config, "SECPAT_VIEW_FULL_CPG", False)
+    monkeypatch.setattr(cli, "_dataset", lambda args: 0)
+    assert cli.main(["dataset", "--dataset", "d", "--full-view-cpg"]) == 0
+    assert config.SECPAT_VIEW == "nodes" and config.SECPAT_VIEW_FULL_CPG

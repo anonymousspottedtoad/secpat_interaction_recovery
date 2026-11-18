@@ -87,6 +87,14 @@ SECPAT_VIEW_DIR = Path(os.getenv("SECPAT_VIEW_DIR", "") or Path.home() / ".cache
 # The viewer's port, on 127.0.0.1.
 SECPAT_VIEW_PORT = int(os.getenv("SECPAT_VIEW_PORT", "8765") or "8765")
 
+# On (1, true, yes, on): the view shows each traversal on a map of the whole CPG (every method of
+# the repository, in its folders and files, and the library methods it calls), lighting up the
+# methods the traversal reaches. The map is saved once per CPG, next to the traces. Implies
+# SECPAT_VIEW=nodes; the same as --full-view-cpg.
+SECPAT_VIEW_FULL_CPG = os.getenv("SECPAT_VIEW_FULL_CPG", "").strip().lower() in ("1", "true", "yes", "on")
+if SECPAT_VIEW_FULL_CPG:
+    SECPAT_VIEW = "nodes"
+
 # ── CPG builds (local joern-parse) ────────────────────────────────────────────
 
 # Delombok mode for JAVASRC builds. "types-only" is what the query service used; "no-delombok"
