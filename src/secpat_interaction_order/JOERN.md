@@ -1,4 +1,4 @@
-# How the walk works
+# How the traversal works
 
 `joern/walk.sc` takes a role mapping and returns the order those roles interact.
 A role is a name the annotation attached to an entity in the code; an
@@ -76,7 +76,7 @@ should stay visible. A citation naming an entity outside the repo becomes an
 **external** role, matched later by callee name and keyed on `(citing file,
 name)`.
 
-The result is one map, `roleOfNode`, and it is the only thing the walk consults.
+The result is one map, `roleOfNode`, and it is the only thing the traversal consults.
 A role cited on a **class** is also recorded against every method that class
 declares, so a call landing on any of them counts as reaching the role — unless
 some role cited one of those methods directly, which is the more specific claim
@@ -86,11 +86,11 @@ enclosing class for the same reason.
 
 ---
 
-## 2. Where the walk starts
+## 2. Where the traversal starts
 
 Two questions, in this order.
 
-**Which role.** The walk runs **once**, from one role; every other role is
+**Which role.** The traversal runs **once**, from one role; every other role is
 *reached*, never started at. That role must be a **root** — one no other cited
 role reaches, counting calls and framework wiring alike. The pattern's first
 speaker is used if it is a root (`entryRule: behaviour`); otherwise the root
@@ -104,12 +104,12 @@ thing runs next*:
 | cited on | start node |
 | --- | --- |
 | a method (`METHOD`) | `cfgFirst`, the body's first node |
-| a class (`TYPE_DECL`) | `cfgFirst` of **every** method it declares, each walked in turn |
+| a class (`TYPE_DECL`) | `cfgFirst` of **every** method it declares, each traversed in turn |
 | a statement (a role on a variable) | that line's first node, inside the enclosing body |
 
 A class is started from all its bodies because that is the set the root test
 above judged it on (`reachesFrom` reads every body). Starting from the first
-alone -- which it used to -- walked whichever method the graph listed first: on
+alone -- which it used to -- traversed whichever method the graph listed first: on
 `cloudfoundry_uaa` the Enforcer cited as `OAuth2AuthenticationProcessingFilter`
 began in a setter, never entered `doFilter`, and derived nothing, while the same
 mapping citing `doFilter` derived three interactions.
@@ -117,7 +117,7 @@ mapping citing `doFilter` derived three interactions.
 Naming a function is naming its body. Naming a variable is naming one statement,
 and execution simply carries on from it — so a module-level
 `auth_scheme = FastApiKeycloack(...)` reaches `__init__` with no special case,
-because the constructor call on that line is an ordinary CALL node the walk
+because the constructor call on that line is an ordinary CALL node the traversal
 arrives at. Neither shape needs a stop rule. A `PARAM` has no body, so a role on
 a parameter is only ever reached.
 
@@ -127,7 +127,7 @@ a parameter is only ever reached.
 
 *`Walker.walkBody` in `walk.sc`; its traversal loop is the `while (pending.nonEmpty)` at its end.*
 
-The walk moves in **two different ways**, and it matters that they are different:
+The traversal moves in **two different ways**, and it matters that they are different:
 
 ```
 within a method    follow a CFG edge        "what runs next here"
@@ -144,7 +144,7 @@ continue in**, because it is where most of what the derivation misses is lost.
 ### The whole flow, once
 
 Start in `show_tenant` (the `Enforcer`). Read top to bottom — this is every
-movement the walk makes:
+movement the traversal makes:
 
 ```
 walkBody(show_tenant)                        ← loop #1 begins at its cfgFirst
@@ -278,7 +278,7 @@ pop       → L25   ✗ else first          push L23  stack: [25, 23]  ← on to
                                         pop       → L23   ✓ then first
 ```
 
-**Measured on that method** — same walk, same graph, `.reverse` the only
+**Measured on that method** — same traversal, same graph, `.reverse` the only
 difference, visit order by line:
 
 ```
@@ -291,12 +291,12 @@ before 35 before 34 — and the `raise` on line 23 is visited last of everything
 The emitted rank **is** the visit order, so every derived order in a branching
 method would be scrambled.
 
-**One consequence that surprises people.** Depth-first means the walk finishes
+**One consequence that surprises people.** Depth-first means the traversal finishes
 the first branch *and everything downstream of the join* before coming back for
 the second. In the correct trace above, after line 23 it goes to 27 and runs to
 the end of the method (40, then `METHOD_RETURN` at 17) — and only then picks up
 25, the else-arm, dead last. At runtime only one arm runs, so there is no true
-ordering between them; what the walk guarantees is that **both are seen** and the
+ordering between them; what the traversal guarantees is that **both are seen** and the
 source-first one is seen first.
 
 ### Iterative, not recursive
@@ -336,7 +336,7 @@ receives it. There is no sort anywhere in the script.
 
 **The whole rule:**
 
-> While walking inside role **A**, traverse to something carrying role **B**.
+> While the traversal is inside role **A**, traverse to something carrying role **B**.
 > That is an interaction: emit `A → B`, and continue with the context now set to
 > **B**.
 
@@ -352,7 +352,7 @@ the file:
 
 | clause of the rule | responsible | `walk.sc` |
 | --- | --- | --- |
-| "while walking inside role A" | `walkBody`'s `sources` parameter | 425 |
+| "while the traversal is inside role A" | `walkBody`'s `sources` parameter | 425 |
 | "traverse to something" | the node match in `walkBody`, via `calleeOf` / `methodsPassedTo` / `referencedMethodInRepo` / `_refOut`; plus `Lang.entryEdges` before the first node | 489–513, 474 |
 | "carrying role B" | `emitAndDescend` → `roleOfNode` + `externalRoles` | 444 |
 | "B ≠ A" | `pairsFor` (drops self-pairs) | 318 |
@@ -365,7 +365,7 @@ Everything below is that rule, with the three things it leaves unsaid.
 
 `Walker.walkBody(m, from, sources, via, depth)`.
 
-Set when a body is entered, constant while inside it, restored when the walk
+Set when a body is entered, constant while inside it, restored when the traversal
 returns. The pop is the JVM call stack — there is no separate structure.
 
 ### "Traverse to" means follow an edge
@@ -374,9 +374,9 @@ The `n match { … }` block inside `Walker.walkBody`, plus the
 `Lang.entryEdges` call at `474`, which runs before the first node is stepped.
 
 Roles live on **declarations** (METHOD, TYPE_DECL, LOCAL, PARAM, MEMBER) and the
-walk steps on **executable** nodes (CALL, IDENTIFIER, …). Those two sets are
-disjoint — measured on `CentOS_duffy`, the walk steps on 72,147 nodes, 28,395
-nodes can carry a role, and the overlap is **zero**. So the walk never lands
+traversal steps on **executable** nodes (CALL, IDENTIFIER, …). Those two sets are
+disjoint — measured on `CentOS_duffy`, the traversal steps on 72,147 nodes, 28,395
+nodes can carry a role, and the overlap is **zero**. So the traversal never lands
 *on* a role; it lands on a node that *points at* one, and traversing means
 following that pointer. These pointers exist:
 
@@ -398,7 +398,7 @@ rows, which read one the profile declares; none searches by name. Those two and
 Two timing rules: arguments are followed **before** the call that receives them,
 because that is when they are evaluated; and an entry binding's
 `dependency-injection` is emitted before the body's first node, because a
-parameter is bound before the body runs — and only when the walk really enters
+parameter is bound before the body runs — and only when the traversal really enters
 the method, never when it started partway down a body it does not own. A
 provider's `dependency-injection` is emitted at the call made on the injected
 object, with that call's other targets.
@@ -416,12 +416,12 @@ A  →  helper  →  B
       (no role)
 ```
 
-If the walk stopped at `helper`, it would never see `B` and `A → B` would be
+If the traversal stopped at `helper`, it would never see `B` and `A → B` would be
 lost. So: **no role → emit nothing, keep the context, keep going**, with the
 helper appended to `via`. That is the only addition to your rule, and `via` is
 what distinguishes a direct call from one found six helpers away.
 
-A node carrying the **same** role emits nothing and the walk does not enter it.
+A node carrying the **same** role emits nothing and the traversal does not enter it.
 
 ### What if it carries **several** roles?
 
@@ -446,9 +446,9 @@ emitted:  Enforcer → Validator   then   Enforcer → Hasher
 
 **Co-located roles on a library entity only ever land on the target side.** A
 library entity has no body, so it is excluded from `withBody` (never an entry)
-and from both descent sites by `filterNot(_.isExternal)` (never walked into): it
+and from both descent sites by `filterNot(_.isExternal)` (never traversed into): it
 can only be reached. Roles co-located on a **repository method** are different
--- the walk enters that method as all of them, so `A, B → D` does happen
+-- the traversal enters that method as all of them, so `A, B → D` does happen
 (`Enforcer` and `Verification manager` both cited as `login` emit
 `Enforcer → Password store` *and* `Verification manager → Password store`).
 
@@ -520,7 +520,7 @@ parent is the pair, at the same call, that reached its source. Following
 `parent` back from any row reaches the entry role. It names a token, not a
 row, so it survives `firstOccurrences`. The parent's first occurrence is always
 ranked before the child, because an edge is emitted before its target's body is
-walked.
+traversed.
 
 Both are evidence only. Neither feeds `keepMostRoles`' ranking or Level 3.
 
@@ -546,11 +546,11 @@ Both are evidence only. Neither feeds `keepMostRoles`' ranking or Level 3.
 
 §3 established that a CFG stops at the method boundary, so crossing into a callee
 needs a different edge and a fresh traversal. This is how the other end of that
-edge is found. It is the single most consequential mechanism in the walk: almost
+edge is found. It is the single most consequential mechanism in the traversal: almost
 every interaction the derivation reports depends on it, and almost everything the
 derivation *misses* is it failing.
 
-### The walk does not search. It reads the call's edges.
+### The traversal does not search. It reads the call's edges.
 
 ```scala
 def calleesOf(c: Call): List[Method] = {
@@ -573,7 +573,7 @@ than it looks: a dynamically dispatched Java call has one per implementation
 bodiless interface method), and an untyped Python call can carry a library stub
 beside the repository method (freqtrade: 138 calls where the stub came first, so
 `worker.run()` lost `Worker.run`). The first edge is whatever storage order put
-first, so the walk entered the wrong subclass in another file, an empty
+first, so the traversal entered the wrong subclass in another file, an empty
 interface body, or nothing:
 
 ```
@@ -585,13 +585,13 @@ CompareAction.java:34   compareExecutor.compare(logger, actual, expected)
 
 Now: the addressed method when it has a body (the frontend's static answer);
 otherwise the addressed declaration plus every implementation. **A set of more
-than one is resolved by trial** (`Walker.keepMostRoles`): each member is walked in
-isolation, as though it were the only one, and the member whose walk reaches the
+than one is resolved by trial** (`Walker.keepMostRoles`): each member is traversed in
+isolation, as though it were the only one, and the member whose traversal reaches the
 most distinct roles is kept -- ties to the earlier, which for a rescued set is the
 nearest in the class hierarchy. The others leave no trace: their rows are dropped
 and the bodies they entered are forgotten. Until 2026-09-26 a non-role member was
-never entered, because walking all fourteen `executeSeleniumAction` bodies as
-though each ran would attribute every call in them to the source role; walking
+never entered, because traversing all fourteen `executeSeleniumAction` bodies as
+though each ran would attribute every call in them to the source role; traversing
 them one at a time and keeping one answers that without giving up a role that
 sits *inside* an implementation rather than on it. The cost is the other side of
 the same choice: two members that are both roles no longer both emit -- the one
@@ -616,7 +616,7 @@ Python embeds the file path in the name; Java embeds the package
 
 ### How that address comes to exist
 
-None of it is the walk's work. It happens when the CPG is built:
+None of it is the traversal's work. It happens when the CPG is built:
 
 1. **the frontend writes an address.** Each `CALL` gets a `methodFullName` — its
    best guess at the target's fully qualified name, from imports, scope and
@@ -629,9 +629,9 @@ None of it is the walk's work. It happens when the CPG is built:
 Measured, that gives 100% of `Enedis-OSS_chutney`'s 10,533 stubs a `fullName`
 identical to the call's address: a stub *is* the string, wrapped in a node.
 
-### Three outcomes, and what the walk does with each
+### Three outcomes, and what the traversal does with each
 
-| `c.callee` gives | walk |
+| `c.callee` gives | traversal |
 | --- | --- |
 | an **internal** method — same file or another | **descends**: `walkBody` starts at that method's own `cfgFirst` |
 | an **external stub** | no descent (there is no body), but the stub carries the *name*, so a library-cited role still matches through `externalRoles` |
@@ -644,11 +644,11 @@ freqtrade      (py)      15.1%        64.1%            9.3% / 11.5%
 chutney      (java)       0.0%        72.9%            7.8% / 19.3%
 ```
 
-So the walk descends on 10–27% of call sites. Java's cross-file edges outnumber
+So the traversal descends on 10–27% of call sites. Java's cross-file edges outnumber
 its same-file ones 2.5:1 — static types and explicit imports let the frontend
 compute the address; Python's `ANY` types often do not.
 
-### A secondary route the walk never sees
+### A secondary route the traversal never sees
 
 The string join is primary, not sole. `CentOS_duffy` has 3,210 calls whose
 address is `<unknownFullName>` but only 1,807 with no edge — so ~1,400 were
@@ -686,7 +686,7 @@ receiver's type; a library parent is also matched by simple name). They go to
 `keepMostRoles` like any linked dispatch set, and edges reached through them
 are tagged `mechanism: "dispatch"` -- the call is in the code, *which* override
 runs is Spring's choice at runtime, and a reader filtering on `call` still gets
-the order a literal-call walk produces. Two bounds keep it a single inference
+the order a literal-call traversal produces. Two bounds keep it a single inference
 rather than a search: more than `MAX_OVERRIDES` (32) candidates follows none,
 and inside a trail already entered by dispatch a second dispatch is not taken --
 UAA's 18 `AuthenticationManager` overrides delegate to each other, and letting
@@ -711,16 +711,16 @@ registered `AuthenticationProvider`s and calls the one whose `supports()`
 accepts the token -- here `StandardAuthenticationProvider.authenticate`,
 registered at `WebSecurityConfig.java:127`. The repository implements
 `AuthenticationProvider`, not `AuthenticationManager`, and the loop is library
-code, so nothing in the graph joins the filter to the provider. The walk stopped
+code, so nothing in the graph joins the filter to the provider. The traversal stopped
 at line 49, and because the Enforcer reached no role the whole derivation came
 back empty: the Verification manager's own direct calls to the Password store and
-Comparator were never walked.
+Comparator were never traversed.
 
 A **route** is the profile's declaration of such a hand-off, `Lang.routes`: *a
 call to `method` on `owner` runs the first of these steps that resolves to
 repository code*. A step is `anyOf` -- the framework picks one target at runtime,
 so they compete in `keepMostRoles` like a dispatch set -- or `inOrder` -- the
-framework runs each in turn, so they are walked as consecutive hops of the one
+framework runs each in turn, so they are traversed as consecutive hops of the one
 call. A target resolves to the repository's implementations of `type.method`
 (`implementationsOf`, which is `overridesOf` without the call), else to the
 repository's injection providers of the type (below). Java declares one route,
@@ -729,7 +729,7 @@ for `ProviderManager`; see `java.sc` § `routes`.
 - **Last resort, and additive.** `targetsOf` tries a callee with a body, then
   overrides (`dispatch`), then a route, then providers. A route only fills a gap,
   and what the call resolved to without it -- the external stub, and any library
-  role cited on the call site -- stays as the first hop, so no edge the walk
+  role cited on the call site -- stays as the first hop, so no edge the traversal
   emitted before can disappear.
 - **The receiver's type may be unknown.** When a Spring superclass supplies the
   getter, JAVASRC leaves the call unresolved and the receiver `ANY` -- true of all
@@ -763,7 +763,7 @@ passwordEncoder.matches(raw, user.getPassword());                               
 every method carrying it whose return type is `T` -- full name, else simple name.
 When nothing else resolves the call, its providers' roles are reached **at the
 call**: emitted together with its other targets and ordered with them by the
-pattern (`pairsFor`), tagged `dependency-injection`, and never walked into -- a
+pattern (`pairsFor`), tagged `dependency-injection`, and never traversed into -- a
 provider's body builds the object at startup, it is not what the call does. The
 first cut emitted providers as a hop of their own, *after* the call's other
 targets; on `Open-Core-Finance_corefinance`, where one side cites the Hasher on the
@@ -851,7 +851,7 @@ answer are the language's, so both live in the profile:
   the module-path chain through `__init__.py` re-exports in Python.
 
 **An overloaded member is told apart by arity** (arguments vs parameters,
-receiver excluded) when that leaves any; several left go to the walker as a
+receiver excluded) when that leaves any; several left go to the traversal as a
 dispatch set, resolved by trial like any other. Arity is a hint, not a filter,
 because a keyword argument has index -1 in PYTHONSRC: `svc.create(name=…)`
 counts no arguments against seven parameters. The Java rescue used to split the import at its last dot
@@ -923,7 +923,7 @@ Two shapes, neither fixable from the annotation side (a third, Python's package 
 *The two `walkBody` calls inside `emitAndDescend`; termination from
 `Walker.enteredBodies`, `visitedNodes` and `Walker.MAX_DEPTH`.*
 
-A call that reaches a role **enters that method** before the walk carries on, so
+A call that reaches a role **enters that method** before the traversal carries on, so
 anything found inside appears *between* the outer call's edge and the next one
 — the way a sequence diagram nests:
 
@@ -953,7 +953,7 @@ and a node is visited once per body (`visitedNodes`), so loops end. `MAX_DEPTH`
 *`── 5. emit` — `firstOccurrences`, then the
 `interactions` array.*
 
-The walk emits one row per *reaching event*; the token `A → B` names roles only.
+The traversal emits one row per *reaching event*; the token `A → B` names roles only.
 Many events collapse onto one token — several call sites, several methods of a
 cited class, both arms of a branch, two paths through different helpers, a pair
 that is both wired and called. Duplicates collapse to their **first**
@@ -1006,12 +1006,12 @@ node rather than filtering by line: first-in-the-list is not first-to-run.
 The seam is narrow on purpose: a profile answers questions about its own
 frontend — where a declaration's line sits, how containment is spelled, how the
 ties it makes are ranked, how an import maps to a file, what it discarded — and
-the walk owns every decision that needs the graph, so there is one walk rather
+the traversal owns every decision that needs the graph, so there is one traversal rather
 than one per language.
 
 A member earns a place on the seam only if **two profiles could legitimately
 answer differently**. Anything every profile would answer identically is a CPG
-fact, not a language fact, and stays in the walk. `walk.sc` therefore names no
+fact, not a language fact, and stays in the traversal. `walk.sc` therefore names no
 language, no framework and no library anywhere in it — that is checkable, and
 worth re-checking after an edit:
 
@@ -1029,7 +1029,7 @@ Sections of `walk.sc`, in file order, which is also the order they run:
 | --- | --- | --- |
 | 1 | call resolution (`calleeOf`) | §4 |
 | 2 | locate roles | §1 |
-| 3 | the walk (`startsOf`, `walkBody`) | §2, §3, §4, §5 |
+| 3 | the traversal (`startsOf`, `walkBody`) | §2, §3, §4, §5 |
 | 4 | entry role, then the single `walkBody` call | §2 |
 | 5 | emit | §6 |
 
@@ -1050,13 +1050,13 @@ definition's own name; the code carries only a one- or two-line docstring.
 
 | | |
 | --- | --- |
-| **a third of calls carry no target, so the call graph is fragmented** | on 30–44% of call nodes the frontend records `<unknownFullName>` and no callee edge (JAVASRC 29–31%, PYTHONSRC 34–44%). **The walk itself is unbounded** — there is no hop budget — but it runs out of graph almost at once: from the busiest method of a 7850-method repo only **39** methods are reachable at any depth. So two roles not within about three *resolved* calls of each other are not connected here however far the walk is allowed to go. This is the ceiling of the approach, and **chasing it means guessing** — see below |
+| **a third of calls carry no target, so the call graph is fragmented** | on 30–44% of call nodes the frontend records `<unknownFullName>` and no callee edge (JAVASRC 29–31%, PYTHONSRC 34–44%). **The traversal itself is unbounded** — there is no hop budget — but it runs out of graph almost at once: from the busiest method of a 7850-method repo only **39** methods are reachable at any depth. So two roles not within about three *resolved* calls of each other are not connected here however far the traversal is allowed to go. This is the ceiling of the approach, and **chasing it means guessing** — see below |
 | **nothing separates derived edges from inferred ones at scoring time** | `mechanism` records whether an edge was a literal call or framework wiring; Level 3 scores them alike. Reporting Level 3 over `mechanism == "call"` only would say how much of a score rests on inference — but see the dedupe caveat in §6 |
-| a role the entry never reaches contributes nothing | the walk starts once, so an unconnected role is absent from the order rather than given a walk of its own. A true statement about the call graph, but a mapping can be good and still derive little. Most often the break is a framework hand-off; the Spring Security login one and `@Bean` injection are routed (§4, **Framework routes**) |
-| framework hand-offs outside the declared routes still break the walk | Spring's resource server (`jwtAuthenticationConverter(x)` → `x.convert`), SpEL `@PreAuthorize("@bean.m()")`, Shiro `Subject.login` → a `Realm`, WebFlux's `ReactiveAuthenticationManager`. Each is one `Route` in `java.sc` once it is worth one; the survey behind the current two is in **Framework routes** |
+| a role the entry never reaches contributes nothing | the traversal starts once, so an unconnected role is absent from the order rather than given a traversal of its own. A true statement about the call graph, but a mapping can be good and still derive little. Most often the break is a framework hand-off; the Spring Security login one and `@Bean` injection are routed (§4, **Framework routes**) |
+| framework hand-offs outside the declared routes still break the traversal | Spring's resource server (`jwtAuthenticationConverter(x)` → `x.convert`), SpEL `@PreAuthorize("@bean.m()")`, Shiro `Subject.login` → a `Realm`, WebFlux's `ReactiveAuthenticationManager`. Each is one `Route` in `java.sc` once it is worth one; the survey behind the current two is in **Framework routes** |
 | a route is the framework's contract, unchecked against the repository's wiring | which provider a `ProviderManager` holds, and whether `supports()` accepts the token, is decided at runtime; the route assumes the declared behaviour. Edges past one are `dispatch` with the route's label in `via` |
 | `methodsOfType` is built for every class | and read for the handful that are cited; it duplicates what `methodsByOwner` derives in one pass |
-| the differential against the deleted Python walk was never re-run | the one comparison made covered 8 of 30 rows |
+| the differential against the deleted Python traversal was never re-run | the one comparison made covered 8 of 30 rows |
 
 **Reachability, measured.** Breadth-first from the highest-fan-out method:
 
@@ -1067,7 +1067,7 @@ definition's own name; the code carries only a one- or two-line docstring.
 | `CentOS_duffy` | 1443 | 3 → 5 → 1 → **0** | **10** |
 | `Aquiles-ai_Aquiles-RAG` | 401 | 4 → **0** | **5** |
 
-The depth column, not a limit: the walk follows every resolved call as far as it
+The depth column, not a limit: the traversal follows every resolved call as far as it
 goes. A `maxHops` budget existed until 2026-09-22; it was **removed**, and
 removing it changed no result on any case tested — because the graph runs out
 long before a budget would bite. The only remaining bound is `MAX_DEPTH` (512),
@@ -1077,10 +1077,10 @@ a JVM-stack guard set far above anything real code reaches.
 `IDENTIFIER` argument was a function — answering by searching the repository for
 that name. On `CentOS_duffy` it derived six interactions of which **five were
 wrong**: a comprehension lowered to `tmp0.append(...)` matched 256 unrelated
-bindings of `tmp0`, and following them relocated the walk into
+bindings of `tmp0`, and following them relocated the traversal into
 `retire_unretire_tenant`, where two *real* calls were then emitted under the
 wrong source role. **A bad resolution does not add one bad row; it relocates the
-walk and mislabels everything downstream.** With the guess removed the same input
+traversal and mislabels everything downstream.** With the guess removed the same input
 gives the two rows at the top of this document. This is why every event in §4
 follows an edge the frontend resolved, and why only a `METHOD_REF` counts as a
 callable handed over — that node exists *because* the frontend resolved the name.
@@ -1098,7 +1098,7 @@ Measured 2026-09-22 against a live service (Joern 4.0.600, CPGs built by
 | call sites reaching a repo method, indexes vs `c.callee` | 534/695, 9056/10017, 161/188, 3853/3912 — the edge strictly dominates |
 | `METHOD_REF` → `referencedMethod` | resolved 6379 of 6379 on freqtrade, agreeing with the name index exactly |
 
-An earlier comparison against the deleted Python walk: 30 rows attempted, 14 lost to
+An earlier comparison against the deleted Python traversal: 30 rows attempted, 14 lost to
 Cloudflare 524, 8 both-empty, 8 actually compared (6 gains, 2 losses).
 
 ---
@@ -1131,7 +1131,7 @@ gained them. The profile only declares; `targetsOf`, `emitAndDescend` and
 **What decides whether something belongs here.** Not "is it about a language" --
 that lets anything in. The test is whether **two profiles could legitimately
 answer differently**. A member every profile would implement identically is a
-fact about the CPG, not about a language, and belongs in the walk: that is why
+fact about the CPG, not about a language, and belongs in the traversal: that is why
 `<operator>.*` (the filter separating a call the programmer wrote from one the
 frontend synthesised) and the placeholder filenames `rel` discards stay there,
 behind `isRealCall`, with a comment saying so. The same test took `isSynthetic`
@@ -1143,18 +1143,18 @@ once the nested-definition rule stopped depending on how one frontend lowers a
 **The trait names no language, and no framework.** A reader of `walk.sc` should
 not be able to tell which profiles exist. Each member states the question and
 no answer; the reasoning for an answer lives in the profile that gives it and in
-**Language profiles** below. The walk's own comments were genericised to match
+**Language profiles** below. The traversal's own comments were genericised to match
 -- where they used to cite `CentOS_duffy`'s `Depends()` or FastAPI by name, they
 now state the rule and point here for the measurement. The rule the split holds
-to is unchanged: **only the walk decides what an interaction is.**
+to is unchanged: **only the traversal decides what an interaction is.**
 
 The rule the split holds to is not "a profile may not touch `cpg`". It is
-**only the walk decides what an interaction is**. A profile answers questions
-about its own language; the walk turns answers into edges, in one place, the
-same way for every frontend. That restriction is the whole discipline of the split: the walk below
+**only the traversal decides what an interaction is**. A profile answers questions
+about its own language; the traversal turns answers into edges, in one place, the
+same way for every frontend. That restriction is the whole discipline of the split: the traversal below
 owns every decision that needs the graph, and a profile owns only what can be
 decided without it. A profile is therefore a page of code readable in one
-sitting, and the walk stays one implementation instead of growing a `if
+sitting, and the traversal stays one implementation instead of growing a `if
 (language == ...)` at each frontend quirk. A profile is supplied by
 concatenation, not by import: `detector.py` sends this file followed by
 `python.sc` or `java.sc`, and the second defines `object Lang extends LangSpec`.
@@ -1272,8 +1272,8 @@ and `walkBody` enters it where the CFG reaches the node, as `nested-definition`.
 lambda was therefore a dead end. On `spring-cloud_spring-cloud-gateway` both
 sides cite the Enforcer on `RequestRateLimiterGatewayFilterFactory.apply`, whose
 body ends in `return (exchange, chain) -> …`; that METHOD_REF is a child of the
-`RETURN`, so the walk fell through to `case _` and the whole order came back
-empty, Level 3 n/a with all four roles agreed. Now the walk goes `apply` →
+`RETURN`, so the traversal fell through to `case _` and the whole order came back
+empty, Level 3 n/a with all four roles agreed. Now the traversal goes `apply` →
 `<lambda>0` → (passed to `flatMap`) `<lambda>1` → `limiter.isAllowed(routeId, key)`,
 whose dispatch set the frontend already linked, and derives `Enforcer → Limiter`
 at line 132.
@@ -1286,9 +1286,9 @@ keeps its path and its rank.
 **The module/class-body guard** (`Lang.isModuleOrClassBody`). A Python module or
 class body binds every `def` it contains as `name = <METHOD_REF>` without running
 any of them; entering them would treat each function the file defines as
-something the walk ran. Measured before 0.14.0, when the guard was
+something the traversal ran. Measured before 0.14.0, when the guard was
 `isSynthetic(m.name)`, on `duffy/database/__init__.py` with a role cited on the
-module-level binding at line 25, which starts the walk inside `<module>`: with
+module-level binding at line 25, which starts the traversal inside `<module>`: with
 the guard **0** interactions; without it a fabricated `Enforcer -> Validator` at
 `__init__.py:53`, whose only basis is that line 53 declares a function. The guard
 no longer reads `isSynthetic`, which also matched `<lambda>N` and so would have
@@ -1298,7 +1298,7 @@ guard drops only edges no call evidences. Java has no such body: a class body is
 a TYPE_DECL, and `java.sc` answers false.
 
 **A guard that was dropped.** `nestedDefsIn` also kept only targets lexically
-nested in the walked body (`t.fullName.startsWith(m.fullName + ".")`), skipping an
+nested in the traversed body (`t.fullName.startsWith(m.fullName + ".")`), skipping an
 alias like `handler = login`. The rule is now the same for both languages: a
 callable handed on is entered whether it was defined there or elsewhere, as Java's
 `Handler h = service::process` must be. No measured case motivated the old test,
@@ -1308,7 +1308,7 @@ and none of 25 scored Python records changed without it.
 *runs* -- the gateway invokes the filter per request, FastAPI the closure per
 request -- so the edge is framework wiring, like `dependency-injection` and
 `route-registration`, and carries its own `mechanism` to stay separable. It is the
-same claim the walk already makes for a lambda passed to a call.
+same claim the traversal already makes for a lambda passed to a call.
 
 **Ordering.** The callable's interactions are emitted where it is built, ahead of
 anything the body does after it: exact for a returned lambda, which is the last
@@ -1322,7 +1322,7 @@ of 25 records scored under both, one changed -- gateway, Level 3a n/a → 0.667,
 argument lambdas only. Python, 25 of 25 unchanged.
 
 **Not covered: anonymous and local classes.** `return new GatewayFilter() { … }`
-is an `<init>` call on a generated type, not a METHOD_REF; the walk reaches the
+is an `<init>` call on a generated type, not a METHOD_REF; the traversal reaches the
 constructor and stops. 30 such sites outside tests in gateway alone.
 
 
@@ -1335,28 +1335,28 @@ and nothing more: the caller knows it arrived somewhere and by what mechanism,
 not whether that is an interaction.
 
 Three steps: whose code was arrived at (`roleOfNode`, or `externalRoles` by
-name); is that a *different* role than the one being walked (`pairsFor`, which
+name); is that a *different* role than the one being traversed (`pairsFor`, which
 drops self-pairs); and if so, append the row and continue inside the new role.
-Most calls write nothing — every ordinary helper call in every walked body comes
+Most calls write nothing — every ordinary helper call in every traversed body comes
 through here and lands on the `targets.isEmpty` branch.
 
 **A dispatch set is resolved by trial** (`keepMostRoles`). When a call may run
-several implementations, each is walked alone and only the one reaching the most
+several implementations, each is traversed alone and only the one reaching the most
 roles keeps its rows, ties going to the fewest helpers in `via` and then to the
-earlier -- see **Locating the method to continue in**. Walking every
+earlier -- see **Locating the method to continue in**. Traversing every
 implementation as though it ran would attribute all of their calls to `sources`;
-walking each alone and keeping one does not.
+traversing each alone and keeping one does not.
 
-**A call may resolve to several hops** (`Resolution.hops`), walked in order: the
+**A call may resolve to several hops** (`Resolution.hops`), traversed in order: the
 call's own callees, then what a framework route runs next (**Framework routes**).
 Within a hop the alternatives compete as above. Two parameters carry what a hop
 knows: `bridged` -- the hop came from a route, so it does not set `dispatched`
 (the trail's one guess is untouched) and edges past it are tagged `dispatch`
-through the walk's `framework` flag -- and `provided`, the injection providers of
+through the traversal's `framework` flag -- and `provided`, the injection providers of
 the object the call is made on. Their roles join the call's own targets *before*
 `pairsFor` orders them, so a role reached by injection sits where the pattern puts
 it among roles reached by the same call; they are tagged `dependency-injection`
-and are never walked into, and descent into the call's target carries only the
+and are never traversed into, and descent into the call's target carries only the
 roles that were not injected.
 
 It was called `reach` until the name was found to obscure exactly this: it reads
@@ -1381,7 +1381,7 @@ traversal runs until the graph runs out. Termination comes from
 
 ## `startsOf`
 
-Where a role's walk begins. One rule in two shapes -- **start at whatever the
+Where a role's traversal begins. One rule in two shapes -- **start at whatever the
 cited thing runs next**:
 
 | cited | runs next | start node |
@@ -1395,18 +1395,18 @@ statement -- and then keeps going, because the line after it really is what
 happens next. Neither shape needs a stop rule.
 
 The statement case is what makes `auth_scheme = FastApiKeycloack(...)` work. The
-constructor call on that line is an ordinary CALL node the walk arrives at, so
+constructor call on that line is an ordinary CALL node the traversal arrives at, so
 `__init__` is entered by the same `calleeOf` path as any other call. Nothing
 about constructors is modelled; the code just runs.
 
 **What it replaced.** Two earlier designs handled the variable case specially.
 `walkDefinition` was a second entry path that ran after the main loop and did its
-own walking. `definingCalls` moved that into role location -- finding the
+own traversal. `definingCalls` moved that into role location -- finding the
 assignment, collecting its right-hand side, resolving each call by hand, and
 appending the result to the role's node list as a second anchor. Starting the
-walk at the line gets the same edges by *running* the code, in execution order
+traversal at the line gets the same edges by *running* the code, in execution order
 rather than in the order an AST collection happened to yield them, and leaves the
-walk with one entry shape instead of two.
+traversal with one entry shape instead of two.
 
 Measured on `CentOS_duffy`, roles `Guard` (`req_tenant`, `duffy/app/auth.py:45`,
 a module-level binding) and `Factory` (`_req_tenant_factory`, same file line 11):
@@ -1452,7 +1452,7 @@ convert that node into something else. An earlier version accepted only METHOD
 nodes, so a role cited on a variable fell through to a containment fallback and
 silently became `<module>` -- the wrong node, which then claimed the whole file
 and fabricated an interaction. Every entity a role can be cited on already *is*
-a node, so the lookup returns whatever kind it finds and the walk (§3) takes it
+a node, so the lookup returns whatever kind it finds and the traversal (§3) takes it
 from there.
 
 
@@ -1474,10 +1474,10 @@ handed *to* the function, so the Token manager role lives on `db` and the
 interaction is `Validator -> Token manager`. Without this the citation matched
 no node at all and the role was reported external. Nothing else needs changing
 for it to be reached: `Identifier._refOut` follows a use of `db` in the body
-back to this node, and the walk already emits a `data` edge for a use whose
+back to this node, and the traversal already emits a `data` edge for a use whose
 declaration carries a role. And like LOCAL and MEMBER it has no body, so
 `bodiesOf` returns nothing and a role on a parameter is only ever reached, never
-walked from.
+traversed from.
 
 
 ## `pool`
@@ -1514,7 +1514,7 @@ followed is the language's business, so it sits behind two `LangSpec` members:
 
 The second matters as much as the first. PYTHONSRC binds every imported name as a
 LOCAL assigned by an `import` call, so before this a citation in `aquiles/main.py` on
-`get_current_user` anchored on that import (no body, nothing to walk) instead of
+`get_current_user` anchored on that import (no body, nothing to traverse) instead of
 the `def` at `aquiles/auth/jwt_aq.py:50`, two hops away through
 `aquiles/auth/__init__.py`. Import bindings are excluded from the cited file's
 candidates and from occurrences. They are recognised from the node itself -- a
@@ -1553,7 +1553,7 @@ Measured 2026-09-24:
 
 ## `declarationOf`
 
-**The CPG's own scope link decides what a name means**, and the walk follows it
+**The CPG's own scope link decides what a name means**, and the traversal follows it
 all the way. A use of a name has a REF edge to the variable it means, resolved by
 scope -- a local wins inside its function, exactly as in Python. A name used in
 a nested scope (a method using a module-level import) REFs a closure capture in
@@ -1594,7 +1594,7 @@ receiver `this`, so no Java call is resolved this way.
 
 A field use is resolved to the field's declaration, as a call is to its method.
 Until 2026-09-24 it was not resolved at all, so **a role located on a field was
-never reached**: the walk's `data` edges followed an identifier's reference to
+never reached**: the traversal's `data` edges followed an identifier's reference to
 its declaration, and a field use is not an identifier. Every spelling of it is an
 `<operator>.fieldAccess` -- measured, 1 of 2,268 repository fields on chutney
 and 0 of 1,972 on duffy is ever referenced any other way:
@@ -1620,7 +1620,7 @@ One trap: PYTHONSRC declares a placeholder TYPE_DECL `ANY` (file `N/A`, not
 marked external), so "is this type in the repository?" must require a real
 source file, or every untyped `self` looks typed as `ANY` and resolves nothing.
 
-Used in two places: the walk emits a `data` edge when the field carries a role,
+Used in two places: the traversal emits a `data` edge when the field carries a role,
 and `occurrencesAt` resolves a citation on a line that *uses* a field -- which
 may be declared in another file or a parent class.
 
@@ -1718,7 +1718,7 @@ identical `pool.sortBy(preference)` that used to sit here was deleted.) 1. a *de
 line. Most precise, and it must come first: PYTHONSRC represents `def f` as
 binding a METHOD_REF to a module-level LOCAL named `f`, so the def line is
 simultaneously a declaration (the METHOD) and a use (the LOCAL). Letting the use
-win anchors every Python function on a variable, which has no body, and the walk
+win anchors every Python function on a variable, which has no body, and the traversal
 then starts nowhere -- measured, it took this repo from 5 interactions to 0. 2.
 an *occurrence* on the cited line, resolved to what it denotes. This is where a
 citation on a use lands: `db` at the line it is read on names one of the 16
@@ -1753,7 +1753,7 @@ role's sites in an ordinary method stay sites.
 ## `CallGraph` (`── 1. call resolution: which method does a call run?`)
 
 Ordering used to live here: a BFS from the method entry assigned every node a
-rank, and a method's calls were sorted by it. The walk (§3) now steps the CFG
+rank, and a method's calls were sorted by it. The traversal (§3) now steps the CFG
 directly, so the order it visits nodes in *is* the execution order and there is
 nothing left to rank.
 
@@ -1765,7 +1765,7 @@ type (`providersOf`). It returns a `Resolution` -- hops in order, each a list of
 alternatives -- rather than one list, because a route's `inOrder` step is two
 methods that both run, which a list of alternatives cannot say. `Entry.reachesFrom`
 reads the same answer (`Resolution.all`), so what counts as reaching a role is one
-definition for entry selection and for the walk.
+definition for entry selection and for the traversal.
 
 
 ## `isSynthetic`
@@ -1795,7 +1795,7 @@ and did *not* conclude it was a method; overriding that by searching the
 repository is what emitted `Enforcer -> Proxy` off `tmp0.append(sn.pydantic_view)`.
 See **What guessing cost** above -- four of six derived interactions
 were false, and two more were real calls mislabelled because a false edge had
-relocated the walk.
+relocated the traversal.
 
 
 ## `Walker` (`── 4. the walk: step the control-flow graph`)
@@ -1844,8 +1844,8 @@ brief docstring per member in the profile itself.
 ### `id`
 
 Python profile for `walk.sc`. Sent as the second half of the script, after the
-walk. See `LangSpec` there for what each member decides and why the seam is
-restricted to pure functions. Everything here was inline in the walk until the
+traversal. See `LangSpec` there for what each member decides and why the seam is
+restricted to pure functions. Everything here was inline in the traversal until the
 Java frontend needed different answers to the same three questions: where a
 declaration's line is, how an import maps to a file, and whether a parameter can
 carry a default the frontend threw away.
@@ -1871,7 +1871,7 @@ declaration the frontend records twice.
 `member.startsWith(owner + ".")`. PYTHONSRC spells containment as a dotted
 fullName path rooted at the file -- `file.py:<module>.Owner.member` -- for a
 class's methods and a function's nested functions alike, so one prefix test
-covers both places the walk needs it.
+covers both places the traversal needs it.
 
 
 ### `anchorsAt`
@@ -1892,7 +1892,7 @@ would bury it behind a confident wrong answer.
 
 ### `moduleFiles`
 
-No longer a `LangSpec` member -- the walk never asked it; only this profile's own
+No longer a `LangSpec` member -- the traversal never asked it; only this profile's own
 import resolution does. `a.b.c` read both as a module (`a/b/c.py`,
 `a/b/c/__init__.py`) and as a symbol inside one (`a/b.py`, `a/b/__init__.py`),
 because the entity spelling does not say which it is. A leading `.` is relative
@@ -1936,10 +1936,10 @@ of them in `walk.sc`:
    one of those words named (`amphetamarina_litellm`'s 25-helper `Enforcer -> Key
    manager`; `bluesky_tiled`'s `Enforcer -> Validator` through a test fixture).
 3. **resolve the name** through `methodForName` (below).
-4. **return** (target, the `def` line, `dependency-injection`). The walk emits
+4. **return** (target, the `def` line, `dependency-injection`). The traversal emits
    these before the body's first node, because a parameter is bound first.
 
-Nothing runs until a walked method actually carries a default, and the indexes
+Nothing runs until a traversed method actually carries a default, and the indexes
 behind step 3 are built on first use, so a repo with none pays nothing.
 
 
@@ -1966,7 +1966,7 @@ answer is kept per name (`namedTypes`), and the whole lookup per (name, file,
 depth) (`nameMemo`). The profile's other per-call answers are kept the same way --
 `importedCallees` per call, `classOfObject` per node, `classesHeld` per variable,
 a field's classes per (field, owner) -- all pure functions of the graph, which the
-walk otherwise recomputed for every call it passed.
+traversal otherwise recomputed for every call it passed.
 
 
 ### `scopedHit`
@@ -2005,7 +2005,7 @@ file's import (else a class the file defines) and the answer is every `m` a run
 could land on: the first definition up `T`'s bases, depth-first in declared order
 (the MRO under single inheritance), then each subclass override, level by level.
 Bases come from `inheritsFromTypeFullName`, which PYTHONSRC does resolve to full
-names. Which of them the call runs is the walk's to decide, by trial -- see
+names. Which of them the call runs is the traversal's to decide, by trial -- see
 **Locating the method to continue in**; the profile only names the candidates.
 Only the plain shape is read: `svc_factory.<returnValue>.m`,
 `__builtin.list.…` and file-qualified addresses are left alone.
@@ -2128,7 +2128,7 @@ derives in 24 s. Adding `classesOfValue` changed one of the 50 records, `FastJan
 
 `<module>` (a file's top level) and `<body>` (a class body), confirmed on the
 `CentOS_duffy` CPG: 108 `<module>`, 169 `<body>`. Each binds its `def`s as
-`name = <METHOD_REF>` without running them. See `isCallArgument` for why the walk
+`name = <METHOD_REF>` without running them. See `isCallArgument` for why the traversal
 must not enter those.
 
 
@@ -2138,7 +2138,7 @@ must not enter those.
 ### `id`
 
 Java profile for `walk.sc`. Sent as the second half of the script, after the
-walk. See `LangSpec` there. Java differs from Python in all three of the ways
+traversal. See `LangSpec` there. Java differs from Python in all three of the ways
 the seam exists for, and the first one is not a preference -- it is the reason a
 Java repo derived nothing at all before this profile existed.
 
@@ -2178,10 +2178,10 @@ GAP: nothing here separates two overloads of one method. They tie, and
 name, so a dotted prefix test is still correct.
 
 GAP: a nested type is spelled `Outer.Inner`, so `Outer` claims `Inner`'s methods
-as well. Harmless for the walk today -- they are reached as the outer class's
+as well. Harmless for the traversal today -- they are reached as the outer class's
 role, a defensible reading of a citation on the outer class -- but it is not what
 a `$`-separated frontend would do, and it is the reason this is a profile member
-rather than a constant in the walk.
+rather than a constant in the traversal.
 
 
 ### `moduleFiles` (removed)
@@ -2191,11 +2191,11 @@ fully-qualified type (`org.example.auth.TokenService`) whose file sits under a
 source root the entity does not mention -- `java-impetus-auth-
 impl/src/main/java/org/example/auth/TokenService.java` in a multi-module build.
 Mapping the entity to an exact repository path therefore needs the build layout,
-and the walk looks its candidates up by exact key. Returning nothing leaves the
-walk on its by-name fallback, which is exactly how Java resolved before the
+and the traversal looks its candidates up by exact key. Returning nothing leaves the
+traversal on its by-name fallback, which is exactly how Java resolved before the
 import index existed -- correct, just without the disambiguation Python now
 gets. Matching by path *suffix* would close it and is the obvious next step; it
-needs a lookup the walk does not yet have.
+needs a lookup the traversal does not yet have.
 
 
 ### `entryEdges`
@@ -2240,7 +2240,7 @@ name:
 1. **single import.** `import a.b.Foo` is the type `a.b.Foo` (`a.b.Foo$Inner`
    tried for a nested type, JAVASRC's spelling); `import static a.b.Utils.check`
    is every `check` declared by `a.b.Utils` -- all overloads, and a field of that
-   name, left for the walk to rank.
+   name, left for the traversal to rank.
 2. **own package.** A type in the file's package needs no import; the package
    comes from the namespace block JAVASRC records per file.
 3. **on-demand.** `import a.b.*` makes `a.b.Foo` visible; `import static
@@ -2248,7 +2248,7 @@ name:
    `entity=a.b` / `a.b.Utils` with `as=*` and does not mark which is static, so
    `entity.Name` is tried as a type and then as a member. **Not recursive**:
    `a.b.*` does not reach `a.b.c.Foo`, so this stays an exact name. Two
-   on-demand imports both supplying the name return both, and the walk accepts
+   on-demand imports both supplying the name return both, and the traversal accepts
    neither -- Java rejects that reference as ambiguous too.
 
 `isImportBinding` is always false: JAVASRC binds no LOCAL for an import.
@@ -2262,11 +2262,11 @@ delomboked source, whose pretty-printer drops blank lines and shifts every line
 in the graph away from the checkout (on `catch-money_java-impetus`, 515 methods
 off and `getByUsername` cited at 61 recorded at 42). `types-only` keeps the
 lines true, but a generated accessor is then only a bodiless stub:
-`userAccount.getPassword()` resolves to it, and the walk cannot step inside to
+`userAccount.getPassword()` resolves to it, and the traversal cannot step inside to
 see the read of `password`. So a role cited on the field owns the stubs instead.
 
 Only stubs, and only ones declared on the field's own class: a hand-written
-getter has a body and is walked like any method, and the owner prefix keeps a
+getter has a body and is traversed like any method, and the owner prefix keeps a
 library's `getPassword` from matching. GAP: a field declared on a parent class
 and reached through a subclass (`userAccount.getId()` for `BaseJapPojo.id`), and
 `@Accessors(fluent = true)`, which names the getter `x()`.
@@ -2276,7 +2276,7 @@ and reached through a subclass (`userAccount.getId()` for `BaseJapPojo.id`), and
 citation as the call on that line (`occurrence-at-line`) and takes the method it
 runs -- and a generated accessor is a bodiless external stub, which no declaration
 matches, so the role used to fall through to a library call: nothing in the
-repository to walk from. `calledDecl` now hands a stub to
+repository to traverse from. `calledDecl` now hands a stub to
 `fieldOfAccessor`, which returns field `x` of the class the stub is declared on
 (`getX` / `isX` / `setX`, matched as `x.capitalize`), and the role is located on
 that MEMBER -- exactly as if the field had been cited, so `accessorsOf` then gives
@@ -2357,7 +2357,7 @@ constructor inside a `@Bean` makes the role the provider's (`Ownership`).
 
 ### `isModuleOrClassBody`
 
-Always false. A Java class body is a TYPE_DECL, not a method the walk can be
+Always false. A Java class body is a TYPE_DECL, not a method the traversal can be
 inside, so there is no body whose `def`s bind without running. (This profile used
 to answer `nestedDefOperator` with "", on the reasoning that Java's lambdas are
 not definition statements -- true, and the reason a returned lambda was never

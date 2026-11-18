@@ -1,19 +1,19 @@
-# Profiling the CPG build and the walk (2026-11-14)
+# Profiling the CPG build and the traversal (2026-11-14)
 
 Branch `profiling`. Everything here was measured on this machine: Tesla V100 instance, cgroup limit
 ~15 CPUs and 180 GiB RAM, Joern 4.0.627 on OpenJDK 21. One Joern JVM ran at a time throughout.
 
 **Short answer.**
 
-- **The walk's slowness is in the traversal rule's implementation, not in Joern or Scala.** The 19
-  drafts that timed out in the published run spend their time on exponential re-walking inside
+- **The traversal's slowness is in the rule's implementation, not in Joern or Scala.** The 19
+  drafts that timed out in the published run spend their time on exponential re-traversal inside
   `keepMostRoles`, on pure queries recomputed on every visit, and on an O(types × methods) index.
-  Joern's own graph access is under 10 % of the walk's samples.
+  Joern's own graph access is under 10 % of the traversal's samples.
 - **For the drafts that do finish, the cost is Joern's script tooling.** Each `joern --script`
-  query spends 10–11 s before the walk starts (two JVMs, compiling ~1,300–2,000 lines of Scala 3,
-  copying the CPG). The walk then takes 0.0–0.3 s.
+  query spends 10–11 s before the traversal starts (two JVMs, compiling ~1,300–2,000 lines of Scala 3,
+  copying the CPG). The traversal then takes 0.0–0.3 s.
 - **Fix the rule first, then the tooling.** `walk_opt.sc` keeps the output identical and makes the
-  walk polynomial on everything except the Camunda family. `walk_opt3.sc` adds an exact cut found
+  traversal polynomial on everything except the Camunda family. `walk_opt3.sc` adds an exact cut found
   while porting, which bounds the Camunda family too. The native engine (`joern-rust`) removes the
   tooling cost.
 - **Migrating the frontends is not needed:** `joern-parse` stays (see §4).
@@ -23,12 +23,12 @@ Branch `profiling`. Everything here was measured on this machine: Tesla V100 ins
 | Script | What it does |
 |---|---|
 | `extract_jobs.py` | Captures the exact `(roles, behaviour, entry)` that the 2026-11-09 batch run sent for each of the 502 drafts. 379 drafts reach Joern; the other 123 have fewer than two grounded roles. Output: `jobs/jobs.jsonl`. |
-| `prof_walk.py` | One instrumented JVM per repository, strictly sequential. Asserted text patches add phase timers (`exec`'s five steps), counters (bodies entered, memo hits, `keepMostRoles` calls, alternatives and nesting, `targetsOf` calls and distinct sites, CFG visits and distinct nodes) and an in-JVM watchdog. The watchdog prints progress every 10 s and, at the budget, dumps the main thread's stack and exits so JFR writes its recording. The patches do not change what the walk computes. |
-| `startup_bench.py` | Splits the fixed cost of a query: a one-line script, the walk with no jobs, and the walk loading CPGs of 4–490 MB. |
-| `jfr_analyze.py` | Execution-sample buckets, plus self and inclusive time per method of the walk script. |
-| `compare_golden.py` | Compares raw walk outputs with the published orders, or with another run. |
+| `prof_walk.py` | One instrumented JVM per repository, strictly sequential. Asserted text patches add phase timers (`exec`'s five steps), counters (bodies entered, memo hits, `keepMostRoles` calls, alternatives and nesting, `targetsOf` calls and distinct sites, CFG visits and distinct nodes) and an in-JVM watchdog. The watchdog prints progress every 10 s and, at the budget, dumps the main thread's stack and exits so JFR writes its recording. The patches do not change what the traversal computes. |
+| `startup_bench.py` | Splits the fixed cost of a query: a one-line script, the traversal with no jobs, and the traversal loading CPGs of 4–490 MB. |
+| `jfr_analyze.py` | Execution-sample buckets, plus self and inclusive time per method of the traversal script. |
+| `compare_golden.py` | Compares raw traversal outputs with the published orders, or with another run. |
 | `prof_build.py` | `joern-parse` with JFR, Joern's INFO log, and the process tree's peak RSS and process count, under a pid/memory watchdog. |
-| `warm_worker.py` | A long-lived `joern --script` that compiles the walk once, loads each CPG once with `CpgLoader` (read-only), and streams queries over stdin. This is the "fix the Joern client" baseline. |
+| `warm_worker.py` | A long-lived `joern --script` that compiles the traversal once, loads each CPG once with `CpgLoader` (read-only), and streams queries over stdin. This is the "fix the Joern client" baseline. |
 
 ## 2. Where a query's time goes (normal drafts)
 
@@ -37,7 +37,7 @@ Branch `profiling`. Everything here was measured on this machine: Tesla V100 ins
 | Launch | To script `main` | CPG load | Heap after load |
 |---|---:|---:|---:|
 | One-line script | 5.8 s (launcher JVM ~1.1 s + script JVM and console ~4.7 s) | – | – |
-| walk.sc + profile, no jobs | 10.0–10.3 s (compiling the walk adds ~4.5 s) | 0.15 s (14 KB) | 0.14 GB |
+| walk.sc + profile, no jobs | 10.0–10.3 s (compiling the traversal adds ~4.5 s) | 0.15 s (14 KB) | 0.14 GB |
 | load factcast | 10.3–10.6 s | 0.34–0.41 s (4 MB) | 0.18 GB |
 | load camunda-bpm-platform | 9.9–10.2 s | 0.62–0.71 s (37 MB) | 0.54 GB |
 | load camunda | 10.3–10.6 s | 1.06–1.18 s (92 MB) | 1.1 GB |
@@ -49,12 +49,12 @@ Branch `profiling`. Everything here was measured on this machine: Tesla V100 ins
 - **The query service does the same per query** (`joern-runner/app/runner.py` runs one
   `joern --script` each time).
 - **Most CPGs are small:** median 3.8 MB, p90 47 MB.
-- **So nearly every query is ~11 s of fixed cost wrapped around a walk of 0.0–0.3 s.** Example: the
-  20-draft validation set (`opt-check2`) took 9.4 min of wall time, and its walks summed to 12 s.
+- **So nearly every query is ~11 s of fixed cost wrapped around a traversal of 0.0–0.3 s.** Example: the
+  20-draft validation set (`opt-check2`) took 9.4 min of wall time, and its traversals summed to 12 s.
 
 ## 3. Why the 19 drafts timed out
 
-All 19 were rerun with the original walk, a 120 s budget each, and JFR on (`results/timeouts/`):
+All 19 were rerun with the original traversal, a 120 s budget each, and JFR on (`results/timeouts/`):
 
 | draft | stopped in | bodies entered | distinct keys | kmr nesting | targetsOf calls / sites | CFG visits / distinct | methodsOfType (s) |
 |---|---|---:|---:|---:|---:|---:|---:|
@@ -80,15 +80,15 @@ All 19 were rerun with the original walk, a 120 s budget each, and JFR on (`resu
 
 Three causes, all in the rule's implementation:
 
-1. **`keepMostRoles` re-walks the same bodies exponentially often.**
+1. **`keepMostRoles` re-traverses the same bodies exponentially often.**
    - It snapshots `enteredBodies`, runs each alternative, and restores the snapshot, so every
-     alternative re-walks everything its siblings walked.
-   - Alternatives nest 12–48 deep, which multiplies the re-walks.
+     alternative re-traverses everything its siblings traversed.
+   - Alternatives nest 12–48 deep, which multiplies the re-traversals.
    - Examples: factcast re-entered its 171 distinct bodies 930 k times (about 5,400× each); on
      EximeeBPMS, ≤ 930 keys were entered 643 k times.
    - The cloning itself added 130 M copied set elements on factcast.
 2. **Pure queries are recomputed on every visit.**
-   - `targetsOf` ran 1,226× per call site on factcast. 80 % of factcast's walk samples are
+   - `targetsOf` ran 1,226× per call site on factcast. 80 % of factcast's traversal samples are
      `targetsOf → injected → providersOf → simpleName` (`String.split` over every `@Bean` provider,
      for every call).
    - On the Python drafts, 58–79 % of samples are in the profile's `Index.chain → toGraphFile`,
@@ -96,7 +96,7 @@ Three causes, all in the rule's implementation:
 3. **`methodsOfType` is O(types × methods).**
    - It took 15–25 s on the Camunda family.
    - It ran past the whole 120 s budget on camunda_camunda, langflow and cadelphi, which never
-     reached the walk.
+     reached the traversal.
 
 Joern itself is not the bottleneck: flatgraph steps (`collectAll`, `getNeighbors`) are < 10 % of
 samples, GC pauses 1–4.5 s per 120 s run, and loading even a 490 MB CPG takes under 5 s.
@@ -135,16 +135,16 @@ Breakdown from Joern's own per-pass log lines:
     memory (10.8 vs 1.8 GB), running 38 concurrent JVMs instead of 2, for a graph of the same size.
   - Every delombok JVM sizes its heap at 75 % of RAM unless capped. A guard watched the cgroup's
     task count during this build.
-- **`ReachingDefPass` is pure overhead for the walk,** which never reads data-flow edges (no
+- **`ReachingDefPass` is pure overhead for the traversal,** which never reads data-flow edges (no
   reaching-def use anywhere in walk.sc, java.sc or python.sc).
   - `joern-parse --max-num-def 0` drops it: 1.9 M → 372 `REACHING_DEF` edges on cibseven.
   - Build time falls 27 % on super-dev (50.1 → 36.6 s) and 8 % on cibseven.
-  - Walks on the rebuilt Python CPGs are identical (3/3 drafts).
+  - Traversals on the rebuilt Python CPGs are identical (3/3 drafts).
 - **Java CPG builds are not reproducible.**
   - Two `joern-parse` runs on cibseven with identical settings, minutes apart, gave METHOD 53,284 vs
     53,304 and CALL edges 278,489 vs 278,398, and the stored CPG differs again (53,134 / 278,782).
   - The METHOD count varies with the set of stub methods for unresolved callees, i.e. call
-    resolution itself varies between runs. cibseven's walk output differs on each rebuild.
+    resolution itself varies between runs. cibseven's traversal output differs on each rebuild.
   - This is the frontend (javasrc2cpg), independent of `--max-num-def`.
   - Consequence: published orders must be reproduced from the shipped CPGs, never from a rebuild,
     as the README already prescribes. Why javasrc2cpg varies (parallel symbol resolution is the
@@ -166,30 +166,30 @@ Each change below was checked by running the full job set and diffing against th
 | `walk_opt.sc` | Memoise `targetsOf`, `providersOf`, `fieldsOf`, `methodsPassedTo`, `entryEdges`, CFG successors, `brief` | Pure functions of the graph |
 | | Build `methodsOfType` from each method's dotted prefixes | Both profiles define `declares` as `member.startsWith(owner + ".")`; same per-type order |
 | | Undo log instead of `enteredBodies.clone()` | Restores the same set |
-| | Memoise walked bodies, keyed `(method, start, sources, |via|, dispatched, framework)` and replayed only when every entered-set lookup they made (present or absent) answers the same | `via`, `path` and `enteredBy` only flow into edges (stored relative to the caller); `keepMostRoles` reads only `via`'s length |
-| | Skip bodies that can reach no role-carrying node (lazy Tarjan liveness) | A dead body emits nothing, and its entered keys are only ever tested by dead walks |
+| | Memoise traversed bodies, keyed `(method, start, sources, |via|, dispatched, framework)` and replayed only when every entered-set lookup they made (present or absent) answers the same | `via`, `path` and `enteredBy` only flow into edges (stored relative to the caller); `keepMostRoles` reads only `via`'s length |
+| | Skip bodies that can reach no role-carrying node (lazy Tarjan liveness) | A dead body emits nothing, and its entered keys are only ever tested by dead traversals |
 | `opt/python.sc` | Memoise `toGraphFile`, and `chain` when `seen` is empty | Pure; inner `chain` calls depend on the cycle cut, so they are not cached |
-| `walk_opt3.sc` | In `keepMostRoles`, do not walk an alternative that provably emits nothing. Decided per (method, dispatched) state, with the second-override gate applied, without entering bodies already in the entered set. | Such an alternative cannot win (rank needs a target) and is rolled back without a trace. The entered set only grows while it runs. |
+| `walk_opt3.sc` | In `keepMostRoles`, do not traverse an alternative that provably emits nothing. Decided per (method, dispatched) state, with the second-override gate applied, without entering bodies already in the entered set. | Such an alternative cannot win (rank needs a target) and is rolled back without a trace. The entered set only grows while it runs. |
 
 Results (all one JVM at a time; raw outputs in `results/opt-full/` and `results/opt3-timeouts/`):
 
 | Run | Drafts | Identical to published | Different | Former timeouts that now derive | Still unbounded |
 |---|---:|---:|---:|---:|---|
 | `opt-full` (walk_opt.sc + opt/python.sc, 180 s budget) | 379 | **360 / 360** | 0 | 9 / 19 | 6 Camunda forks, cognee, CIRISAgent, cadelphi; litellm hit a `StackOverflowError` |
-| `opt3-timeouts` (walk_opt3.sc, 300 s budget) | 19 | – | – | **17 / 19** | CIRISAgent (session_based); litellm (`StackOverflowError` at walk depth 367) |
+| `opt3-timeouts` (walk_opt3.sc, 300 s budget) | 19 | – | – | **17 / 19** | CIRISAgent (session_based); litellm (`StackOverflowError` at traversal depth 367) |
 
-- **Speed:** the median walk is 0.38 s and the p90 1.9 s.
+- **Speed:** the median traversal is 0.38 s and the p90 1.9 s.
   - On the 19 former timeouts the median is 8 s; the slowest is cadelphi at 277 s on the JVM.
   - factcast: from 930 k bodies entered in 120 s without finishing, to 12.6 k bodies and 1.0 s.
 - **Fixed cost is now everything:** the 308 launches of `opt-full` took 101 min of wall time, and
-  the walks summed to 7 min.
+  the traversals summed to 7 min.
 - **Cross-check with the Rust port:** every former timeout that both engines derive is identical
   (15 Java, 8 Python; 0 different).
 - **The two drafts left are not an implementation problem.**
   - Their alternatives nest 67–69 deep, and the cut skips over a million of them, yet the search
     stays unbounded in both engines.
   - Separately, litellm overflows the JVM thread stack before the rule's own `MAX_DEPTH = 512` guard.
-    Running the walk on a thread with a large stack would fix that crash without changing
+    Running the traversal on a thread with a large stack would fix that crash without changing
     semantics.
   - Making them finish needs a decision about what `keepMostRoles` should mean (e.g. a bound on
     nested alternatives, or alternatives that do not undo each other's entered bodies). That would
@@ -223,9 +223,9 @@ Repository `/workspace/joern-rust` (`docs/PLAN.md`, `docs/WALK.md`, `docs/cpg-st
 
 | Engine | Per query | All 379 drafts |
 |---|---|---|
-| `joern --script`, walk_opt (today's client) | ~11 s fixed + walk | 101 min (308 JVMs), 9 still timing out |
+| `joern --script`, walk_opt (today's client) | ~11 s fixed + traversal | 101 min (308 JVMs), 9 still timing out |
 | Warm Joern worker (`warm_worker.py`) | after a 10–12 s start: 0.1–0.6 s; 20 drafts in 41 s vs 9.4 min | – |
-| `secpat-walk` (Rust) | CPG open 2 ms; walk median 10 ms (Java) / 76 ms (Python), p90 0.24 / 1.1 s | ~2.3 min of walking (26 s Java, 112 s Python) |
+| `secpat-walk` (Rust) | CPG open 2 ms; traversal median 10 ms (Java) / 76 ms (Python), p90 0.24 / 1.1 s | ~2.3 min of traversal (26 s Java, 112 s Python) |
 | `detect()` with `JOERN_ENGINE=rust` | 0.02–0.05 s on small repos (vs ~11–14 s) | – |
 
 **Memory** (peak RSS of the whole process tree, sampled every 50 ms; same drafts, each run alone;
@@ -239,18 +239,18 @@ container's 180 GiB; results in `results/mem-*`):
 | litellm (490 MB), never finishes | 15.3 GB at the 300 s limit | 31.1 GB when it died (StackOverflowError) | 8.5 GB |
 
 - Peak RSS per CPG in Rust: median 13 MB (Java) / 48 MB (Python).
-- Of the Rust peaks, the decoded graph columns are 2.1–2.3 GB; the rest is the walk. The JVM holds
+- Of the Rust peaks, the decoded graph columns are 2.1–2.3 GB; the rest is the traversal. The JVM holds
   the whole graph in its heap (6.6 GB for litellm after `importCpg`) and lets garbage build up to
   ~28 GB between collections, so its process grows to its 32–34 GB committed heap.
-- litellm is not comparable: its walk never ends, and Rust gets ~1,000× further before the limit
-  (16.6 M bodies walked and 526 k memo summaries, against 14.6 k bodies when the JVM's stack
-  overflowed). Its memo of walked bodies grows by up to ~120 MB/s.
+- litellm is not comparable: its traversal never ends, and Rust gets ~1,000× further before the limit
+  (16.6 M bodies traversed and 526 k memo summaries, against 14.6 k bodies when the JVM's stack
+  overflowed). Its memo of traversed bodies grows by up to ~120 MB/s.
 - An earlier version of this report said the 490–541 MB Python CPGs peak at 13.5–13.7 GB in Rust.
   That was a measurement artefact. In the all-drafts batch, kailash-py and ton-blockchain-mcp ran
-  after litellm in the same process, and the allocator kept litellm's ~15 GB after its walk was
+  after litellm in the same process, and the allocator kept litellm's ~15 GB after its traversal was
   aborted, so their per-CPG peaks included it. Reproduced: ton-blockchain-mcp alone 3.1 GB, after
   litellm in one process 16.0 GB. To do: give memory back after each draft (`malloc_trim`, or an
-  allocator that returns it) so a long-lived `serve` process does not keep it, and cap the walk
+  allocator that returns it) so a long-lived `serve` process does not keep it, and cap the traversal
   memo so an unbounded draft cannot grow without limit.
 
 **Bugs found in the Scala while porting,** reproduced faithfully, not fixed (they change outputs;
@@ -276,7 +276,7 @@ Both GPU paths were built and measured.
 - **The candle pattern** (CUDA C compiled to PTX by nvcc in `build.rs`, launched through `cudarc`) is
   what `crates/reach` uses: cargo feature `cuda`, runtime `--gpu on|off|auto`, CPU fallback with a
   reason. Details: `joern-rust-spikes/gpu/FINDINGS.md`, `crates/reach/README.md`.
-- **Only bulk work fits the GPU.** The walk is an order-sensitive depth-first search, which belongs
+- **Only bulk work fits the GPU.** The traversal is an order-sensitive depth-first search, which belongs
   on the CPU. Multi-source reachability on large graphs is the one thing that fits: 19–115× faster
   at 1M–5M nodes with 64+ source sets.
 - **At SecPat's sizes the GPU loses.** Graphs have ≤ 300 k methods and repositories ≤ 6 drafts.
@@ -292,7 +292,7 @@ Both GPU paths were built and measured.
    - 17 of the 19 drafts that had no sequence now get one, and agree across both engines.
    - Seconds instead of > 870 s.
    - The new sequences (17 drafts) are additions to the dataset; nothing published changes.
-2. **Use the native engine (`JOERN_ENGINE=rust`) wherever the walk runs repeatedly:** the annotation
+2. **Use the native engine (`JOERN_ENGINE=rust`) wherever the traversal runs repeatedly:** the annotation
    portal after every edit, Level 3 scoring (both sides per record), batch backfills.
    - It removes the ~11 s per query.
    - Keep `joern-parse` for building.
