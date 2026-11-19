@@ -34,6 +34,12 @@ orders" are that run's outputs. 19 drafts timed out in it and have no order.
   `SECPAT_VIEW`, on a stand-in `secpat-walk`; the whole-CPG map (made once per CPG, served
   gzipped, made on request, missing CPG, in exports, the flag).
 
+### Requires
+
+- For the whole-CPG view, a `secpat-walk` that has the `methods` command: joern-rust branch
+  `traversal-view` (a220d3c) or later. With an older one, queries still run and give the same
+  orders; the map is left out with a warning, and the page shows why and draws the call tree.
+
 ### Fixed
 
 - The page's short names of Python methods: `RateLimitMiddleware.__call__`, not the file's path
